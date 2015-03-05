@@ -56,7 +56,7 @@ cd content
 npm run-script optimize
 git add var
 git commit ...
-``
+```
 
 
 ### Features

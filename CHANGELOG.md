@@ -2,6 +2,7 @@
 
 ## Last Changes
 
-- [#3](https://github.com/LaxarJS/laxar/issues/3): added missing license
+- [#4](https://github.com/LaxarJS/ax-developer-tools-widget/issues/4): fixed README.md code block
+- [#3](https://github.com/LaxarJS/ax-developer-tools-widget/issues/3): added missing license
 
 Initial OSS version.

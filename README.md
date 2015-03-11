@@ -13,7 +13,7 @@ The AxDeveloperToolsWidget allows to open a _developer tools window_ that displa
 
 ## Appearance
 
-![The window opened by the AxDeveloperToolsWidget](docs/img/example_1.png)
+![The window opened by the AxDeveloperToolsWidget](docs/example.png)
 
 
 ## Usage

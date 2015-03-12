@@ -29,6 +29,20 @@
                }
             }
          },
+         "button": {
+            "type": "object",
+            "description": "allows to render a button that opens the popup",
+            "properties": {
+               "enabled": {
+                  "type": "boolean",
+                  "default": true
+               },
+               "htmlLabel": {
+                  "type": "string",
+                  "default": "<i class='fa fa-cube'></i> DeveloperTools"
+               }
+            }
+         },
          "grid": {
             "type": "object",
             "properties": {

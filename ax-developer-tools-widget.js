@@ -22,6 +22,10 @@ define( [
    Controller.$inject = [ '$scope', 'axEventBus' ];
 
    function Controller( $scope, eventBus ) {
+      $scope.commands = {
+         open: openContentWindow
+      };
+
       var channel = window.axDeveloperTools = ( window.axDeveloperTools || {} );
       var buffers = channel.buffers = ( channel.buffers || { events: [], log: [] } );
 
@@ -92,7 +96,15 @@ define( [
          if( !contentWindow || contentWindow.closed ) {
             contentWindow = window.open( contentUrl, 'axDeveloperTools', settingsString );
          }
-         contentWindow.focus();
+
+         try {
+            contentWindow.focus();
+         }
+         catch( e ) {
+            ax.log.warn(
+               'AxDeveloperToolsWidget: Popup was blocked. Unblock in browser, or use the "button" feature.'
+            );
+         }
       }
    }
 

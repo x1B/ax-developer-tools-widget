@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#9](https://github.com/LaxarJS/ax-developer-tools-widget/issues/9): tests: fixed broken spec tests
 - [#7](https://github.com/LaxarJS/ax-developer-tools-widget/issues/7): browser support: widget should not break page in msie8
 - [#5](https://github.com/LaxarJS/ax-developer-tools-widget/issues/5): documentation: fixed README.md links
 

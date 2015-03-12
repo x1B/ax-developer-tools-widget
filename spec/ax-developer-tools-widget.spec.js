@@ -5,8 +5,9 @@
  */
 define( [
    '../ax-developer-tools-widget',
+   'jquery',
    'laxar/laxar_testing'
-], function( widgetModule, ax ) {
+], function( widgetModule, $, ax ) {
    'use strict';
 
    describe( 'An AxDeveloperToolsWidget', function() {
@@ -27,8 +28,8 @@ define( [
          };
 
          // intercept unload registration
-         spyOn( window, 'addEventListener' ).andCallFake( function( event, callback ) {
-            expect( event ).toEqual( 'unload' );
+         spyOn( $.prototype, 'on' ).andCallFake( function( event, callback ) {
+            expect( event ).toEqual( 'beforeunload.AxDeveloperToolsWidget' );
             cleanup = callback;
          } );
 

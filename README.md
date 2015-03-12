@@ -26,16 +26,31 @@ For installation instruction take a look at the [LaxarJS documentation](https://
 
 ```json
 {
+   "widget": "laxarjs/ax-developer-tools-widget"
+}
+```
+
+Use this configuration on a page to have a button that will open the developer tools window.
+The window will also open when the global method `window.laxarShowDeveloperTools()` is called.
+
+```json
+{
    "widget": "laxarjs/ax-developer-tools-widget",
    "features": {
+      "button": {
+         "enabled": false
+      },
       "open": {
-         "onActions": [ "showDevTools" ]
+         "onActions": [ "showDevTools" ],
+         "onGlobalMethod": "goDevelop"
       }
    }
 }
 ```
-Use this configuration on a page to have a developer tools window open when the action `showDevTools` is requested.
-By default, the window will also open when the method `laxarShowDeveloperTools()` is called.
+
+Use this configuration on a page to have a developer tools window without visual representation, that will open when the action `showDevTools` is requested.
+Alternatively, the window can be opened by calling the method `window.goDevelop()` (for example, from a bookmark).
+_Note:_ To open the developer window in this fashion, it might be necessary to add an exception to the browser's popup blocker. 
 
 For full configuration options refer to the [widget.json](widget.json).
 
@@ -66,8 +81,10 @@ git commit ...
 Because the developer tools should exist independent of the host application state and navigation, they are opened in a separate window.
  
 *R1.1* The widget MUST allow to configure an action for opening the developer tools window.
+_Note:_ To open the developer window in this fashion, it might be necessary to add an exception to the browser's popup blocker.
+Alternatively, a _button_ (see below) may be used.
 
-*R1.2* The widget MUST allow to configure a global javascript method that opens the window directly.
+*R1.2* The widget MUST allow to configure a global javascript method name that opens the window directly.
 _Note:_ This is intended to be used manually by developers, and not as an API.
 
 *R1.3* The widget MUST establish a _communication channel_ to the contents of the developer tools window when open.
@@ -81,21 +98,31 @@ The widget MUST observe the communication channel from within the window and upd
 Refer to the [AxHostConnectorWidget](content/includes/widgets/developer-tools/ax-host-connector-widget/README.md) for details.
 
 
-### 2. Display Events from the Host Application
+### 2. Provide Access through a Graphical Button _(button)_
 
-*R2.1* The widget MUST allow to view events from the host application.
+*R2.1* The widget MUST allow to render a graphical button.
+This should be the default behavior.
+
+*R2.2* It must be possible to disable the button.
+
+*R2.3* It must be possible to configure a different label for the button.
+
+
+### 3. Display Events from the Host Application
+
+*R3.1* The widget MUST allow to view events from the host application.
 Refer to the [AxEventsDisplayWidget](content/includes/widgets/developer-tools/ax-events-display-widget/README.md) for details.
 
 
-### 3. Display Log Messages from the Host Application
+### 4. Display Log Messages from the Host Application
 
-*R3.1* The widget MUST allow to view log messages from the host application.
+*R4.1* The widget MUST allow to view log messages from the host application.
 Refer to the [AxLogDisplayWidget](content/includes/widgets/developer-tools/ax-log-display-widget/README.md) for details.
 
 
-### 4. Visualize Widget Positions within the Host Application
+### 5. Visualize Widget Positions within the Host Application
 
-*R4.1* The widget MUST help to identify widgets and their grid-alignment within the host application.
+*R5.1* The widget MUST help to identify widgets and their grid-alignment within the host application.
 Refer to the [AxDeveloperToolbarWidget](content/includes/widgets/developer-tools/ax-developer-toolbar-widget/README.md) for details.
 
 

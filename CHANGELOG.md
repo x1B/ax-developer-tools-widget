@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#5](https://github.com/LaxarJS/ax-developer-tools-widget/issues/5): documentation: fixed README.md links
+
 
 ## v0.1.0
 

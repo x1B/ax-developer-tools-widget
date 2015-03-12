@@ -7,7 +7,7 @@ The AxDeveloperToolsWidget allows to open a _developer tools window_ that displa
 * [Appearance](#appearance)
 * [Usage](#usage)
 * [Features](#features)
-* [Integration](#Integration)
+* [Integration](#integration)
 * [References](#references)
 
 
@@ -78,25 +78,25 @@ _Note:_ This is intended to be used manually by developers, and not as an API.
 
 *R1.6* The widget MUST provide _content_ that must not depend in any way on the contents of the host application, except for relying on the communication channel. 
 The widget MUST observe the communication channel from within the window and update its contents with no more than a second delay.
-_See [content/includes/widgets/developer-tools/ax-host-connector-widget/README.md] for details._
+Refer to the [AxHostConnectorWidget](content/includes/widgets/developer-tools/ax-host-connector-widget/README.md) for details.
 
 
 ### 2. Display Events from the Host Application
 
 *R2.1* The widget MUST allow to view events from the host application.
-_See [content/includes/widgets/developer-tools/ax-events-display-widget/README.md] for details._
+Refer to the [AxEventsDisplayWidget](content/includes/widgets/developer-tools/ax-events-display-widget/README.md) for details.
 
 
 ### 3. Display Log Messages from the Host Application
 
 *R3.1* The widget MUST allow to view log messages from the host application.
-_See [content/includes/widgets/developer-tools/ax-log-display-widget/README.md] for details._
+Refer to the [AxLogDisplayWidget](content/includes/widgets/developer-tools/ax-log-display-widget/README.md) for details.
 
 
 ### 4. Visualize Widget Positions within the Host Application
 
 *R4.1* The widget MUST help to identify widgets and their grid-alignment within the host application.
-_See [content/includes/widgets/developer-tools/ax-developer-toolbar-widget/README.md] for details._
+Refer to the [AxDeveloperToolbarWidget](content/includes/widgets/developer-tools/ax-developer-toolbar-widget/README.md) for details.
 
 
 ## Integration

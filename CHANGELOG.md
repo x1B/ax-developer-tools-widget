@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#11](https://github.com/LaxarJS/ax-developer-tools-widget/issues/11): bower: added missing repository URL
+
 
 ## v0.2.0
 

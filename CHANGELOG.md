@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#12](https://github.com/LaxarJS/ax-developer-tools-widget/issues/12): fixed log level.
 - [#11](https://github.com/LaxarJS/ax-developer-tools-widget/issues/11): bower: added missing repository URL
 
 

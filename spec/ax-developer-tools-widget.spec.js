@@ -102,7 +102,7 @@ define( [
 
       it( 'intercepts LaxarJS _log messages_ from the host application and forwards them to the communication channel (R1.5)', function() {
          window.axOpenDevTools();
-         ax.log.develop( 'test log message' );
+         ax.log.trace( 'test log message' );
          ax.log.info( 'test log message' );
          jasmine.Clock.tick( 0 );
          expect( window.axDeveloperTools.buffers.log.length ).toBe( 2 );

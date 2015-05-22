@@ -7,6 +7,7 @@ atlassian-ide-plugin.xml
 contents-*.zip
 
 /var/build/*.map
+/var/build/require_configured.js
 
 /bower_components/*
 
@@ -18,10 +19,10 @@ contents-*.zip
 /bower_components/es5-shim/*
 !/bower_components/es5-shim/es5-shim.js
 
-!/bower_components/laxar_uikit/
-/bower_components/laxar_uikit/*
-!/bower_components/laxar_uikit/themes
-/bower_components/laxar_uikit/themes/*
-!/bower_components/laxar_uikit/themes/default.theme
-/bower_components/laxar_uikit/themes/default.theme/*
-!/bower_components/laxar_uikit/themes/default.theme/fonts
+!/bower_components/laxar-uikit/
+/bower_components/laxar-uikit/*
+!/bower_components/laxar-uikit/themes
+/bower_components/laxar-uikit/themes/*
+!/bower_components/laxar-uikit/themes/default.theme
+/bower_components/laxar-uikit/themes/default.theme/*
+!/bower_components/laxar-uikit/themes/default.theme/fonts

@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#13](https://github.com/LaxarJS/ax-developer-tools-widget/issues/13): Updated to LaxarJS 1.0.0 style controls
+    + **BREAKING CHANGE:** see ticket for details
 - [#12](https://github.com/LaxarJS/ax-developer-tools-widget/issues/12): fixed log level.
 - [#11](https://github.com/LaxarJS/ax-developer-tools-widget/issues/11): bower: added missing repository URL
 

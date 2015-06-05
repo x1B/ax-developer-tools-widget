@@ -2,6 +2,9 @@
 
 ## Last Changes
 
+
+## v1.1.0
+
 - [#14](https://github.com/LaxarJS/ax-developer-tools-widget/issues/14): Updated internal app and LaxarJS dependencies to v1.0.0
 
 

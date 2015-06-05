@@ -6,9 +6,8 @@
 define( [
    'laxar',
    'angular',
-   'jquery',
    'require'
-], function( ax, ng, $, require ) {
+], function( ax, ng, require ) {
    'use strict';
 
    var BUFFER_SIZE = 500;
@@ -37,8 +36,8 @@ define( [
             pushIntoStore( 'events',  ax.object.options( { time: new Date() }, eventItem ) );
          } );
 
-         $( window ).off( 'beforeunload.AxDeveloperToolsWidget' );
-         $( window ).on( 'beforeunload.AxDeveloperToolsWidget', function() {
+         ng.element( window ).off( 'beforeunload.AxDeveloperToolsWidget' );
+         ng.element( window ).on( 'beforeunload.AxDeveloperToolsWidget', function() {
             ax.log.removeLogChannel( logChannel );
             cleanupInspector();
             cleanupInspector = null;

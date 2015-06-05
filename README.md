@@ -61,7 +61,6 @@ To _develop_ (and not just use) the AxDeveloperToolsWidget _itself,_ the content
 ```sh
 cd content
 npm install
-grunt build
 ```
 
 To build and _release a new version_, the release-version of the embedded application must be committed:

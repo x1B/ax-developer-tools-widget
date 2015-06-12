@@ -2,6 +2,9 @@
 
 ## Last Changes
 
+
+## v1.2.0
+
 - [#10](https://github.com/LaxarJS/ax-developer-tools-widget/issues/10): allow to disable the widget from application configuration
     + NEW FEATURE: see ticket for details
 - [#15](https://github.com/LaxarJS/ax-developer-tools-widget/issues/15): fixed jshint validation and dependencies

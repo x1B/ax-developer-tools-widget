@@ -77,14 +77,14 @@ git commit ...
 
 ### 1. Allow to Open a Developer Tools Window _(open)_
 
-Because the developer tools should exist independent of the host application state and navigation, they are opened in a separate window.
+Because the developer tools should exist independently of the host application state and navigation, they are opened in a separate window.
  
 *R1.1* The widget MUST allow to configure an action for opening the developer tools window.
-_Note:_ To open the developer window in this fashion, it might be necessary to add an exception to the browser's popup blocker.
+_Note:_ To open the developer window in this fashion, it might be necessary for the user to add an exception to the browser's popup blocker.
 Alternatively, a _button_ (see below) may be used.
 
 *R1.2* The widget MUST allow to configure a global javascript method name that opens the window directly.
-_Note:_ This is intended to be used manually by developers, and not as an API.
+_Note:_ This method is intended to be invoked manually by developers, and not as an API.
 
 *R1.3* The widget MUST establish a _communication channel_ to the contents of the developer tools window when open.
 
@@ -123,6 +123,23 @@ Refer to the [AxLogDisplayWidget](content/includes/widgets/developer-tools/ax-lo
 
 *R5.1* The widget MUST help to identify widgets and their grid-alignment within the host application.
 Refer to the [AxDeveloperToolbarWidget](content/includes/widgets/developer-tools/ax-developer-toolbar-widget/README.md) for details.
+
+
+### 6. No-Op Mode
+
+The widget MUST support being disabled completely using an application-wide _enabled-flag_.
+
+*R6.1* The enabled-flag must be read from the LaxarJS configuration path `widgets.laxar-developer-tools-widget.enabled`.
+The default value for the enabled-flag is `true`.
+If the enabled-flag value is `false`, the widget MUST NOT subscribe to _takeActionRequest_ events, even if configured for the _open_ feature.
+
+*R6.2* If the enabled-flag value is `false`, the widget MUST NOT intercept any events.
+
+*R6.3* If the enabled-flag value is `false`, the widget MUST NOT intercept any log messages.
+
+*R6.4* If the enabled-flag value is `false`, a global method MUST NOT be added, even if configured for the _open_ feature.
+
+*R6.5* If the enabled-flag value is `false`, a button MUST NOT be rendered, even if the _button_ feature has been enabled (see above).
 
 
 ## Integration

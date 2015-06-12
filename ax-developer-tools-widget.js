@@ -18,9 +18,14 @@ define( [
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   Controller.$inject = [ '$scope', 'axEventBus' ];
+   Controller.$inject = [ '$scope', 'axEventBus', 'axConfiguration' ];
 
-   function Controller( $scope, eventBus ) {
+   function Controller( $scope, eventBus, configuration ) {
+      $scope.enabled = configuration.get( 'widgets.laxar-developer-tools-widget.enabled', true );
+      if( !$scope.enabled ) {
+         return;
+      }
+
       $scope.commands = {
          open: openContentWindow
       };
@@ -59,6 +64,16 @@ define( [
 
       if( $scope.features.grid ) {
          channel.gridSettings = $scope.features.grid;
+      }
+
+      $scope.$on( '$destroy', cleanup );
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function cleanup() {
+         if( $scope.features.open.onGlobalMethod ) {
+            delete window[ $scope.features.open.onGlobalMethod ];
+         }
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////

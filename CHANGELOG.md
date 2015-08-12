@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#18](https://github.com/LaxarJS/ax-developer-tools-widget/issues/18): Added a `.travis.yml` for open continuous integration
+
 
 ## v1.2.0
 

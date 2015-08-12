@@ -1,4 +1,4 @@
-# AxDeveloperToolsWidget
+# AxDeveloperToolsWidget [![Build Status](https://travis-ci.org/LaxarJS/ax-developer-tools-widget.svg?branch=master)](https://travis-ci.org/LaxarJS/ax-developer-tools-widget)
 
 The AxDeveloperToolsWidget allows to open a _developer tools window_ that displays log messages and events about the containing LaxarJS application.
 

@@ -1,6 +1,6 @@
-# AxDeveloperToolsWidget [![Build Status](https://travis-ci.org/LaxarJS/ax-developer-tools-widget.svg?branch=master)](https://travis-ci.org/LaxarJS/ax-developer-tools-widget)
+# ax-developer-tools-widget [![Build Status](https://travis-ci.org/LaxarJS/ax-developer-tools-widget.svg?branch=master)](https://travis-ci.org/LaxarJS/ax-developer-tools-widget)
 
-The AxDeveloperToolsWidget allows to open a _developer tools window_ that displays log messages and events about the containing LaxarJS application.
+The ax-developer-tools-widget allows to open a _developer tools window_ that displays log messages and events about the containing LaxarJS application.
 
 
 ## Content
@@ -13,7 +13,7 @@ The AxDeveloperToolsWidget allows to open a _developer tools window_ that displa
 
 ## Appearance
 
-![The window opened by the AxDeveloperToolsWidget](docs/example.png)
+![The window opened by the ax-developer-tools-widget](docs/example.png)
 
 
 ## Usage
@@ -56,7 +56,7 @@ For full configuration options refer to the [widget.json](widget.json).
 
 ### Development
 
-To _develop_ (and not just use) the AxDeveloperToolsWidget _itself,_ the content application must be prepared:
+To _develop_ (and not just use) the ax-developer-tools-widget _itself,_ the content application must be prepared:
 
 ```sh
 cd content

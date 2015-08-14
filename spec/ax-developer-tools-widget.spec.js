@@ -4,14 +4,15 @@
  * http://www.laxarjs.org
  */
 define( [
+   'json!../widget.json',
    '../ax-developer-tools-widget',
    'angular-mocks',
    'jquery',
    'laxar/laxar_testing'
-], function( widgetModule, ngMocks, $, ax ) {
+], function( descriptor, widgetModule, ngMocks, $, ax ) {
    'use strict';
 
-   describe( 'An AxDeveloperToolsWidget', function() {
+   describe( 'An ax-developer-tools-widget', function() {
 
       var cleanup;
       var testBed;
@@ -20,7 +21,7 @@ define( [
 
       beforeEach( function setup() {
          jasmine.Clock.useMock();
-         testBed = ax.testing.portalMocksAngular.createControllerTestBed( 'laxarjs/ax-developer-tools-widget' );
+         testBed = ax.testing.portalMocksAngular.createControllerTestBed( descriptor );
          testBed.featuresMock = {
             open: {
                onActions: [ 'develop' ],

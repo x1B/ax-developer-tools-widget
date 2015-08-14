@@ -1,5 +1,5 @@
 {
-   "name": "AxDeveloperToolsWidget",
+   "name": "ax-developer-tools-widget",
    "description": "Provides developer tools to inspect the event bus and the application log, and the grid-alignment of widgets",
 
    "integration": {

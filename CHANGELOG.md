@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#17](https://github.com/LaxarJS/ax-developer-tools-widget/issues/17): Support AMD references (and installation through bower)
 - [#18](https://github.com/LaxarJS/ax-developer-tools-widget/issues/18): Added a `.travis.yml` for open continuous integration
 
 

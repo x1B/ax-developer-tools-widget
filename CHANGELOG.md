@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#20](https://github.com/LaxarJS/ax-developer-tools-widget/issues/20): capture events as soon as the axGlobalEventBus injection is available
+
 
 ## v1.3.0
 

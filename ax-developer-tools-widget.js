@@ -16,12 +16,17 @@ define( [
    var contentWindow;
    var cleanupInspector;
 
+
+   var channel = window.axDeveloperTools = ( window.axDeveloperTools || {} );
+   var buffers = channel.buffers = ( channel.buffers || { events: [], log: [] } );
+   var enabled = ax.configuration.get( 'widgets.laxar-developer-tools-widget.enabled', true );
+
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   Controller.$inject = [ '$scope', 'axEventBus', 'axConfiguration' ];
+   Controller.$inject = [ '$scope', 'axEventBus' ];
 
-   function Controller( $scope, eventBus, configuration ) {
-      $scope.enabled = configuration.get( 'widgets.laxar-developer-tools-widget.enabled', true );
+   function Controller( $scope, eventBus ) {
+      $scope.enabled = enabled;
       if( !$scope.enabled ) {
          return;
       }
@@ -29,9 +34,6 @@ define( [
       $scope.commands = {
          open: openContentWindow
       };
-
-      var channel = window.axDeveloperTools = ( window.axDeveloperTools || {} );
-      var buffers = channel.buffers = ( channel.buffers || { events: [], log: [] } );
 
       var contentUrl = require.toUrl( './content/' ) +
          ( $scope.features.develop.enabled ? 'debug' : 'index' ) + '.html';
@@ -124,7 +126,29 @@ define( [
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+   function startCapturingEvents( eventBus ) {
+      if( cleanupInspector ) {
+         return;
+      }
+      cleanupInspector = eventBus.addInspector( function( eventItem ) {
+         pushIntoStore( 'events', ax.object.options( {time: new Date() }, eventItem ) );
+      } );
+   }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   function pushIntoStore( storeName, item ) {
+      var buffer = buffers[ storeName ];
+      while( buffer.length >= BUFFER_SIZE ) {
+         buffer.shift();
+      }
+      buffer.push( item );
+   }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
    return ng.module( 'axDeveloperToolsWidget', [] )
-      .controller( 'AxDeveloperToolsWidgetController', Controller );
+       .run( [ 'axGlobalEventBus', startCapturingEvents ] )
+       .controller( 'AxDeveloperToolsWidgetController', Controller );
 
 } );

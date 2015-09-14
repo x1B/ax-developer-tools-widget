@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#21](https://github.com/LaxarJS/ax-developer-tools-widget/issues/21): use regexp-search not only for name, but also source and target
 - [#22](https://github.com/LaxarJS/ax-developer-tools-widget/issues/22): fixed spec tests
 - [#20](https://github.com/LaxarJS/ax-developer-tools-widget/issues/20): capture events as soon as the axGlobalEventBus injection is available
 

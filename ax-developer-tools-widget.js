@@ -17,9 +17,9 @@ define( [
    var cleanupInspector;
 
 
-   var channel = window.axDeveloperTools = ( window.axDeveloperTools || {} );
-   var buffers = channel.buffers = ( channel.buffers || { events: [], log: [] } );
-   var enabled = ax.configuration.get( 'widgets.laxar-developer-tools-widget.enabled', true );
+   var channel;
+   var buffers;
+   var enabled;
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,21 +37,6 @@ define( [
 
       var contentUrl = require.toUrl( './content/' ) +
          ( $scope.features.develop.enabled ? 'debug' : 'index' ) + '.html';
-
-      if( !cleanupInspector ) {
-         cleanupInspector = eventBus.addInspector( function( eventItem ) {
-            pushIntoStore( 'events',  ax.object.options( { time: new Date() }, eventItem ) );
-         } );
-
-         ng.element( window ).off( 'beforeunload.AxDeveloperToolsWidget' );
-         ng.element( window ).on( 'beforeunload.AxDeveloperToolsWidget', function() {
-            ax.log.removeLogChannel( logChannel );
-            cleanupInspector();
-            cleanupInspector = null;
-         } );
-      }
-
-      ax.log.addLogChannel( logChannel );
 
       $scope.features.open.onActions.forEach( function( action ) {
          eventBus.subscribe( 'takeActionRequest.' + action, function( event ) {
@@ -76,22 +61,6 @@ define( [
          if( $scope.features.open.onGlobalMethod ) {
             delete window[ $scope.features.open.onGlobalMethod ];
          }
-      }
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-      function logChannel( messageObject ) {
-         pushIntoStore( 'log', messageObject );
-      }
-
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-      function pushIntoStore( storeName, item ) {
-         var buffer = buffers[ storeName ];
-         while( buffer.length >= BUFFER_SIZE ) {
-            buffer.shift();
-         }
-         buffer.push( item );
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,12 +96,29 @@ define( [
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    function startCapturingEvents( eventBus ) {
-      if( cleanupInspector ) {
-         return;
+      enabled = ax.configuration.get( 'widgets.laxar-developer-tools-widget.enabled', true );
+      if( enabled ) {
+         channel = window.axDeveloperTools = ( window.axDeveloperTools || {} );
+         buffers = channel.buffers = ( channel.buffers || { events: [], log: [] } );
+
+
+         ax.log.addLogChannel( logChannel );
+         cleanupInspector = eventBus.addInspector( function( eventItem ) {
+            pushIntoStore( 'events', ax.object.options( {time: new Date() }, eventItem ) );
+         } );
+         ng.element( window ).off( 'beforeunload.AxDeveloperToolsWidget' );
+         ng.element( window ).on( 'beforeunload.AxDeveloperToolsWidget', function() {
+            ax.log.removeLogChannel( logChannel );
+            cleanupInspector();
+            cleanupInspector = null;
+         } );
       }
-      cleanupInspector = eventBus.addInspector( function( eventItem ) {
-         pushIntoStore( 'events', ax.object.options( {time: new Date() }, eventItem ) );
-      } );
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function logChannel( messageObject ) {
+         pushIntoStore( 'log', messageObject );
+      }
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////

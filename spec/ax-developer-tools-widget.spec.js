@@ -142,13 +142,11 @@ define( [
          var configPath = 'widgets.laxar-developer-tools-widget.enabled';
 
          beforeEach( function() {
-            testBed.injections.axConfiguration = {
-               'get': jasmine.createSpy( 'get' ).andCallFake( function( key, fallback ) {
-                  expect( key ).toEqual( configPath );
-                  expect( fallback ).toEqual( true );
-                  return false;
-               } )
-            };
+            spyOn( ax.configuration, 'get' ).andCallFake( function( key, fallback ) {
+               expect( key ).toEqual( configPath );
+               expect( fallback ).toEqual( true );
+               return false;
+            } );
 
             spyOn( ax.log, 'addLogChannel' );
             testBed.setup();

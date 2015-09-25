@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#24](https://github.com/LaxarJS/ax-developer-tools-widget/issues/24): new tracker feature: monitor pattern topics and detect problems
 - [#23](https://github.com/LaxarJS/ax-developer-tools-widget/issues/23): fixed `ngSanitize` use in events display widget
 
 

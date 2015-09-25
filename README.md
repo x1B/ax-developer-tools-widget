@@ -141,6 +141,21 @@ If the enabled-flag value is `false`, the widget MUST NOT subscribe to _takeActi
 
 *R6.5* If the enabled-flag value is `false`, a button MUST NOT be rendered, even if the _button_ feature has been enabled (see above).
 
+*R6.6* If the enabled-flag value is `false`, the pattern tracker (see below) must always be disabled.
+
+
+### 7. Pattern Tracking (tracker)
+
+The widget must allow to track and validate _pattern events_ (resource, actions, flags) published by widgets on the page.
+
+*R7.1* The widget MUST allow to enable a pattern tracker (default: disabled)
+
+*R7.2* If the tracker is enabled, the widget MUST watch _takeActionRequest_, _willTakeAction_ and _didTakeAction_ events and report problems using log-level WARN.
+
+*R7.3* If the tracker is enabled, the widget MUST watch _didUpdate_ and _didReplace_ events and report problems using log-level WARN.
+
+*R7.4* If the tracker is enabled, the widget MUST watch _didChangeFlag_ events and report problems using log-level WARN.
+
 
 ## Integration
 

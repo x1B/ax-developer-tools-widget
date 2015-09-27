@@ -54,7 +54,7 @@ var require = {
       },
       {
          name: 'wireflow',
-         location: '../lib/wireflow/build/',
+         location: 'wireflow/build/',
          main: 'wireflow'
       },
       {

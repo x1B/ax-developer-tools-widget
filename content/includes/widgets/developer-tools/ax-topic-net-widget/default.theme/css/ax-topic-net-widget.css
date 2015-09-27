@@ -6,11 +6,9 @@
 @charset "UTF-8";
 
 .ax-topic-net-widget {
-  background: blue;
-
   width: 100%;
   height: 100%;
-  min-height: 500px;
+  min-height: 100px;
 }
 
 
@@ -29,10 +27,8 @@
 .ax-topic-net-wrapper .nbe-graph {
   display: table-cell;
   height: 100%;
-  // background: green;
   position: relative;
 }
-
 
 
 

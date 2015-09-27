@@ -37,6 +37,16 @@
             }
          }
       ],
+      "topics": [
+         {
+            "widget": "developer-tools/ax-topic-net-widget",
+            "features": {
+               "events": {
+                  "stream": "eventBusItems"
+               }
+            }
+         }
+      ],
       "logs": [
          {
             "widget": "developer-tools/ax-log-display-widget",

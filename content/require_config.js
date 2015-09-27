@@ -40,13 +40,22 @@ var require = {
       'laxar-path-default-theme': 'laxar-uikit/dist/themes/default.theme',
 
       // LaxarJS application modules (contents are generated):
-      'laxar-application-dependencies': '../var/static/laxar_application_dependencies'
+      'laxar-application-dependencies': '../var/static/laxar_application_dependencies',
+
+      // Topic-Net Widget (Wireflow)
+      react: 'react/react',
+      immutable: 'immutable/dist/immutable'
    },
    packages: [
       {
          name: 'laxar-application',
          location: '..',
          main: 'init'
+      },
+      {
+         name: 'wireflow',
+         location: '../lib/wireflow/build/',
+         main: 'wireflow'
       },
       {
          name: 'moment',

@@ -1,11 +1,29 @@
-.tools-layout {
-  padding-top: 20px;
-  padding-bottom: 20px;
+/** hack... */
+html, body, [data-ax-page] {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+[data-ax-page]  > .container {
+  height: 100%;
+  display: table;
+  margin: 0;
+}
+
+.container > .trow {
+  display: table-row;
+  margin: 0;
+  padding: 0;
+}
+.container > .trow > div {
+  display: table-cell;
+  margin: 0;
+  padding: 0;
 }
 
 .tools-layout .app-tab-content {
-  border: 1px solid #ddd;
-  border-top: none;
   padding: 20px;
   margin-bottom: 20px;
+  height: 85%;
 }

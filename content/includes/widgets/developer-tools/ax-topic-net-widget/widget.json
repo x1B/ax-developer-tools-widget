@@ -1,0 +1,33 @@
+{
+   "name": "ax-topic-net-widget",
+   "description": "Visualizes pub/sub connections in a LaxarJS application",
+
+   "integration": {
+      "technology": "plain",
+      "type": "widget"
+   },
+
+   "features": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "required": [ "events" ],
+      "properties": {
+         "events": {
+            "type": "object",
+            "description": "Display event bus topic connections inferred from wrapper events.",
+            "requires": [ "stream" ],
+            "properties": {
+               "stream": {
+                  "type": "string",
+                  "description": "The event topic through which to gather events."
+               },
+               "bufferSize": {
+                  "type": "integer",
+                  "description": "Maximum number of event items to keep in memory.",
+                  "default": 5000
+               }
+            }
+         }
+       }
+   }
+}

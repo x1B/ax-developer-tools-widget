@@ -2,6 +2,7 @@ define(['exports', 'module', 'react', 'wireflow', './data'], function (exports, 
   'use strict';
 
   var Dispatcher = _wireflow.Dispatcher;
+  var AutoLayout = _wireflow.actions.AutoLayout;
   var _api$model = _wireflow.model;
   var convert = _api$model.convert;
   var Settings = _api$model.Settings;
@@ -61,7 +62,7 @@ define(['exports', 'module', 'react', 'wireflow', './data'], function (exports, 
     var dispatcher = new Dispatcher(render);
     new HistoryStore(dispatcher);
     var graphStore = new GraphStore(dispatcher, convert.graph(graph), types);
-    var layoutStore = new LayoutStore(dispatcher, convert.layout(layout), types);
+    var layoutStore = new LayoutStore(dispatcher, convert.layout(layout), graphStore);
     var selectionStore = new SelectionStore(dispatcher, layoutStore, graphStore);
     var settings = Settings({ mode: READ_WRITE });
 
@@ -102,10 +103,10 @@ define(['exports', 'module', 'react', 'wireflow', './data'], function (exports, 
       console.log('CLOG model', convert.graph(graph).toJS()); // :TODO: DELETE ME
       console.log('CLOG layout', convert.layout(layout).toJS()); // :TODO: DELETE ME
 
-      // :TODO: auto-layout
       layoutStore.layout = convert.layout(layout);
       graphStore.graph = convert.graph(graph);
       render();
+      dispatcher.dispatch(AutoLayout());
     });
 
     function reset() {

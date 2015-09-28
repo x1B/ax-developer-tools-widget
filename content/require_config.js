@@ -42,9 +42,12 @@ var require = {
       // LaxarJS application modules (contents are generated):
       'laxar-application-dependencies': '../var/static/laxar_application_dependencies',
 
-      // Topic-Net Widget (Wireflow)
+      // Topic-Net Widget (wireflow)
       react: 'react/react',
-      immutable: 'immutable/dist/immutable'
+      immutable: 'immutable/dist/immutable',
+      lodash: 'lodash/lodash',
+      graphlib: 'graphlib/dist/graphlib.core',
+      dagre: 'dagre/dist/dagre.core'
    },
    packages: [
       {
@@ -54,7 +57,7 @@ var require = {
       },
       {
          name: 'wireflow',
-         location: 'wireflow/build/',
+         location: 'wireflow/build',
          main: 'wireflow'
       },
       {
@@ -64,8 +67,18 @@ var require = {
       }
    ],
    shim: {
+      lodash: {
+         exports: '_'
+      },
+      graphlib: {
+         deps: [ 'lodash' ],
+         exports: 'graphlib'
+      },
+      dagre: {
+         deps: [ 'graphlib', 'lodash' ],
+         exports: 'dagre'
+      },
       angular: {
-         // use `deps: [ 'jquery' ]` if you use jquery and need a jQuery-compatible angular.element()
          deps: [],
          exports: 'angular'
       },

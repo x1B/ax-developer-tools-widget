@@ -9,7 +9,7 @@
 
       "immutable": "~3.7.4",
       "react": "~0.13.3",
-      "wireflow": "0.1.0",
+      "wireflow": "~0.2.0",
 
       "laxar": "~1.1.0-alpha.6",
       "laxar-patterns": "~1.1.0-alpha.1",

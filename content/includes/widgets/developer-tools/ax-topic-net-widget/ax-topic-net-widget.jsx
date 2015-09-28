@@ -4,6 +4,7 @@ import * as data from './data';
 
 const {
   Dispatcher,
+  actions: { AutoLayout },
   model: { convert, Settings, READ_ONLY, READ_WRITE },
   stores: { LayoutStore, GraphStore, SelectionStore, HistoryStore },
   components: { Graph }
@@ -60,7 +61,7 @@ function create( context, eventBus, features ) {
   const dispatcher = new Dispatcher( render );
   new HistoryStore( dispatcher );
   const graphStore = new GraphStore( dispatcher, convert.graph( graph ), types );
-  const layoutStore = new LayoutStore( dispatcher, convert.layout( layout ), types );
+  const layoutStore = new LayoutStore( dispatcher, convert.layout( layout ), graphStore );
   const selectionStore = new SelectionStore( dispatcher, layoutStore, graphStore );
   const settings = Settings({ mode: READ_WRITE });
 
@@ -93,10 +94,10 @@ function create( context, eventBus, features ) {
     console.log( 'CLOG model', convert.graph( graph ).toJS() ); // :TODO: DELETE ME
     console.log( 'CLOG layout', convert.layout( layout ).toJS() ); // :TODO: DELETE ME
 
-    // :TODO: auto-layout
     layoutStore.layout = convert.layout( layout );
     graphStore.graph = convert.graph( graph );
     render();
+    dispatcher.dispatch( AutoLayout() );
   } );
 
   function reset() {

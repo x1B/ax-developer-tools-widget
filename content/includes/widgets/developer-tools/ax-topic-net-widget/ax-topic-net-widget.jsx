@@ -37,14 +37,25 @@ const types = convert.types( {
 } );
 
 
+const patternTypes = {
+  didReplace: 'RESOURCE',
+  takeActionRequest: 'ACTION',
+  didChangeFlag: 'FLAG',
+};
+
 
 function create( context, eventBus, features ) {
   var domContainer = null;
-  var mastersByResource = {};
-  var slavesByResource = {};
 
-  var graph = { edges: {}, vertices: {} };
-  var layout = { edges: {}, vertices: {} };
+  // topic state:
+  var mastersByResource;
+  var slavesByResource;
+  var graph;
+  var layout;
+  var masterCounter;
+  var topicCounter;
+  var slaveCounter;
+  reset();
 
   const dispatcher = new Dispatcher( render );
   new HistoryStore( dispatcher );
@@ -53,96 +64,31 @@ function create( context, eventBus, features ) {
   const selectionStore = new SelectionStore( dispatcher, layoutStore, graphStore );
   const settings = Settings({ mode: READ_WRITE });
 
-  var masterCounter = 0;
-  var topicCounter = 0;
-  var slaveCounter = 0;
-
   eventBus.subscribe( 'didProduce.' + features.events.stream, function( event ) {
     var items = event.data;
     items.forEach( ({ action, cycleId, event, source, target }) => {
       const parts = event.split( '.' );
+      if( parts[ 0 ] === 'endLifecycleRequest' ) {
+        reset();
+        render();
+        return;
+      }
+
       const topic = parts[ 1 ];
       if( !topic ) { return; }
+
       const widget = source.replace( /.*#(.*)/, '$1' );
-      if( parts[ 0 ] === 'didReplace' ) {
-        if( action === 'subscribe' ) {
-          addResourceSlave( topic, widget );
-        }
-        else if( action === 'publish' ) {
-          addResourceMaster( topic, widget );
-        }
+      const patternType = patternTypes[ parts[ 0 ] ];
+      if( !patternType ) { return; }
+
+      if( action === 'subscribe' ) {
+        addSlave( topic, widget, patternType );
       }
+      else if( action === 'publish' ) {
+        addMaster( topic, widget, patternType );
+      }
+
     } );
-
-
-    function addTopic( topic, type ) {
-      if( graph.edges[ topic ] ) { return; }
-      ++topicCounter;
-      graph.edges[ topic ] = { type: type };
-      layout.edges[ topic ] = {
-        left: 250 + topicCounter*50,
-        top: 100 + topicCounter*80
-      };
-    }
-
-
-    function addResourceMaster( topic, widget ) {
-      if( !mastersByResource[ topic ] ) {
-        addTopic( topic, 'RESOURCE' );
-        mastersByResource[ topic ] = {};
-      }
-      if( mastersByResource[ topic ][ widget ] ) {
-        return;
-      }
-      mastersByResource[ topic ][ widget ] = true;
-
-      if( !graph.vertices[ widget ] ) {
-        ++masterCounter;
-        graph.vertices[ widget ] = {
-          label: widget,
-          ports: { inbound: [], outbound: [] }
-        };
-        layout.vertices[ widget ] = {
-          left: 10 + masterCounter*5,
-          top: 10 + masterCounter*80
-        };
-      }
-      graph.vertices[ widget ].ports.outbound.push( {
-        id: 'M.'+topic,
-        label: topic,
-        edgeId: topic,
-        type: 'RESOURCE'
-      } );
-    }
-
-    function addResourceSlave( topic, widget ) {
-      if( !slavesByResource[ topic ] ) {
-        addTopic( topic, 'RESOURCE' );
-        slavesByResource[ topic ] = {};
-      }
-      if( slavesByResource[ topic ][ widget ] ) {
-        return;
-      }
-      slavesByResource[ topic ][ widget ] = true;
-
-      if( !graph.vertices[ widget ] ) {
-        ++slaveCounter;
-        graph.vertices[ widget ] = {
-          label: widget,
-          ports: { inbound: [], outbound: [] }
-        };
-        layout.vertices[ widget ] = {
-          left: 400 + slaveCounter*50,
-          top: 30 + slaveCounter*80
-        };
-      }
-      graph.vertices[ widget ].ports.inbound.push( {
-        id: 'S'+topic,
-        label: topic,
-        edgeId: topic,
-        type: 'RESOURCE'
-      } );
-    }
 
     console.log( 'CLOG model', convert.graph( graph ).toJS() ); // :TODO: DELETE ME
     console.log( 'CLOG layout', convert.layout( layout ).toJS() ); // :TODO: DELETE ME
@@ -153,6 +99,86 @@ function create( context, eventBus, features ) {
     render();
   } );
 
+  function reset() {
+    console.log( 'reset' ); // :TODO: DELETE ME
+    graph = { edges: {}, vertices: {} };
+    layout = { edges: {}, vertices: {} };
+    mastersByResource = {};
+    slavesByResource = {};
+
+    masterCounter = topicCounter = slaveCounter = 0;
+  }
+
+
+  function addTopic( topic, type ) {
+    if( graph.edges[ topic ] ) { return; }
+    ++topicCounter;
+    graph.edges[ topic ] = { type: type };
+    layout.edges[ topic ] = {
+      left: 250 + topicCounter*50,
+      top: 100 + topicCounter*80
+    };
+  }
+
+
+  function addMaster( topic, widget, type ) {
+    if( !mastersByResource[ topic ] ) {
+      addTopic( topic, type );
+      mastersByResource[ topic ] = {};
+    }
+    if( mastersByResource[ topic ][ widget ] ) {
+      return;
+    }
+    mastersByResource[ topic ][ widget ] = true;
+
+    if( !graph.vertices[ widget ] ) {
+      ++masterCounter;
+      graph.vertices[ widget ] = {
+        label: widget,
+        ports: { inbound: [], outbound: [] }
+      };
+      layout.vertices[ widget ] = {
+        left: 10 + masterCounter*5,
+        top: 10 + masterCounter*80
+      };
+    }
+    graph.vertices[ widget ].ports.outbound.push( {
+      id: 'M.'+topic,
+      label: topic,
+      edgeId: topic,
+      type: type
+    } );
+  }
+
+
+  function addSlave( topic, widget, type ) {
+    if( !slavesByResource[ topic ] ) {
+      addTopic( topic, type );
+      slavesByResource[ topic ] = {};
+    }
+    if( slavesByResource[ topic ][ widget ] ) {
+      return;
+    }
+    slavesByResource[ topic ][ widget ] = true;
+
+    if( !graph.vertices[ widget ] ) {
+      ++slaveCounter;
+      graph.vertices[ widget ] = {
+        label: widget,
+        ports: { inbound: [], outbound: [] }
+      };
+      layout.vertices[ widget ] = {
+        left: 400 + slaveCounter*50,
+        top: 30 + slaveCounter*80
+      };
+    }
+    graph.vertices[ widget ].ports.inbound.push( {
+      id: 'S'+topic,
+      label: topic,
+      edgeId: topic,
+      type: type
+    } );
+  }
 
   function render() {
     if( !domContainer ) {

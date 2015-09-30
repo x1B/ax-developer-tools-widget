@@ -76,6 +76,7 @@ define( [
             testBed.tearDown();
 
             if( window.axDeveloperTools ) {
+               delete window.axDeveloperTools.tracker;
                delete window.axDeveloperTools.buffers.log;
                delete window.axDeveloperTools.buffers.events;
                delete window.axDeveloperTools.buffers;

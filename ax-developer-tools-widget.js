@@ -164,8 +164,8 @@ define( [
             if( monitored[ type ] ) {
                var topic = eventPatternTopic( eventItem );
                if( monitored[ type ][ topic ] ) {
-                  var message = 'monitor( [0] ): new state: [1]';
-                  ax.log.info( message, topic, ax.object.deepClone( states[ type ][ topic ] ) );
+                  var message = 'monitor([0]):\n   event: [1]\n   new state: [2]';
+                  ax.log.info( message, topic, eventItem, ax.object.deepClone( states[ type ][ topic ] ) );
                }
             }
             return problems;
@@ -238,7 +238,6 @@ define( [
          var state = states.action[ actionName ] = states.action[ actionName ] || {
             state: 'inactive',
             numRequests: 0,
-            requester: subject,
             requestedBy: null,
             outstandingReplies: {}
          };
@@ -246,13 +245,8 @@ define( [
          switch( verb ) {
 
             case 'takeActionRequest':
-               if( state.state === 'active' ) {
-                  problems.push( { description: ax.string.format(
-                     'Published takeActionRequest, but action already requested by "[0]"',
-                     [ state.requestedBy ]
-                  ) } );
-               }
                state.state = 'active';
+               state.requestedBy = subject;
                ++state.numRequests;
                return problems;
 
@@ -260,18 +254,24 @@ define( [
                if( state.state === 'inactive' ) {
                   problems.push( { description: 'willTakeAction published without prior active request' } );
                }
-               if( state.outstandingReplies[ subject ] ) {
-                  problems.push( { description: 'willTakeAction published twice by the same respondent' } );
+               if( !state.outstandingReplies.hasOwnProperty( subject ) ) {
+                  state.outstandingReplies[ subject ] = 0;
                }
-               state.outstandingReplies[ subject ] = true;
+               ++state.outstandingReplies[ subject ];
                return problems;
 
             case 'didTakeAction':
                if( state.state === 'inactive' ) {
                   problems.push( { description: 'didTakeAction published without prior active request' } );
                }
-               delete state.outstandingReplies[ subject ];
-               if( Object.keys( state.outstandingReplies).length === 0 ) {
+               if( state.outstandingReplies.hasOwnProperty( subject ) ) {
+                  --state.outstandingReplies[ subject ];
+                  if( state.outstandingReplies[ subject ] === 0 ) {
+                     delete state.outstandingReplies[ subject ];
+                  }
+               }
+
+               if( Object.keys( state.outstandingReplies ).length === 0 ) {
                   state.state = 'inactive';
                }
                return problems;

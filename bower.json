@@ -9,6 +9,7 @@
    },
    "dependencies": {
       "laxar": "^1.0.0",
+      "laxar-patterns": "^1.0.0",
       "laxar-uikit": "^1.0.0"
    },
    "devDependencies": {

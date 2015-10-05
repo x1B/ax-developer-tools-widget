@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#26](https://github.com/LaxarJS/ax-developer-tools-widget/issues/26): tracker: fix handling of didUpdate before didReplace
 - [#25](https://github.com/LaxarJS/ax-developer-tools-widget/issues/25): tracker: allow multiple simultaneous will/did replies
 
 

@@ -344,7 +344,7 @@ define( [
                      description: 'Sender "' + sender + '" sent didUpdate without prior didReplace.'
                   } );
                }
-               if( state.value === null || state.value === undefined ) {
+               else if( state.value === null || state.value === undefined ) {
                   problems.push( {
                      description: 'Sender "' + sender + '" sent didUpdate, but resource is ' + state.value
                   } );

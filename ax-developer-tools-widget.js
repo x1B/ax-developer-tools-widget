@@ -251,9 +251,6 @@ define( [
                return problems;
 
             case 'willTakeAction':
-               if( state.state === 'inactive' ) {
-                  problems.push( { description: 'willTakeAction published without prior active request' } );
-               }
                if( !state.outstandingReplies.hasOwnProperty( subject ) ) {
                   state.outstandingReplies[ subject ] = 0;
                }
@@ -261,9 +258,6 @@ define( [
                return problems;
 
             case 'didTakeAction':
-               if( state.state === 'inactive' ) {
-                  problems.push( { description: 'didTakeAction published without prior active request' } );
-               }
                if( state.outstandingReplies.hasOwnProperty( subject ) ) {
                   --state.outstandingReplies[ subject ];
                   if( state.outstandingReplies[ subject ] === 0 ) {

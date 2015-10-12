@@ -62,6 +62,7 @@ define( [
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function cleanup() {
+         developerHooks.tracker = null;
          if( $scope.features.open.onGlobalMethod ) {
             delete window[ $scope.features.open.onGlobalMethod ];
          }

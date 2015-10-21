@@ -2,6 +2,7 @@
 
 ## Last Changes
 
+- [#29](https://github.com/LaxarJS/ax-developer-tools-widget/issues/29): added require_config.js
 - [#28](https://github.com/LaxarJS/ax-developer-tools-widget/issues/28): tracker: clear state on $destroy
 - [#27](https://github.com/LaxarJS/ax-developer-tools-widget/issues/27): tracker: allow will/didTakeAction without request
 - [#26](https://github.com/LaxarJS/ax-developer-tools-widget/issues/26): tracker: fix handling of didUpdate before didReplace

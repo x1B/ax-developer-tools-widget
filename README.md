@@ -54,6 +54,7 @@ _Note:_ To open the developer window in this fashion, it might be necessary to a
 
 For full configuration options refer to the [widget.json](widget.json).
 
+
 ### Development
 
 To _develop_ (and not just use) the ax-developer-tools-widget _itself,_ the content application must be prepared:
@@ -62,6 +63,20 @@ To _develop_ (and not just use) the ax-developer-tools-widget _itself,_ the cont
 cd content
 npm install
 ```
+
+To have the debug-version run within the developer tools window so that you may quickly try out any changes, enable the `develop` feature:
+
+```json
+{
+   "widget": "laxarjs/ax-developer-tools-widget",
+   "features": {
+      "develop": {
+         "enabled": true
+      }
+   }
+}
+```
+
 
 To build and _release a new version_, the release-version of the embedded application must be committed:
 

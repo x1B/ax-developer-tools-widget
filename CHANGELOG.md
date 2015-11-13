@@ -3,6 +3,7 @@
 
 ## Last Changes
 
+- [#31](https://github.com/LaxarJS/ax-developer-tools-widget/issues/31): added prototype page inspector
 - [#35](https://github.com/LaxarJS/ax-developer-tools-widget/issues/35): host-connector: fixed log message overflow
 - [#34](https://github.com/LaxarJS/ax-developer-tools-widget/issues/34): fixed event timestamp in msie11
 - [#32](https://github.com/LaxarJS/ax-developer-tools-widget/issues/32): host-connector: fixed host-window access problem in MSIE11

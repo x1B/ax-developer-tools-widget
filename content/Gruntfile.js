@@ -27,18 +27,6 @@ module.exports = function( grunt ) {
                }
             }
          },
-         'connect': {
-            'laxar-develop': {
-               options: {
-                  middleware: function( connect, options, defaultMiddleware ) {
-                     var proxy =
-                        require( 'grunt-connect-proxy/lib/utils' ).proxyRequest;
-                     return [ proxy ].concat( defaultMiddleware );
-                  }
-               },
-               'proxies': grunt.file.readJSON( 'var/proxies.json' )
-            }
-         },
          'laxar-compass': {
             options: {
                compass: './tools/bin/compass'
@@ -71,18 +59,19 @@ module.exports = function( grunt ) {
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    grunt.loadNpmTasks( 'grunt-laxar' );
-   grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
-   grunt.loadNpmTasks( 'grunt-contrib-concat' );
-   grunt.loadNpmTasks( 'grunt-contrib-compress' );
-   grunt.loadNpmTasks( 'grunt-contrib-watch' );
+   grunt.loadNpmTasks( 'grunt-laxar-compass' );
+   grunt.loadNpmTasks( 'grunt-babel' );
 
-   grunt.registerTask( 'server', [ 'connect:default' ] );
-   grunt.registerTask( 'build', [ 'directory_tree', 'laxar_application_dependencies' ] );
-   grunt.registerTask( 'optimize', [ 'build', 'css_merger', 'cssmin', 'concat', 'requirejs' ] );
-   grunt.registerTask( 'test', [ 'connect:test', 'widgets' ] );
-   grunt.registerTask( 'dist', [ 'optimize', 'compress' ] );
-   grunt.registerTask( 'start', [ 'build', 'server', 'watch' ] );
-   grunt.registerTask( 'start-no-watch', [ 'build', 'connect:keepalive' ] );
+   // basic aliases
+   grunt.registerTask( 'test', [ 'laxar-test' ] );
+   grunt.registerTask( 'build', [ 'babel', 'laxar-build' ] );
+   grunt.registerTask( 'dist', [ 'laxar-dist' ] );
+   grunt.registerTask( 'develop', [ 'babel', 'laxar-develop' ] );
+   grunt.registerTask( 'info', [ 'laxar-info' ] );
+
+   // additional (possibly) more intuitive aliases
+   grunt.registerTask( 'optimize', [ 'laxar-dist' ] );
+   grunt.registerTask( 'start', [ 'develop' ] );
 
    grunt.registerTask( 'default', [ 'build', 'test' ] );
 

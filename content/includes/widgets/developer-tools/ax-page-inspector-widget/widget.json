@@ -11,7 +11,18 @@
       "$schema": "http://json-schema.org/draft-04/schema#",
       "type": "object",
       "properties": {
-
+         "events": {
+            "type": "object",
+            "description": "Inspect page models received through wrapper events.",
+            "requires": [ "resource" ],
+            "properties": {
+               "resource": {
+                  "type": "string",
+                  "description": "The event topic through which to monitor pages.",
+                  "format": "topic"
+               }
+            }
+         }
       }
    }
 }

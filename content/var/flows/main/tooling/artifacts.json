@@ -1,0 +1,344 @@
+{
+   "flows": [
+      {
+         "path": "application/flow/flow.json",
+         "resources": {
+            "watch": [
+               "."
+            ],
+            "embed": [
+               "."
+            ],
+            "list": []
+         },
+         "references": {
+            "local": {
+               "self": "application/flow/flow.json"
+            }
+         }
+      }
+   ],
+   "themes": [
+      {
+         "path": "bower_components/laxar-uikit/dist/themes/default.theme",
+         "name": "default.theme",
+         "resources": {
+            "watch": [
+               "css/theme.css"
+            ],
+            "list": [
+               "css/theme.css"
+            ],
+            "embed": []
+         },
+         "references": {
+            "local": {
+               "self": "default.theme"
+            }
+         }
+      }
+   ],
+   "pages": [
+      {
+         "path": "application/pages/tools.json",
+         "resources": {
+            "watch": [
+               "."
+            ],
+            "embed": [
+               "."
+            ],
+            "list": []
+         },
+         "references": {
+            "local": {
+               "self": "tools"
+            }
+         },
+         "pages": [],
+         "widgets": [
+            "developer-tools/ax-host-connector-widget",
+            "developer-tools/ax-developer-toolbar-widget",
+            "developer-tools/ax-events-display-widget",
+            "developer-tools/ax-page-inspector-widget",
+            "developer-tools/ax-log-display-widget"
+         ]
+      }
+   ],
+   "layouts": [
+      {
+         "resources": {
+            "list": [
+               "/application/layouts/tools/default.theme/css/tools.css"
+            ],
+            "watch": [
+               "/application/layouts/tools/default.theme/css/tools.css",
+               "/application/layouts/tools/default.theme/tools.html"
+            ],
+            "embed": [
+               "/application/layouts/tools/default.theme/tools.html"
+            ]
+         },
+         "references": {
+            "local": {
+               "self": "tools"
+            }
+         }
+      }
+   ],
+   "widgets": [
+      {
+         "path": "includes/widgets/developer-tools/ax-developer-toolbar-widget",
+         "integration": {
+            "technology": "angular",
+            "type": "widget"
+         },
+         "resources": {
+            "watch": [
+               "widget.json",
+               "*.theme/ax-developer-toolbar-widget.html",
+               "*.theme/css/ax-developer-toolbar-widget.css",
+               "ax-developer-toolbar-widget.js"
+            ],
+            "embed": [
+               "widget.json",
+               "*.theme/ax-developer-toolbar-widget.html"
+            ],
+            "list": [
+               "*.theme/css/ax-developer-toolbar-widget.css"
+            ]
+         },
+         "references": {
+            "local": {
+               "self": "developer-tools/ax-developer-toolbar-widget"
+            },
+            "amd": {
+               "self": "../includes/widgets/developer-tools/ax-developer-toolbar-widget",
+               "module": "laxar-application/includes/widgets/developer-tools/ax-developer-toolbar-widget/ax-developer-toolbar-widget"
+            }
+         },
+         "controls": [],
+         "referencedAs": {
+            "byUser": "developer-tools/ax-developer-toolbar-widget",
+            "derivedReference": "developer-tools/ax-developer-toolbar-widget"
+         }
+      },
+      {
+         "path": "includes/widgets/developer-tools/ax-events-display-widget",
+         "integration": {
+            "technology": "angular",
+            "type": "widget"
+         },
+         "resources": {
+            "watch": [
+               "widget.json",
+               "*.theme/ax-events-display-widget.html",
+               "*.theme/css/ax-events-display-widget.css",
+               "ax-events-display-widget.js"
+            ],
+            "embed": [
+               "widget.json",
+               "*.theme/ax-events-display-widget.html"
+            ],
+            "list": [
+               "*.theme/css/ax-events-display-widget.css"
+            ]
+         },
+         "references": {
+            "local": {
+               "self": "developer-tools/ax-events-display-widget"
+            },
+            "amd": {
+               "self": "../includes/widgets/developer-tools/ax-events-display-widget",
+               "module": "laxar-application/includes/widgets/developer-tools/ax-events-display-widget/ax-events-display-widget"
+            }
+         },
+         "controls": [
+            "laxar-input-control",
+            "laxar-affix-control"
+         ],
+         "referencedAs": {
+            "byUser": "developer-tools/ax-events-display-widget",
+            "derivedReference": "developer-tools/ax-events-display-widget"
+         }
+      },
+      {
+         "path": "includes/widgets/developer-tools/ax-host-connector-widget",
+         "integration": {
+            "technology": "angular",
+            "type": "widget"
+         },
+         "resources": {
+            "watch": [
+               "widget.json",
+               "*.theme/ax-host-connector-widget.html",
+               "*.theme/css/ax-host-connector-widget.css",
+               "ax-host-connector-widget.js"
+            ],
+            "embed": [
+               "widget.json",
+               "*.theme/ax-host-connector-widget.html"
+            ],
+            "list": [
+               "*.theme/css/ax-host-connector-widget.css"
+            ]
+         },
+         "references": {
+            "local": {
+               "self": "developer-tools/ax-host-connector-widget"
+            },
+            "amd": {
+               "self": "../includes/widgets/developer-tools/ax-host-connector-widget",
+               "module": "laxar-application/includes/widgets/developer-tools/ax-host-connector-widget/ax-host-connector-widget"
+            }
+         },
+         "controls": [],
+         "referencedAs": {
+            "byUser": "developer-tools/ax-host-connector-widget",
+            "derivedReference": "developer-tools/ax-host-connector-widget"
+         }
+      },
+      {
+         "path": "includes/widgets/developer-tools/ax-log-display-widget",
+         "integration": {
+            "technology": "angular",
+            "type": "widget"
+         },
+         "resources": {
+            "watch": [
+               "widget.json",
+               "*.theme/ax-log-display-widget.html",
+               "*.theme/css/ax-log-display-widget.css",
+               "ax-log-display-widget.js"
+            ],
+            "embed": [
+               "widget.json",
+               "*.theme/ax-log-display-widget.html"
+            ],
+            "list": [
+               "*.theme/css/ax-log-display-widget.css"
+            ]
+         },
+         "references": {
+            "local": {
+               "self": "developer-tools/ax-log-display-widget"
+            },
+            "amd": {
+               "self": "../includes/widgets/developer-tools/ax-log-display-widget",
+               "module": "laxar-application/includes/widgets/developer-tools/ax-log-display-widget/ax-log-display-widget"
+            }
+         },
+         "controls": [
+            "laxar-affix-control"
+         ],
+         "referencedAs": {
+            "byUser": "developer-tools/ax-log-display-widget",
+            "derivedReference": "developer-tools/ax-log-display-widget"
+         }
+      },
+      {
+         "path": "includes/widgets/developer-tools/ax-page-inspector-widget",
+         "integration": {
+            "technology": "react",
+            "type": "widget"
+         },
+         "resources": {
+            "watch": [
+               "widget.json",
+               "*.theme/ax-page-inspector-widget.html",
+               "*.theme/css/ax-page-inspector-widget.css",
+               "ax-page-inspector-widget.js"
+            ],
+            "embed": [
+               "widget.json",
+               "*.theme/ax-page-inspector-widget.html"
+            ],
+            "list": [
+               "*.theme/css/ax-page-inspector-widget.css"
+            ]
+         },
+         "references": {
+            "local": {
+               "self": "developer-tools/ax-page-inspector-widget"
+            },
+            "amd": {
+               "self": "../includes/widgets/developer-tools/ax-page-inspector-widget",
+               "module": "laxar-application/includes/widgets/developer-tools/ax-page-inspector-widget/ax-page-inspector-widget"
+            }
+         },
+         "controls": [],
+         "referencedAs": {
+            "byUser": "developer-tools/ax-page-inspector-widget",
+            "derivedReference": "developer-tools/ax-page-inspector-widget"
+         }
+      }
+   ],
+   "controls": [
+      {
+         "path": "bower_components/laxar-affix-control",
+         "integration": {
+            "technology": "angular",
+            "type": "control"
+         },
+         "resources": {
+            "watch": [
+               "*.theme/css/ax-affix-control.css",
+               "ax-affix-control.js"
+            ],
+            "embed": [
+               "control.json"
+            ],
+            "list": [
+               "*.theme/css/ax-affix-control.css"
+            ]
+         },
+         "references": {
+            "local": {
+               "self": "../laxar-affix-control"
+            },
+            "amd": {
+               "self": "laxar-affix-control",
+               "module": "laxar-affix-control/ax-affix-control"
+            }
+         },
+         "referencedAs": {
+            "byUser": "laxar-affix-control",
+            "derivedScheme": "amd",
+            "derivedReference": "laxar-affix-control"
+         }
+      },
+      {
+         "path": "bower_components/laxar-input-control",
+         "integration": {
+            "technology": "angular",
+            "type": "control"
+         },
+         "resources": {
+            "watch": [
+               "*.theme/css/ax-input-control.css",
+               "ax-input-control.js"
+            ],
+            "embed": [
+               "control.json"
+            ],
+            "list": [
+               "*.theme/css/ax-input-control.css"
+            ]
+         },
+         "references": {
+            "local": {
+               "self": "../laxar-input-control"
+            },
+            "amd": {
+               "self": "laxar-input-control",
+               "module": "laxar-input-control/ax-input-control"
+            }
+         },
+         "referencedAs": {
+            "byUser": "laxar-input-control",
+            "derivedScheme": "amd",
+            "derivedReference": "laxar-input-control"
+         }
+      }
+   ]
+}

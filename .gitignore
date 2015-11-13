@@ -3,5 +3,5 @@ test-results.xml
 /.idea
 
 # re-enabled this when #31 is complete
-/var
-/bower_components
+/content/var
+/content/bower_components

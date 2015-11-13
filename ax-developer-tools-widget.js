@@ -110,7 +110,7 @@ define( [
 
       if( enabled ) {
          developerHooks = window.axDeveloperTools = ( window.axDeveloperTools || {} );
-         buffers = developerHooks.buffers = ( developerHooks.buffers || { events: [], log: [] } );
+         buffers = developerHooks.buffers = ( developerHooks.buffers || { events: [], log: [], pages: [] } );
 
          ax.log.addLogChannel( logChannel );
          cleanupInspector = eventBus.addInspector( function( item ) {
@@ -377,8 +377,8 @@ define( [
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   onPageChange( pageInfo ) {
-      
+   function onPageChange( pageInfo ) {
+      pushIntoStore( 'pages', pageInfo );
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////

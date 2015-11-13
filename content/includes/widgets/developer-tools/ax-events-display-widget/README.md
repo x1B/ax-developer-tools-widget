@@ -85,6 +85,18 @@ Initially, the interaction types _subscribe_ and _unsubscribe_ should be hidden.
 *R2.4* The widget MUST offer to filter events _by source type_, using a group of toggle controls.
 The predefined sender types are _runtime_ and _widgets_ to distinguish events sent by the LaxarJS runtime from widget-sent events.
 
+*R2.5* The widget MUST offer to filter events based on a _filter resource_.
+The following fields are supported for the filter resource:
+
+  * `topics`: an array of event-name prefixes to include in the output.
+    If missing or `null`, default to `[ '' ]` (include all events).
+
+  * `sources`: an array of event-senders to include.
+    If missing or `null`, include all senders.
+
+  * `targets`: an array of event-recipients to include.
+    If missing or `null`, include all recipients.
+
 
 ###  3. Allow to show local events _(showLocalEvents)_
 

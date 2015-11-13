@@ -40,7 +40,17 @@ var require = {
       'laxar-path-default-theme': 'laxar-uikit/dist/themes/default.theme',
 
       // LaxarJS application modules (contents are generated):
-      'laxar-application-dependencies': '../var/static/laxar_application_dependencies'
+      'laxar-application-dependencies': '../var/static/laxar_application_dependencies',
+
+      // React support (ax-page-inspector-widget):
+      'laxar-react-adapter': 'laxar-react-adapter/laxar-react-adapter',
+      'react': 'react/react',
+      // dagre library (ax-page-inspector-widget):
+      lodash: 'lodash/lodash',
+      dagre: 'dagre/dist/dagre.core',
+      graphlib: 'graphlib/dist/graphlib.core',
+      // Immutable.js library (ax-page-inspector-widget):
+      immutable: 'immutable/dist/immutable'
    },
    packages: [
       {
@@ -52,6 +62,11 @@ var require = {
          name: 'moment',
          location: 'moment',
          main: 'moment'
+      },
+      {
+         name: 'wireflow',
+         location: 'wireflow/build',
+         main: 'wireflow'
       }
    ],
    shim: {
@@ -85,7 +100,9 @@ var require = {
       'json-patch': {
          exports: 'jsonpatch'
       },
-
+      lodash: { exports: '_' },
+      graphlib: { deps: [ 'lodash' ], exports: 'graphlib' },
+      dagre: { deps: [ 'graphlib', 'lodash' ], exports: 'dagre' },
       // ax-affix-control, ax-input-control:
       'bootstrap/affix': [ 'jquery' ],
       'bootstrap/tooltip': [ 'jquery' ]

@@ -1,3 +1,35 @@
+
+.ax-events-filter-items {
+   line-height: 200%;
+}
+
+.ax-events-filter-items .btn-info {
+   color: white;
+   margin-left: 4px;
+   border: none;
+}
+
+.ax-events-display-widget .ax-events-display-kind-ACTIVITY {
+   background: #4fb04f;
+}
+.ax-events-display-widget .ax-events-display-kind-WIDGET {
+   background: #f90;
+}
+
+.ax-events-display-widget .ax-events-display-pattern-RESOURCE {
+   background: #673ab7;
+}
+.ax-events-display-widget .ax-events-display-pattern-FLAG {
+   background: #4caf50;
+}
+.ax-events-display-widget .ax-events-display-pattern-ACTION {
+   background: #ef6c00;
+}
+.ax-events-display-widget .ax-events-display-pattern-CONTAINER {
+   background: #4285f4;
+}
+
+
 .ax-events-display-widget .affix {
   top: 0;
   left: 0;
@@ -127,6 +159,12 @@
 .ax-events-display-widget .table tbody.ax-event-interaction-unsubscribe {
   color: #999;
 }
+
+.ax-events-display-widget .ax-event-pattern-navigation {
+  background: #ffeebb;
+}
+
+
 .ax-events-display-widget .table tr.ax-event-summary td {
   border-top: 1px solid #ddd;
 }

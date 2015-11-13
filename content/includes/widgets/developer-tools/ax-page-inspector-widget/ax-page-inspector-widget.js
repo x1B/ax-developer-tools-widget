@@ -1,0 +1,121 @@
+define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-helpers'], function (exports, module, _react, _laxarPatterns, _wireflow, _graphHelpers) {'use strict';function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { 'default': obj };}var _React = _interopRequireDefault(_react);var _patterns = _interopRequireDefault(_laxarPatterns);var _wireflow2 = _interopRequireDefault(_wireflow);var 
+
+
+
+
+
+
+
+   SelectionStore = _wireflow2['default'].selection.SelectionStore;var 
+   HistoryStore = _wireflow2['default'].history.HistoryStore;var 
+   LayoutStore = _wireflow2['default'].layout.LayoutStore;var 
+   GraphStore = _wireflow2['default'].graph.GraphStore;var _wireflow$settings = _wireflow2['default'].
+   settings;var _wireflow$settings$actions = _wireflow$settings.
+   actions;var ChangeMode = _wireflow$settings$actions.ChangeMode;var MinimapResized = _wireflow$settings$actions.MinimapResized;var _wireflow$settings$model = _wireflow$settings.
+   model;var Settings = _wireflow$settings$model.Settings;var READ_ONLY = _wireflow$settings$model.READ_ONLY;var READ_WRITE = _wireflow$settings$model.READ_WRITE;var 
+   SettingsStore = _wireflow$settings.SettingsStore;var 
+
+   Dispatcher = _wireflow2['default'].Dispatcher;var 
+   Graph = _wireflow2['default'].components.Graph;
+
+
+
+   function create(context, eventBus, reactRender) {
+
+      var domAvailable = false;
+      var resourceAvailable = false;
+      var visible = false;
+      var showIrrelevantWidgets = false;
+      var publishedSelection = null;
+
+      _patterns['default'].resources.handlerFor(context).
+      registerResourceFromFeature('pageInfo', { 
+         onUpdateReplace: function onUpdateReplace() {
+            resourceAvailable = true;
+            update();} });
+
+
+
+
+      var publishFilter = _patterns['default'].resources.replacePublisherForFeature(context, 'filter', { 
+         isOptional: true });
+
+
+      eventBus.subscribe('didChangeAreaVisibility.' + context.widget.area, function (event) {
+         if (!visible && event.visible) {
+            visible = true;
+            update();}});
+
+
+
+      function replaceFilter(selection, graphModel) {
+         var resource = context.features.filter.resource;
+         if (!resource || selection === publishedSelection) {
+            return;}
+
+         publishedSelection = selection;
+         publishFilter((0, _graphHelpers.filterFromSelection)(selection, graphModel));}
+
+
+      function toggleIrrelevantWidgets() {
+         showIrrelevantWidgets = !showIrrelevantWidgets;
+         update();}
+
+
+      function renderEmpty() {
+         reactRender(_React['default'].createElement('h3', null, 'Waiting for data'));}
+
+
+      var dispatcher = undefined;
+      function update() {
+         if (!visible || !domAvailable || !resourceAvailable) {
+            return;}
+
+
+         var pageInfo = context.resources.pageInfo;
+         var pageGraph = (0, _graphHelpers.graph)(pageInfo, showIrrelevantWidgets);
+
+         var pageTypes = (0, _graphHelpers.types)();
+         dispatcher = new Dispatcher(render);
+         new HistoryStore(dispatcher);
+         var graphStore = new GraphStore(dispatcher, pageGraph, pageTypes);
+         var layoutStore = new LayoutStore(dispatcher, graphStore);
+         var settingsStore = new SettingsStore(dispatcher, Settings({ mode: READ_ONLY }));
+         var selectionStore = new SelectionStore(dispatcher, layoutStore, graphStore);
+
+         function render() {
+            replaceFilter(selectionStore.selection, graphStore.graph);
+
+            reactRender(
+            _React['default'].createElement('div', { className: 'page-inspector-row form-inline' }, 
+            _React['default'].createElement('div', { className: 'row text-right' }, 
+            _React['default'].createElement('button', { className: 'btn btn-link', 
+               type: 'button', 
+               onClick: toggleIrrelevantWidgets }, 
+            _React['default'].createElement('i', { className: 'fa fa-toggle-' + (showIrrelevantWidgets ? 'on' : 'off') }), ' "Silent" Widgets')), 
+
+
+            _React['default'].createElement(Graph, { className: 'nbe-theme-fusebox-app', 
+               types: graphStore.types, 
+               model: graphStore.graph, 
+               layout: layoutStore.layout, 
+               measurements: layoutStore.measurements, 
+               settings: settingsStore.settings, 
+               selection: selectionStore.selection, 
+               eventHandler: dispatcher.dispatch })));}}
+
+
+
+
+
+      return { onDomAvailable: function onDomAvailable() {
+            domAvailable = true;
+            update();} };}module.exports = 
+
+
+
+   { 
+      name: 'ax-page-inspector-widget', 
+      injections: ['axContext', 'axEventBus', 'axReactRender'], 
+      create: create };});
+//# sourceMappingURL=ax-page-inspector-widget.js.map

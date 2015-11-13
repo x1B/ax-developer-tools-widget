@@ -1,0 +1,29 @@
+/**
+ * Copyright 2015
+ * Released under the MIT license
+ */
+@charset "UTF-8";
+
+@import "../../../../../../bower_components/wireflow/demos/fusebox/css/wireflow.css";
+
+.ax-page-inspector-widget {
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   height: 100%;
+}
+
+.ax-page-inspector-widget .page-inspector-row {
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   height: 100%;
+}
+
+.ax-page-inspector-widget .nbe-graph {
+   display: flex;
+   flex-direction: column;
+   width: calc( 100% - 4px );
+   height: calc( 100% - 4px );
+   position: relative;
+}

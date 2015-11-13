@@ -16,7 +16,9 @@ define( [
 
    function Controller( $scope ) {
       var eventBus = $scope.eventBus;
+      var pageInfoVersion = -1;
       var timeout;
+      var lastIndexByStream = {};
 
       // If the development server is used and we don't want the development window to be reloaded each
       // time something changes during development, we shutdown live reload here.
@@ -36,14 +38,24 @@ define( [
             return;
          }
 
-         publishGridSettings();
-         checkForData();
+         var hostApplicationAvailable = publishGridSettings();
+         if( hostApplicationAvailable ) {
+            checkForData();
+         }
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function publishGridSettings() {
-         var channel = window.opener.axDeveloperTools;
+         var channel;
+         try {
+            channel = window.opener.axDeveloperTools;
+         }
+         catch( exception ) {
+            handleApplicationGone();
+            return false;
+         }
+
          var channelGridSettings = channel && channel.gridSettings;
          if( $scope.features.grid.resource && channelGridSettings ) {
             eventBus.publish( 'didReplace.' + $scope.features.grid.resource, {
@@ -51,35 +63,58 @@ define( [
                data: channelGridSettings
             } );
          }
+         return true;
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function checkForData() {
-         var channel = window.opener.axDeveloperTools;
+         var channel;
+         try {
+            channel = window.opener.axDeveloperTools;
+         } catch (e) {
+            handleApplicationGone();
+            return;
+         }
          var buffers = channel && channel.buffers;
          if( buffers ) {
             publishStream( 'events' );
             publishStream( 'log' );
          }
-         timeout = window.setTimeout( checkForData, REFRESH_DELAY_MS );
+         if( channel && channel.pageInfoVersion > pageInfoVersion ) {
+            pageInfoVersion = channel.pageInfoVersion;
+            eventBus.publish( 'didReplace.' + $scope.features.pageInfo.resource, {
+               resource: $scope.features.pageInfo.resource,
+               data: channel.pageInfo
+            } );
+         }
 
+         timeout = window.setTimeout( checkForData, REFRESH_DELAY_MS );
          function publishStream( bufferFeature ) {
             var buffer = buffers[ bufferFeature ];
-            if( !buffer.length ) {
+            var lastIndex = lastIndexByStream[ bufferFeature ] || -1;
+            var events = buffer
+               .filter( function( _ ) { return lastIndex < _.index; } )
+               .map( function ( _ ) { return JSON.parse( _.json ); } );
+            if( !events.length ) {
                return;
             }
             eventBus.publish( 'didProduce.' + $scope.features[ bufferFeature ].stream, {
                stream: $scope.features[ bufferFeature ].stream,
-               // re-wrap the transfer array to avoid bug in MSIE11
-               // see http://stackoverflow.com/questions/7975655 for details
-               data: [].concat( buffer )
-                  // content has been stringified for transfer (MSIE11 performance)
-                  .map( function ( _ ) { return JSON.parse( _ ); } )
+               data: events
             } );
-            // modify buffer in place so that no object crosses the window boundary (MSIE11 performance)
-            buffer.splice( 0, buffer.length );
+            lastIndexByStream[ bufferFeature ] = buffer[ buffer.length - 1 ].index;
          }
+
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function handleApplicationGone() {
+         var message =
+            'laxar-developer-tools-widget: Cannot access LaxarJS host window (or tab). Is it still open?';
+         ax.log.error( message );
+         eventBus.publish( 'didEncounterError', message );
       }
 
    }

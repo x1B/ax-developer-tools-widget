@@ -6,8 +6,9 @@
 define( [
    'angular',
    'angular-sanitize',
+   'laxar-patterns',
    'moment'
-], function( ng, ngSanitize, moment ) {
+], function( ng, ngSanitize, patterns, moment ) {
    'use strict';
 
    var settingGroups = [ 'patterns', 'interactions', 'sources' ];
@@ -17,6 +18,13 @@ define( [
    Controller.$inject = [ '$scope', '$sanitize' ];
 
    function Controller( $scope, $sanitize ) {
+
+      $scope.resources = {};
+
+      var resourceHandler = patterns.resources.handlerFor( $scope ).registerResourceFromFeature( 'filter', {
+         onUpdateReplace: runFilters,
+         isOptional: true
+      } );
 
       $scope.model = {
          patterns: [
@@ -127,7 +135,7 @@ define( [
 
       if( $scope.features.events.stream ) {
          $scope.eventBus.subscribe( 'didProduce.' + $scope.features.events.stream, function( event ) {
-            if( Array.isArray( event.data ) ) {
+            if( Array.isArray( event.data ) && event.data.length ) {
                event.data.forEach( addEvent );
             }
             else {
@@ -211,15 +219,11 @@ define( [
             if( !settings.sources[ eventInfo.sourceType ] ) {
                return false;
             }
-            if( searchRegExp ) {
-               var someMatch = [ eventInfo.name, eventInfo.source, eventInfo.target].some( function( field ) {
-                  var matches = searchRegExp.test( field );
-                  searchRegExp.lastIndex = 0;
-                  return !!matches;
-               } );
-               if( !someMatch ) {
-                  return false;
-               }
+            if( !matchesFilterResource( eventInfo ) ) {
+               return false;
+            }
+            if( !matchesSearchExpression( eventInfo, searchRegExp ) ) {
+               return false;
             }
             ++numVisible;
             return true;
@@ -232,6 +236,63 @@ define( [
             eventInfo.htmlTarget = htmlValue( eventInfo.target, searchRegExp );
             eventInfo.selected = !!selectionEventInfo && inSelection( eventInfo, selectionEventInfo );
          } );
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function matchesSearchExpression( eventInfo, searchRegExp ) {
+         return !searchRegExp || [ eventInfo.name, eventInfo.source, eventInfo.target ]
+            .some( function( field ) {
+               var matches = searchRegExp.test( field );
+               searchRegExp.lastIndex = 0;
+               return !!matches;
+            } );
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      const patternTopics = {
+         RESOURCE: [ 'didReplace', 'didUpdate' ],
+         ACTION: [ 'takeActionRequest', 'willTakeAction', 'didTakeAction' ],
+         FLAG: [ 'didChangeFlag' ],
+         CONTAINER: [ 'changeAreaVisibilityRequest', 'willChangeAreaVisibility', 'didChangeAreaVisibility' ]
+      };
+
+      function matchesFilterResource( eventInfo ) {
+         if( !$scope.resources.filter ) {
+            return true;
+         }
+
+         var filterTopics = $scope.resources.filter.topics || [];
+         var filterParticipants = $scope.resources.filter.participants || [];
+         if( !filterTopics.length && !filterParticipants.length ) {
+            return true;
+         }
+
+         var matchesTopicFilter = filterTopics
+            .some( function( item ) {
+               var prefixes = patternTopics[ item.pattern ];
+               return prefixes.some( function( prefix ) {
+                  var topic = prefix + '.' + item.topic;
+                  return eventInfo.name === topic || eventInfo.name.indexOf( topic + '.' ) === 0;
+               } );
+            } );
+
+         var matchesParticipantsFilter = [ 'target', 'source' ].some( function( field ) {
+            var value = eventInfo[ field ];
+            return filterParticipants
+               .map( function( _ ) { return _.participant; } )
+               .some( isSuffixOf( value ) );
+         } );
+
+         return matchesTopicFilter || matchesParticipantsFilter;
+
+         function isSuffixOf( value ) {
+            return function( _ ) {
+               const tail = '#' + _;
+               return value.length >= tail.length && value.indexOf( tail ) === value.length - tail.length;
+            };
+         }
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////

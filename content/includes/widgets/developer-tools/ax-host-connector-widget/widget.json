@@ -33,6 +33,17 @@
                }
             }
          },
+         "pageInfo": {
+            "type": "object",
+            "description": "Publish the current page for inspection.",
+            "properties": {
+               "resource": {
+                  "type": "string",
+                  "description": "The topic through which to publish the current page.",
+                  "default": null
+               }
+            }
+         },
          "grid": {
             "type": "object",
             "description": "Publish application-specific grid configuration set by the host application.",

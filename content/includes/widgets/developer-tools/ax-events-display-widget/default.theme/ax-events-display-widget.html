@@ -96,6 +96,19 @@
               data-ng-class="{ 'ax-disabled': !model.eventInfos.length }"
               data-ng-click="commands.discard()">Discard Events</button>
    </div>
+
+   <div class="form-inline ax-events-filter-items" data-ng-if="resources.filter.topics.length || resources.filter.participants.length">
+      <a class="btn btn-xs btn-link" href="#/tools/page">Page selection</a>
+      <span class="btn btn-xs btn-info"
+            data-ng-repeat="item in resources.filter.topics track by item.topic"
+            data-ng-class="'ax-events-display-pattern-' + item.pattern">
+            {{item.topic}}
+      </span><span class="btn btn-xs btn-info"
+            data-ng-repeat="item in resources.filter.participants track by item.participant"
+            data-ng-class="'ax-events-display-kind-' + item.kind">
+            {{item.participant}}
+      </span>
+   </div>
 </div>
 
 <div data-ng-if="!model.eventInfos.length"
@@ -143,31 +156,31 @@
          <th class="text-right">Timestamp</th>
       </tr>
    </thead>
-   <tbody data-ng-repeat="event in model.visibleEventInfos"
-          data-ng-class="'ax-event-interaction-' + event.interaction + ( event.selected ? ' ax-event-selected' : '' )"
-          data-ng-click="commands.select( event )">
-      <tr class="ax-event-summary">
+   <tbody ng-repeat="event in model.visibleEventInfos"
+          ng-class="'ax-event-interaction-' + event.interaction + ( event.selected ? ' ax-event-selected' : '' )"
+          ng-click="commands.select( event )">
+      <tr class="ax-event-summary" ng-class="'ax-event-pattern-' + event.pattern">
          <td class="ax-col-pattern-icon"
              title="{{ event.pattern }}"
              data-ng-bind-html="view.patternsByName[ event.pattern ].htmlIcon"></td>
          <td class="ax-col-interaction"><em>{{event.interaction}}</em></td>
          <td>
-            <button type="button" class="btn-link"
-                    data-ng-if="event.interaction == 'publish' && !event.showDetails"
-                    data-ng-click="event.showDetails = true; $event.stopPropagation();"><i class="fa fa-plus-square">&nbsp;</i></button>
-            <button type="button" class="btn-link"
-                    data-ng-if="event.interaction == 'publish' && event.showDetails"
-                    data-ng-click="event.showDetails = false; $event.stopPropagation();"><i class="fa fa-minus-square" >&nbsp;</i></button>
+            <button type="button" class="btn-link btn-info"
+                    ng-if="event.interaction == 'publish' && !event.showDetails"
+                    ng-click="event.showDetails = true; $event.stopPropagation();"><i class="fa fa-plus-square">&nbsp;</i></button>
+            <button type="button" class="btn-link btn-info"
+                    ng-if="event.interaction == 'publish' && event.showDetails"
+                    ng-click="event.showDetails = false; $event.stopPropagation();"><i class="fa fa-minus-square" >&nbsp;</i></button>
          </td>
          <td data-ng-bind-html="event.htmlName"></td>
 
          <td class="ax-col-cycle text-right">{{event.cycleId}}</td>
-         <td data-ng-bind-html="event.htmlSource"></td>
-         <td data-ng-bind-html="event.htmlTarget"></td>
+         <td ng-bind-html="event.htmlSource"></td>
+         <td ng-bind-html="event.htmlTarget"></td>
          <td class="text-right">{{event.formattedTime}}</td>
       </tr>
       <tr class="ax-event-payload"
-          data-ng-if="event.showDetails">
+          ng-if="event.showDetails">
          <td colspan="3"></td>
          <td colspan="5" ><pre>{{event.formattedEvent}}</pre></td>
       </tr>

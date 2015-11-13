@@ -1,15 +1,27 @@
 <div class="row text-right">
    <button class="btn btn-link"
            type="button"
-           data-ng-if="resources.grid"
-           data-ng-click="toggleGrid()"
-      ><i class="fa"
-          data-ng-class="{ 'fa-toggle-off': !model.gridOverlay, 'fa-toggle-on': model.gridOverlay }"
+           ng-if="resources.grid"
+           ng-click="toggleGrid()"
+      ><i class="fa" ng-class="{ 'fa-toggle-off': !model.gridOverlay, 'fa-toggle-on': model.gridOverlay }"
       ></i>&nbsp;{{model.gridOverlay ? 'Turn off grid overlay' : 'Turn on grid overlay'}}</button>
    <button class="btn btn-link"
            type="button"
-           data-ng-click="toggleWidgetOutline()"
-      ><i class="fa"
-          data-ng-class="{ 'fa-toggle-off': !model.widgetOverlay, 'fa-toggle-on': model.widgetOverlay }"
+           ng-click="toggleWidgetOutline()"
+      ><i class="fa" ng-class="{ 'fa-toggle-off': !model.widgetOverlay, 'fa-toggle-on': model.widgetOverlay }"
       ></i>&nbsp;{{model.widgetOverlay ? 'Turn off widget outline' : 'Turn on widget outline'}}</button>
+
 </div>
+
+<ul class="nav nav-tabs"
+    role="tablist">
+   <li ng-repeat="tab in model.tabs"
+       ng-class="{ 'ax-active': model.activeTab.name == tab.name }"
+      ><a href="javascript:void(0);" ng-click="activateTab( tab )">{{ tab.label }}</a></li>
+</ul>
+
+<div ng-repeat="tab in model.tabs"
+     ng-show="model.activeTab == tab"
+     class="app-tab app-tab-page"
+     data-ax-widget-area
+     data-ax-widget-area-binding="tab.name"></div>

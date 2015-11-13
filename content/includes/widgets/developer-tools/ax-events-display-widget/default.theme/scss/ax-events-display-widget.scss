@@ -3,6 +3,31 @@
 @import "variables_all";
 @import "ax-events-display-widget-variables";
 
+
+.ax-events-display-filter-items .btn-info {
+   color: white;
+}
+
+.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-kind-ACTIVITY {
+   background: #4fb04f;
+}
+.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-kind-WIDGET {
+   background: #f90;
+}
+
+.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-pattern-RESOURCE {
+   background: #673ab7;
+}
+.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-pattern-FLAG {
+   background: #4caf50;
+}
+.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-pattern-ACTION {
+   background: #ef6c00;
+}
+.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-pattern-CONTAINER {
+   background: #4285f4;
+}
+
 .ax-events-display-widget {
 
    .affix {
@@ -126,6 +151,10 @@
 
       tbody, tr, td {
          border: none;
+      }
+
+      .ax-event-pattern-navigation {
+        background: #ffeebb;
       }
 
       tbody.ax-event-interaction-publish {

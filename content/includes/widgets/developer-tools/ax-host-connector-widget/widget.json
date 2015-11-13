@@ -33,6 +33,17 @@
                }
             }
          },
+         "pages": {
+            "type": "object",
+            "description": "Publish a stream of pages through wrapper events, for inspection.",
+            "properties": {
+               "stream": {
+                  "type": "string",
+                  "description": "The topic through which to publish page items.",
+                  "default": null
+               }
+            }
+         },
          "grid": {
             "type": "object",
             "description": "Publish application-specific grid configuration set by the host application.",

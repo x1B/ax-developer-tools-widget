@@ -1,0 +1,14 @@
+{
+   "name": "ax-page-inspector-widget",
+   "version": "0.1.0-pre",
+   "description": "Visualizes the widgets on the current page and their event connections",
+   "license": "MIT",
+   "authors": [ "" ],
+   "dependencies": {
+      "laxar": "~1.1.0",
+      "laxar-uikit": "~1.1.0"
+   },
+   "devDependencies": {
+      "laxar-mocks": "~0.6.0"
+   }
+}

@@ -32,6 +32,11 @@ define( [
          return;
       }
 
+      if( ax._tooling.pages ) {
+         ax._tooling.pages.addListener( onPageChange );
+         onPageChange( ax._tooling.pages.current() );
+      }
+
       $scope.commands = {
          open: openContentWindow
       };
@@ -368,6 +373,12 @@ define( [
                return problems;
          }
       }
+   }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   onPageChange( pageInfo ) {
+      
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////

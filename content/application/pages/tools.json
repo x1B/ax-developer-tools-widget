@@ -11,6 +11,9 @@
                "log": {
                   "stream": "logItems"
                },
+               "pages": {
+                  "stream": "pageItems"
+               },
                "grid": {
                   "resource": "gridSettings"
                }
@@ -33,6 +36,16 @@
             "features": {
                "events": {
                   "stream": "eventBusItems"
+               }
+            }
+         }
+      ],
+      "pages": [
+         {
+            "widget": "developer-tools/ax-page-inspector-widget",
+            "features": {
+               "pages": {
+                  "stream": "pageItems"
                }
             }
          }

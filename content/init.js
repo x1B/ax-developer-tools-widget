@@ -8,8 +8,9 @@ require( [
    'laxar-application-dependencies',
    'json!laxar-application/var/listing/application_resources.json',
    'json!laxar-application/var/listing/bower_components_resources.json',
-   'json!laxar-application/var/listing/includes_resources.json'
-], function( ax, applicationDependencies, applicationListing, bowerComponentsListing, includesListing, pageFade ) {
+   'json!laxar-application/var/listing/includes_resources.json',
+   'laxar-react-adapter'
+], function( ax, applicationDependencies, applicationListing, bowerComponentsListing, includesListing, axReactAdapter ) {
    'use strict';
 
    // prepare file listings for efficient asset loading
@@ -19,6 +20,6 @@ require( [
       includes: includesListing
    };
 
-   ax.bootstrap( applicationDependencies );
+   ax.bootstrap( applicationDependencies, [ axReactAdapter ] );
 
 } );

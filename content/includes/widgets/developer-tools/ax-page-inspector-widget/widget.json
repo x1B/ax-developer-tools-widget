@@ -1,0 +1,17 @@
+{
+   "name": "ax-page-inspector-widget",
+   "description": "Visualizes the widgets on the current page and their event connections",
+
+   "integration": {
+      "technology": "react",
+      "type": "widget"
+   },
+
+   "features": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "properties": {
+
+      }
+   }
+}

@@ -40,7 +40,18 @@ var require = {
       'laxar-path-default-theme': 'laxar-uikit/dist/themes/default.theme',
 
       // LaxarJS application modules (contents are generated):
-      'laxar-application-dependencies': '../var/static/laxar_application_dependencies'
+      'laxar-application-dependencies': '../var/static/laxar_application_dependencies',
+
+      // React support (ax-page-inspector-widget):
+      'laxar-react-adapter': 'laxar-react-adapter/laxar-react-adapter',
+      'wireflow': '../includes/lib/wireflow',
+      'react': 'react/react',
+      // dagre library (ax-page-inspector-widget):
+      lodash: 'lodash/lodash',
+      dagre: 'dagre/dist/dagre.core',
+      graphlib: 'graphlib/dist/graphlib.core',
+      // Immutable.js library (ax-page-inspector-widget):
+      immutable: 'immutable/dist/immutable'
    },
    packages: [
       {

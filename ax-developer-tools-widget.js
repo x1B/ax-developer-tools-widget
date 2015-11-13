@@ -17,9 +17,7 @@ define( [
    var contentWindow;
    var cleanupInspector;
 
-
    var developerHooks;
-   var buffers;
    var enabled;
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,9 +33,6 @@ define( [
       $scope.commands = {
          open: openContentWindow
       };
-
-      var contentUrl = require.toUrl( './content/' ) +
-         ( $scope.features.develop.enabled ? 'debug' : 'index' ) + '.html';
 
       $scope.features.open.onActions.forEach( function( action ) {
          eventBus.subscribe( 'takeActionRequest.' + action, function( event ) {
@@ -70,7 +65,10 @@ define( [
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      function openContentWindow() {
+      function openContentWindow( mode ) {
+         var contentUrl = require.toUrl( './content/' ) +
+            ( mode || ( $scope.features.develop.enabled ? 'debug' : 'index' ) ) + '.html';
+
          var settings = {
             resizable: 'yes',
             scrollbars: 'yes',
@@ -105,7 +103,12 @@ define( [
 
       if( enabled ) {
          developerHooks = window.axDeveloperTools = ( window.axDeveloperTools || {} );
-         buffers = developerHooks.buffers = ( developerHooks.buffers || { events: [], log: [] } );
+         developerHooks.buffers = ( developerHooks.buffers || { events: [], log: [] } );
+         developerHooks.eventCounter = developerHooks.eventCounter || Date.now();
+         developerHooks.logCounter = developerHooks.logCounter || Date.now();
+         developerHooks.pageInfo = developerHooks.pageInfo || ax._tooling.pages.current();
+         developerHooks.pageInfoVersion = developerHooks.pageInfoVersion || 1;
+         ax._tooling.pages.addListener( onPageChange );
 
          ax.log.addLogChannel( logChannel );
          cleanupInspector = eventBus.addInspector( function( item ) {
@@ -116,11 +119,22 @@ define( [
                   ax.log.warn( 'DeveloperTools: [0], event: [1]', problem.description, item );
                } );
             }
-            pushIntoStore( 'events', ax.object.options( { time: Date.now(), problems: problems }, item ) );
+
+            var index = developerHooks.eventCounter++;
+            var jsonItem = JSON.stringify( ax.object.options( {
+               time: Date.now(),
+               problems: problems,
+               index: index
+            }, item ) );
+
+            pushIntoStore( 'events', {
+               index: index,
+               json: jsonItem
+            } );
          } );
 
          ng.element( window ).off( 'beforeunload.AxDeveloperToolsWidget' );
-         ng.element( window ).on( 'beforeunload.AxDeveloperToolsWidget', function() {
+         ng.element( window ).one( 'beforeunload.AxDeveloperToolsWidget', function() {
             ax.log.removeLogChannel( logChannel );
             cleanupInspector();
             cleanupInspector = null;
@@ -130,7 +144,9 @@ define( [
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function logChannel( messageObject ) {
-         pushIntoStore( 'log', messageObject );
+         var index = developerHooks.logCounter++;
+         var jsonItem = JSON.stringify( messageObject );
+         pushIntoStore( 'log', { index: index, json: jsonItem } );
       }
    }
 
@@ -372,12 +388,22 @@ define( [
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+   function onPageChange( pageInfo ) {
+      if( ng.equals( developerHooks.pageInfo, pageInfo ) ) {
+         return;
+      }
+      developerHooks.pageInfo = pageInfo;
+      ++developerHooks.pageInfoVersion;
+   }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
    function pushIntoStore( storeName, item ) {
-      var buffer = buffers[ storeName ];
+      var buffer = developerHooks.buffers[ storeName ];
       while( buffer.length >= BUFFER_SIZE ) {
          buffer.shift();
       }
-      buffer.push( JSON.stringify( item ) );
+      buffer.push( item );
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////

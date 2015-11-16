@@ -8,7 +8,6 @@
    "forin": true,
    "noarg": true,
    "noempty": true,
-   "nonew": true,
    "quotmark": "single",
    "strict": false,
    "sub": true,

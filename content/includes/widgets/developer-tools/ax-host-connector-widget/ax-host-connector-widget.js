@@ -16,7 +16,7 @@ define( [
 
    function Controller( $scope ) {
       var eventBus = $scope.eventBus;
-      var pageNumber = -1;
+      var pageInfoVersion = -1;
       var timeout;
 
       // If the development server is used and we don't want the development window to be reloaded each
@@ -77,12 +77,11 @@ define( [
             }
          }
 
-         if( channel.pageCounter > pageNumber ) {
-            pageNumber = channel.pageCounter;
-            var pageInfo = channel.pageInfo;
+         if( channel && channel.pageInfoVersion > pageInfoVersion ) {
+            pageInfoVersion = channel.pageInfoVersion;
             eventBus.publish( 'didReplace.' + $scope.features.pageInfo.resource, {
                resource: $scope.features.pageInfo.resource,
-               data: pageInfo
+               data: channel.pageInfo
             } );
          }
 

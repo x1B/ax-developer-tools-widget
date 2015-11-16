@@ -110,8 +110,8 @@ define( [
       if( enabled ) {
          developerHooks = window.axDeveloperTools = ( window.axDeveloperTools || {} );
          developerHooks.buffers = ( developerHooks.buffers || { events: [], log: [] } );
-         developerHooks.pageCounter = 1;
          developerHooks.pageInfo = ax._tooling.pages.current();
+         developerHooks.pageInfoVersion = 1;
 
          ax.log.addLogChannel( logChannel );
          cleanupInspector = eventBus.addInspector( function( item ) {
@@ -379,9 +379,11 @@ define( [
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    function onPageChange( pageInfo ) {
-      console.log( "HOST: PAGE CHANGED: ", pageInfo.name, pageInfo.page );
+      if( ng.equals( developerHooks.pageInfo, pageInfo ) ) {
+         return;
+      }
       developerHooks.pageInfo = pageInfo;
-      ++developerHooks.pageCounter;
+      ++developerHooks.pageInfoVersion;
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////

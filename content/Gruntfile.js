@@ -5,7 +5,7 @@
 module.exports = function( grunt ) {
    'use strict';
 
-   var serverPort = 8001;
+   var serverPort = 15001;
    var testPort = 1000 + serverPort;
    var liveReloadPort = 30000 + serverPort;
 

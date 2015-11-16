@@ -44,7 +44,6 @@ var require = {
 
       // React support (ax-page-inspector-widget):
       'laxar-react-adapter': 'laxar-react-adapter/laxar-react-adapter',
-      'wireflow': '../includes/lib/wireflow',
       'react': 'react/react',
       // dagre library (ax-page-inspector-widget):
       lodash: 'lodash/lodash',
@@ -63,6 +62,11 @@ var require = {
          name: 'moment',
          location: 'moment',
          main: 'moment'
+      },
+      {
+         name: 'wireflow',
+         location: '../includes/lib/wireflow/build',
+         main: 'wireflow'
       }
    ],
    shim: {
@@ -96,7 +100,9 @@ var require = {
       'json-patch': {
          exports: 'jsonpatch'
       },
-
+      lodash: { exports: '_' },
+      graphlib: { deps: [ 'lodash' ], exports: 'graphlib' },
+      dagre: { deps: [ 'graphlib', 'lodash' ], exports: 'dagre' },
       // ax-affix-control, ax-input-control:
       'bootstrap/affix': [ 'jquery' ],
       'bootstrap/tooltip': [ 'jquery' ]

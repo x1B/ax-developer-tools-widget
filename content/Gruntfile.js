@@ -41,7 +41,7 @@ module.exports = function( grunt ) {
                files: [{
                   expand: true,
                   cwd: 'includes/widgets/',
-                  src: [ '*/*.jsx' ],
+                  src: [ '*/*/*.jsx' ],
                   dest: 'includes/widgets/',
                   ext: '.js'
                }]
@@ -49,7 +49,7 @@ module.exports = function( grunt ) {
          },
          watch: {
             jsx: {
-               files: [ 'includes/widgets/*/*.jsx' ],
+               files: [ 'includes/widgets/*/*/*.jsx' ],
                tasks: [ 'babel:widgets' ]
             }
          }

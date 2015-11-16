@@ -19,7 +19,6 @@ define( [
 
 
    var developerHooks;
-   var buffers;
    var enabled;
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +109,9 @@ define( [
 
       if( enabled ) {
          developerHooks = window.axDeveloperTools = ( window.axDeveloperTools || {} );
-         buffers = developerHooks.buffers = ( developerHooks.buffers || { events: [], log: [], pages: [] } );
+         developerHooks.buffers = ( developerHooks.buffers || { events: [], log: [] } );
+         developerHooks.pageCounter = 1;
+         developerHooks.pageInfo = ax._tooling.pages.current();
 
          ax.log.addLogChannel( logChannel );
          cleanupInspector = eventBus.addInspector( function( item ) {
@@ -378,13 +379,15 @@ define( [
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    function onPageChange( pageInfo ) {
-      pushIntoStore( 'pages', pageInfo );
+      console.log( "HOST: PAGE CHANGED: ", pageInfo.name, pageInfo.page );
+      developerHooks.pageInfo = pageInfo;
+      ++developerHooks.pageCounter;
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    function pushIntoStore( storeName, item ) {
-      var buffer = buffers[ storeName ];
+      var buffer = developerHooks.buffers[ storeName ];
       while( buffer.length >= BUFFER_SIZE ) {
          buffer.shift();
       }

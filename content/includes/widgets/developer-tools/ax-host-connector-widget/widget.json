@@ -33,13 +33,13 @@
                }
             }
          },
-         "pages": {
+         "pageInfo": {
             "type": "object",
-            "description": "Publish a stream of pages through wrapper events, for inspection.",
+            "description": "Publish the current page for inspection.",
             "properties": {
-               "stream": {
+               "resource": {
                   "type": "string",
-                  "description": "The topic through which to publish page items.",
+                  "description": "The topic through which to publish the current page.",
                   "default": null
                }
             }

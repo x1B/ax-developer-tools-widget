@@ -11,7 +11,7 @@
       "$schema": "http://json-schema.org/draft-04/schema#",
       "type": "object",
       "properties": {
-         "events": {
+         "pageInfo": {
             "type": "object",
             "description": "Inspect page models received through wrapper events.",
             "requires": [ "resource" ],

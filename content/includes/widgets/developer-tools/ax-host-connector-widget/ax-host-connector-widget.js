@@ -16,6 +16,7 @@ define( [
 
    function Controller( $scope ) {
       var eventBus = $scope.eventBus;
+      var pageNumber = -1;
       var timeout;
 
       // If the development server is used and we don't want the development window to be reloaded each
@@ -74,6 +75,15 @@ define( [
                } );
                buffers.log = [];
             }
+         }
+
+         if( channel.pageCounter > pageNumber ) {
+            pageNumber = channel.pageCounter;
+            var pageInfo = channel.pageInfo;
+            eventBus.publish( 'didReplace.' + $scope.features.pageInfo.resource, {
+               resource: $scope.features.pageInfo.resource,
+               data: pageInfo
+            } );
          }
 
          timeout = window.setTimeout( checkForData, REFRESH_DELAY_MS );

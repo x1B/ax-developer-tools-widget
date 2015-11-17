@@ -31,11 +31,6 @@ define( [
          return;
       }
 
-      if( ax._tooling.pages ) {
-         ax._tooling.pages.addListener( onPageChange );
-         onPageChange( ax._tooling.pages.current() );
-      }
-
       $scope.commands = {
          open: openContentWindow
       };
@@ -110,8 +105,9 @@ define( [
       if( enabled ) {
          developerHooks = window.axDeveloperTools = ( window.axDeveloperTools || {} );
          developerHooks.buffers = ( developerHooks.buffers || { events: [], log: [] } );
-         developerHooks.pageInfo = ax._tooling.pages.current();
-         developerHooks.pageInfoVersion = 1;
+         developerHooks.pageInfo = developerHooks.pageInfo || ax._tooling.pages.current();
+         developerHooks.pageInfoVersion = developerHooks.pageInfoVersion || 1;
+         ax._tooling.pages.addListener( onPageChange );
 
          ax.log.addLogChannel( logChannel );
          cleanupInspector = eventBus.addInspector( function( item ) {
@@ -379,9 +375,11 @@ define( [
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    function onPageChange( pageInfo ) {
+      console.log( 'developerHooks.pageInfo: ', developerHooks.pageInfo, 'pageInfo: ', pageInfo );
       if( ng.equals( developerHooks.pageInfo, pageInfo ) ) {
          return;
       }
+      console.log( 'page change...' );
       developerHooks.pageInfo = pageInfo;
       ++developerHooks.pageInfoVersion;
    }

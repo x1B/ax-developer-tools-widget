@@ -3,6 +3,8 @@ import patterns from 'laxar-patterns';
 
 import wireflow from 'wireflow';
 
+import { types, graph, layout } from './graph-helpers';
+
 const {
   selection: {
     SelectionStore
@@ -12,12 +14,10 @@ const {
     HistoryStore
   },
   layout: {
-     model: layoutModel,
      actions: { AutoLayout },
      LayoutStore
   },
   graph: {
-    model: graphModel,
     GraphStore
   },
   settings: {
@@ -29,154 +29,27 @@ const {
   components: { Graph }
 } = wireflow;
 
-function graph( pageInfo ) {
-
-   const vertices = {};
-   const edges = {};
-
-   const { pageRef, pageDefinitions, widgetDescriptors } = pageInfo;
-   const page = pageDefinitions[ pageRef ];
-
-   Object.keys( page.areas ).forEach( areaName => {
-      page.areas[ areaName ].forEach( component => {
-         if( component.widget ) {
-            addWidgetInstance( component );
-         }
-      } );
-   } );
-
-   console.log( "GRAPH: ", {
-      vertices,
-      edges
-   } );
-   return graphModel.convert.graph( {
-      vertices,
-      edges
-   } );
-
-   function addWidgetInstance( widget ) {
-      // console.log( "ADD WIDGET: ", widget );
-      const descriptor = widgetDescriptors[ widget.widget ];
-      const ports = { inbound: [], outbound: [] };
-      identifyPorts( widget.features, descriptor.features, [] );
-      vertices[ widget.id ] = {
-         id: widget.id,
-         label: widget.widget,
-         ports: ports
-      };
-
-      function identifyPorts( value, schema, path ) {
-         if( !value || !schema ) {
-            return;
-         }
-
-         if( schema.type === 'string' &&
-             schema.format === 'topic' &&
-             schema.axRole ) {
-            const type = schema.axPattern ? schema.axPattern.toUpperCase() : inferEdgeType( path );
-            if( !type ) {
-               return;
-            }
-            const edgeId = value;
-            ports[ schema.axRole === 'master' ? 'outbound' : 'inbound' ].push( {
-               label: path.join( '.' ),
-               id: path.join( ':' ),
-               type,
-               edgeId
-            } );
-            if( edgeId && !edges[ edgeId ] ) {
-               edges[ edgeId ] = { type, id: edgeId };
-            }
-         }
-
-         if( schema.type === 'object' && schema.properties ) {
-            Object.keys( schema.properties ).forEach( key => {
-               identifyPorts(
-                  value[ key ],
-                  schema.properties[ key ] || schema.additionalProperties,
-                  path.concat( [ key ] )
-               );
-            } );
-         }
-
-         if( schema.type === 'array' ) {
-            value.forEach( (item,i) => {
-               identifyPorts(
-                  item,
-                  schema.items,
-                  path.concat( [ i ] )
-               );
-            } );
-         }
-
-      }
-
-      function inferEdgeType( path ) {
-         if( !path.length ) {
-            return null;
-         }
-         const lastSegment = path[ path.length - 1 ];
-         if( [ 'action', 'flag', 'resource' ].indexOf( lastSegment ) !== -1 ) {
-            return lastSegment.toUpperCase();
-         }
-         if( lastSegment === 'onActions' ) {
-            return 'ACTION';
-         }
-         return inferEdgeType( path.slice( 0, path.length - 1 ) );
-      }
-   }
-}
-
-function layout( graph ) {
-   const vertices = {};
-   let i = 0;
-   graph.vertices.forEach( (_, key) => {
-      vertices[ key ] = { left: 50, top: 50 + 50 * i };
-      ++i;
-   } );
-
-   let j = 0;
-   const edges = {};
-   graph.edges.forEach( (_, key) => {
-      edges[ key ] = { left: 450, top: 150 + 50 * j };
-      ++j;
-   } );
-
-   console.log( "LAYOUT: ", {
-      vertices,
-      edges
-   } );
-   return layoutModel.convert.layout( {
-      vertices,
-      edges
-   } );
-}
-
-function types() {
-   return graphModel.convert.types( {
-      RESOURCE: {
-        hidden: false,
-        label: 'Resources'
-      },
-      FLAG: {
-        label: 'Flags',
-        hidden: false
-      },
-      ACTION: {
-        // owningPort: 'inbound',
-        label: 'Actions',
-        hidden: false
-      }
-   } );
-}
-
-
 function create( context, eventBus, reactRender ) {
+
+   var domAvailable = false;
+   var resourceAvailable = false;
+   var visible = false;
 
    patterns.resources.handlerFor( context )
       .registerResourceFromFeature( 'pageInfo', {
-         onUpdateReplace: update
+         onUpdateReplace: () => {
+            console.log( 'resource changed' )
+            resourceAvailable = true;
+            update();
+         }
       } );
+
+   eventBus.subscribe( 'didChangeAreaVisibility.' + context.widget.area, event => {
+      if( !visible && event.visible ) {
+         visible = true;
+         update();
+      }
+   } );
 
    function renderEmpty() {
       reactRender( <h3>Waiting for data</h3> );
@@ -184,17 +57,11 @@ function create( context, eventBus, reactRender ) {
 
    let dispatcher;
    function update() {
-      const pageInfo = context.resources.pageInfo;
-      if( !pageInfo || !pageInfo.pageRef ) {
-         dispatcher = null;
-         renderEmpty();
-         return;
-      }
-      if( dispatcher ) {
-         // TODO: tear down old dispatcher and stores, then rebuild
+      if( !visible || !domAvailable || !resourceAvailable ) {
          return;
       }
 
+      const pageInfo = context.resources.pageInfo;
       const pageGraph = graph( pageInfo );
       const pageTyeps = types();
       const pageLayout = layout( pageGraph );
@@ -204,8 +71,8 @@ function create( context, eventBus, reactRender ) {
       const layoutStore = new LayoutStore( dispatcher, pageLayout, graphStore );
       const settingsStore = new SettingsStore( dispatcher, Settings({ mode: READ_ONLY }) );
       const selectionStore = new SelectionStore( dispatcher, layoutStore, graphStore );
-      render();
-      window.setTimeout( () => dispatcher.dispatch( AutoLayout() ), 500 );
+
+      window.setTimeout( () => { dispatcher.dispatch( AutoLayout() ); }, 0 );
 
       function render() {
          reactRender(
@@ -228,7 +95,10 @@ function create( context, eventBus, reactRender ) {
       }
    }
 
-   return { onDomAvailable: update };
+   return { onDomAvailable: () => {
+      domAvailable = true;
+      update();
+   } };
 }
 
 export default {

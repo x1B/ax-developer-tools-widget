@@ -29,7 +29,6 @@ var require = {
       "laxar-path-default-theme": "laxar-uikit/dist/themes/default.theme", 
       "laxar-application-dependencies": "../var/static/laxar_application_dependencies", 
       "laxar-react-adapter": "laxar-react-adapter/laxar-react-adapter", 
-      "wireflow": "../includes/lib/wireflow", 
       "react": "react/react", 
       "lodash": "lodash/lodash", 
       "dagre": "dagre/dist/dagre.core", 
@@ -48,6 +47,11 @@ var require = {
          "name": "moment", 
          "location": "moment", 
          "main": "moment"
+      },
+      { 
+         "name": "wireflow", 
+         "location": "../includes/lib/wireflow/build", 
+         "main": "wireflow"
       }
    ], 
    "shim": { 
@@ -87,6 +91,22 @@ var require = {
       ], 
       "json-patch": { 
          "exports": "jsonpatch"
+      }, 
+      "lodash": { 
+         "exports": "_"
+      }, 
+      "graphlib": { 
+         "deps": [
+            "lodash"
+         ], 
+         "exports": "graphlib"
+      }, 
+      "dagre": { 
+         "deps": [
+            "graphlib",
+            "lodash"
+         ], 
+         "exports": "dagre"
       }, 
       "bootstrap/affix": [
          "jquery"

@@ -35,7 +35,8 @@ module.exports = function( grunt ) {
          babel: {
             options: {
                sourceMap: true,
-               modules: 'amd'
+               modules: 'amd',
+               retainLines: true
             },
             widgets: {
                files: [{

@@ -1,6 +1,8 @@
 
 import wireflow from 'wireflow';
 
+const TYPE_CONTAINER = 'CONTAINER';
+
 const {
   layout: {
      model: layoutModel
@@ -13,29 +15,99 @@ const {
 
 export function graph( pageInfo ) {
 
-   const vertices = {};
-   const edges = {};
-
+   const PAGE_ID = '.';
    const { pageRef, pageDefinitions, widgetDescriptors } = pageInfo;
    const page = pageDefinitions[ pageRef ];
 
-   Object.keys( page.areas ).forEach( areaName => {
-      page.areas[ areaName ].forEach( component => {
-         if( component.widget ) {
-            addWidgetInstance( component );
-         }
-      } );
-   } );
-
+   const vertices = {};
+   const edges = {};
+   vertices[ PAGE_ID ] =  {
+      PAGE_ID,
+      label: 'Page: ' + pageRef,
+      ports: { inbound: [], outbound: [] }
+   };
+   identifyVertices();
+   identifyContainers();
    return graphModel.convert.graph( {
       vertices,
       edges
    } );
 
-   function addWidgetInstance( widget ) {
-      // console.log( "ADD WIDGET: ", widget );
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   function isWidget( pageAreaItem ) {
+      return !!pageAreaItem.widget;
+   }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   function identifyContainers() {
+
+      const type = TYPE_CONTAINER;
+
+      Object.keys( page.areas ).forEach( areaName => {
+         insertEdge( areaName );
+         const owner = findOwner( areaName );
+         console.log( "OWNER: ", owner );
+         insertOwnerPort( owner, areaName );
+         page.areas[ areaName ].filter( isWidget ).forEach( widget => {
+            insertUplink( vertices[ widget.id ], areaName );
+         } );
+      } );
+
+      function findOwner( areaName ) {
+         if( areaName.indexOf( '.' ) === -1 ) {
+            return vertices[ PAGE_ID ];
+         }
+         const prefix = areaName.slice( 0, areaName.lastIndexOf( '.' ) );
+         return vertices[ prefix ];
+      }
+
+      function insertOwnerPort( vertex, areaName ) {
+         vertex.ports.outbound.unshift( {
+            id: areaEdgeId( areaName ),
+            type: TYPE_CONTAINER,
+            edgeId: areaEdgeId( areaName ),
+            label: areaName
+         } );
+      }
+
+      function insertUplink( vertex, areaName ) {
+         vertex.ports.inbound.unshift( {
+            type: TYPE_CONTAINER,
+            edgeId: areaEdgeId( areaName ),
+            label: 'anchor'
+         } );
+      }
+
+      function insertEdge( areaName ) {
+         const id = areaEdgeId( areaName );
+         edges[ id ] = { id, type, label: areaName };
+      }
+
+      function areaEdgeId( areaName ) {
+         return TYPE_CONTAINER + ':' + areaName;
+      }
+   }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   function identifyVertices() {
+      Object.keys( page.areas ).forEach( areaName => {
+         page.areas[ areaName ].forEach( component => {
+            if( component.widget ) {
+               processWidgetInstance( component, areaName );
+            }
+         } );
+      } );
+   }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   function processWidgetInstance( widget, areaName ) {
       const descriptor = widgetDescriptors[ widget.widget ];
       const ports = { inbound: [], outbound: [] };
+
       identifyPorts( widget.features, descriptor.features, [] );
       vertices[ widget.id ] = {
          id: widget.id,
@@ -52,41 +124,30 @@ export function graph( pageInfo ) {
              schema.format === 'topic' &&
              schema.axRole ) {
             const type = schema.axPattern ? schema.axPattern.toUpperCase() : inferEdgeType( path );
-            if( !type ) {
-               return;
-            }
-            const edgeId = value;
+            if( !type ) { return; }
+            const edgeId = type + ':' + value;
+            const label = path.join( '.' );
+            const id =  path.join( ':' );
             ports[ schema.axRole === 'master' ? 'outbound' : 'inbound' ].push( {
-               label: path.join( '.' ),
-               id: path.join( ':' ),
-               type,
-               edgeId
+               label, id, type, edgeId
             } );
             if( edgeId && !edges[ edgeId ] ) {
-               edges[ edgeId ] = { type, id: edgeId };
+               edges[ edgeId ] = { type, id: edgeId, label: value };
             }
          }
 
          if( schema.type === 'object' && schema.properties ) {
             Object.keys( schema.properties ).forEach( key => {
-               identifyPorts(
-                  value[ key ],
-                  schema.properties[ key ] || schema.additionalProperties,
-                  path.concat( [ key ] )
-               );
+               const propertySchema = schema.properties[ key ] || schema.additionalProperties;
+               identifyPorts( value[ key ], propertySchema, path.concat( [ key ] ) );
             } );
          }
 
          if( schema.type === 'array' ) {
-            value.forEach( (item,i) => {
-               identifyPorts(
-                  item,
-                  schema.items,
-                  path.concat( [ i ] )
-               );
+            value.forEach( (item, i) => {
+               identifyPorts( item, schema.items, path.concat( [ i ] ) );
             } );
          }
-
       }
 
       function inferEdgeType( path ) {
@@ -129,16 +190,21 @@ export function layout( graph ) {
 export function types() {
    return graphModel.convert.types( {
       RESOURCE: {
-        hidden: false,
-        label: 'Resources'
+         hidden: false,
+         label: 'Resources'
       },
       FLAG: {
-        label: 'Flags',
-        hidden: false
+         label: 'Flags',
+         hidden: false
       },
       ACTION: {
-        label: 'Actions',
-        hidden: false
+         label: 'Actions',
+         hidden: false
+      },
+      CONTAINER: {
+         hidden: false,
+         label: 'Container',
+         owningPort: 'outbound'
       }
    } );
 }

@@ -38,7 +38,6 @@ function create( context, eventBus, reactRender ) {
    patterns.resources.handlerFor( context )
       .registerResourceFromFeature( 'pageInfo', {
          onUpdateReplace: () => {
-            console.log( 'resource changed' )
             resourceAvailable = true;
             update();
          }
@@ -54,6 +53,7 @@ function create( context, eventBus, reactRender ) {
    function renderEmpty() {
       reactRender( <h3>Waiting for data</h3> );
    }
+
 
    let dispatcher;
    function update() {
@@ -72,24 +72,21 @@ function create( context, eventBus, reactRender ) {
       const settingsStore = new SettingsStore( dispatcher, Settings({ mode: READ_ONLY }) );
       const selectionStore = new SelectionStore( dispatcher, layoutStore, graphStore );
 
-      window.setTimeout( () => { dispatcher.dispatch( AutoLayout() ); }, 0 );
+      window.setTimeout( () => {
+         dispatcher.dispatch( AutoLayout() );
+      }, 0 );
 
       function render() {
          reactRender(
             <div className='page-inspector-row'>
-               <h2><i className='fa fa-newspaper-o'></i>  { name }</h2>
-               <div className='demo-wrapper'>
-                 <div className='demo-editor'>
-                   <Graph className={'nbe-theme-fusebox-app'}
-                          types={graphStore.types}
-                          model={graphStore.graph}
-                          layout={layoutStore.layout}
-                          measurements={layoutStore.measurements}
-                          settings={settingsStore.settings}
-                          selection={selectionStore.selection}
-                          eventHandler={dispatcher.dispatch} />
-                 </div>
-               </div>
+                <Graph className={'nbe-theme-fusebox-app'}
+                       types={graphStore.types}
+                       model={graphStore.graph}
+                       layout={layoutStore.layout}
+                       measurements={layoutStore.measurements}
+                       settings={settingsStore.settings}
+                       selection={selectionStore.selection}
+                       eventHandler={dispatcher.dispatch} />
             </div>
          );
       }

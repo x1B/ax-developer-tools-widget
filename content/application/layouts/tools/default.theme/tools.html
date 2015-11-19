@@ -1,11 +1,9 @@
-<div class="container"
+<div class="fluid-container"
      data-ng-init="activeTab='page'">
-   <div class="row">
-      <div class="col col-lg-12 first last" data-ax-widget-area="header"></div>
-   </div>
 
-   <div class="row">
-      <div class="col col-lg-12 first last" data-ax-widget-area="toolbar"></div>
+   <div class="app-toolbar">
+      <div class="col col-lg-12 first last"
+           data-ax-widget-area="toolbar"></div>
    </div>
 
    <ul class="nav nav-tabs" role="tablist">
@@ -20,13 +18,13 @@
              data-ng-click="activeTab='logs'">Logs</a></li>
    </ul>
 
-   <div class="app-tab-page"
+   <div class="app-tab app-tab-page"
         data-ax-widget-area="page"
         data-ng-show="activeTab=='page'"></div>
-   <div class="app-tab-content"
+   <div class="app-tab app-tab-content"
         data-ax-widget-area="events"
         data-ng-show="activeTab=='events'"></div>
-   <div class="app-tab-content"
+   <div class="app-tab app-tab-content"
         data-ax-widget-area="logs"
         data-ng-show="activeTab=='logs'"></div>
 

@@ -48,7 +48,6 @@ export function graph( pageInfo ) {
       Object.keys( page.areas ).forEach( areaName => {
          insertEdge( areaName );
          const owner = findOwner( areaName );
-         console.log( "OWNER: ", owner );
          insertOwnerPort( owner, areaName );
          page.areas[ areaName ].filter( isWidget ).forEach( widget => {
             insertUplink( vertices[ widget.id ], areaName );
@@ -167,23 +166,9 @@ export function graph( pageInfo ) {
 }
 
 export function layout( graph ) {
-   const vertices = {};
-   let i = 0;
-   graph.vertices.forEach( (_, key) => {
-      vertices[ key ] = { left: 50, top: 50 + 50 * i };
-      ++i;
-   } );
-
-   let j = 0;
-   const edges = {};
-   graph.edges.forEach( (_, key) => {
-      edges[ key ] = { left: 450, top: 150 + 50 * j };
-      ++j;
-   } );
-
    return layoutModel.convert.layout( {
-      vertices,
-      edges
+      vertices: {},
+      edges: {}
    } );
 }
 

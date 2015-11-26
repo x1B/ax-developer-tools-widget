@@ -12,8 +12,35 @@ const {
   }
 } = wireflow;
 
+const edgeTypes = {
+   RESOURCE: {
+      hidden: false,
+      label: 'Resources'
+   },
+   FLAG: {
+      label: 'Flags',
+      hidden: false
+   },
+   ACTION: {
+      label: 'Actions',
+      hidden: false
+   },
+   CONTAINER: {
+      hidden: false,
+      label: 'Container',
+      owningPort: 'outbound'
+   }
+};
 
-export function graph( pageInfo ) {
+/**
+ * Create a wireflow graph from a given page/widget information model.
+ *
+ * @param {Object} pageInfo
+ * @param {Boolean} removeIrrelevantWidgets
+ *   If set to `true`, widgets without any relevance to actions/resources/flags are removed.
+ *   Containers of widgets (that are relevant by this measure) are kept.
+ */
+export function graph( pageInfo, removeIrrelevantWidgets ) {
 
    const PAGE_ID = '.';
    const { pageRef, pageDefinitions, widgetDescriptors } = pageInfo;
@@ -21,13 +48,14 @@ export function graph( pageInfo ) {
 
    const vertices = {};
    const edges = {};
-   vertices[ PAGE_ID ] =  {
-      PAGE_ID,
-      label: 'Page: ' + pageRef,
-      ports: { inbound: [], outbound: [] }
-   };
+
    identifyVertices();
    identifyContainers();
+   if( removeIrrelevantWidgets ) {
+      pruneIrrelevantWidgets();
+   }
+   pruneEmptyEdges();
+
    return graphModel.convert.graph( {
       vertices,
       edges
@@ -39,54 +67,14 @@ export function graph( pageInfo ) {
       return !!pageAreaItem.widget;
    }
 
-   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+   function isLayout( pageAreaItem ) {
+      return !!pageAreaItem.layout;
+   }
 
-   function identifyContainers() {
-
-      const type = TYPE_CONTAINER;
-
-      Object.keys( page.areas ).forEach( areaName => {
-         insertEdge( areaName );
-         const owner = findOwner( areaName );
-         insertOwnerPort( owner, areaName );
-         page.areas[ areaName ].filter( isWidget ).forEach( widget => {
-            insertUplink( vertices[ widget.id ], areaName );
-         } );
-      } );
-
-      function findOwner( areaName ) {
-         if( areaName.indexOf( '.' ) === -1 ) {
-            return vertices[ PAGE_ID ];
-         }
-         const prefix = areaName.slice( 0, areaName.lastIndexOf( '.' ) );
-         return vertices[ prefix ];
-      }
-
-      function insertOwnerPort( vertex, areaName ) {
-         vertex.ports.outbound.unshift( {
-            id: areaEdgeId( areaName ),
-            type: TYPE_CONTAINER,
-            edgeId: areaEdgeId( areaName ),
-            label: areaName
-         } );
-      }
-
-      function insertUplink( vertex, areaName ) {
-         vertex.ports.inbound.unshift( {
-            type: TYPE_CONTAINER,
-            edgeId: areaEdgeId( areaName ),
-            label: 'anchor'
-         } );
-      }
-
-      function insertEdge( areaName ) {
-         const id = areaEdgeId( areaName );
-         edges[ id ] = { id, type, label: areaName };
-      }
-
-      function areaEdgeId( areaName ) {
-         return TYPE_CONTAINER + ':' + areaName;
-      }
+   function either( f, g ) {
+      return function() {
+         return f.apply( this, arguments ) || g.apply( this, arguments );
+      };
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,8 +85,21 @@ export function graph( pageInfo ) {
             if( component.widget ) {
                processWidgetInstance( component, areaName );
             }
+            else if( component.layout ) {
+               processLayoutInstance( component, areaName );
+            }
          } );
       } );
+   }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   function processLayoutInstance( layout, areaName ) {
+      vertices[ layout.id ] = {
+         id: layout.id,
+         label: 'Layout: ' + layout.layout,
+         ports: { inbound: [], outbound: [] }
+      };
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +121,7 @@ export function graph( pageInfo ) {
          }
 
          if( schema.type === 'string' &&
-             schema.format === 'topic' &&
+             ( schema.format === 'topic' || schema.format === 'flag-topic' ) &&
              schema.axRole ) {
             const type = schema.axPattern ? schema.axPattern.toUpperCase() : inferEdgeType( path );
             if( !type ) { return; }
@@ -163,6 +164,133 @@ export function graph( pageInfo ) {
          return inferEdgeType( path.slice( 0, path.length - 1 ) );
       }
    }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   function pruneIrrelevantWidgets() {
+      let toPrune = [];
+      do {
+         toPrune.forEach( id => { delete vertices[ id ]; } );
+         pruneEmptyEdges();
+         toPrune = mark();
+      } while( toPrune.length );
+
+      function mark() {
+         const pruneList = [];
+         Object.keys( vertices ).forEach( vId => {
+            const ports = vertices[ vId ].ports;
+            if( ports.inbound.length <= 1 ) {
+               if( ports.outbound.every( _ => !_.edgeId ) ) {
+                  pruneList.push( vId  );
+               }
+            }
+         } );
+         return pruneList;
+      }
+   }
+
+   function pruneEmptyEdges() {
+      const toPrune = [];
+      Object.keys( edges ).forEach( edgeId => {
+         const type = edgeTypes[ edges[ edgeId ].type ];
+         const masters = Object.keys( vertices ).filter( isMasterOf( edgeId ) );
+         const slaves = Object.keys( vertices ).filter( isSlaveOf( edgeId ) );
+         const hasMasters = masters.length > 0;
+         const hasSlaves = slaves.length > 0;
+         const isEmpty = type.owningPort ? (!hasMasters || !hasSlaves) : (!hasMasters && !hasSlaves);
+         if( !isEmpty ) {
+            return;
+         }
+
+         toPrune.push( edgeId );
+         masters.concat( slaves ).forEach( vertexId => {
+            const ports = vertices[ vertexId ].ports;
+            ports.inbound.concat( ports.outbound ).forEach( port => {
+               port.edgeId = port.edgeId === edgeId ? null : port.edgeId;
+            } );
+         } );
+      } );
+      toPrune.forEach( id => { delete edges[ id ]; } );
+
+      function isSlaveOf( edgeId ) {
+         return function( vertexId ) {
+            return vertices[ vertexId ].ports.inbound.some( port => port.edgeId === edgeId );
+         };
+      }
+
+      function isMasterOf( edgeId ) {
+         return function( vertexId ) {
+            return vertices[ vertexId ].ports.outbound.some( port => port.edgeId === edgeId );
+         };
+      }
+   }
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   function identifyContainers() {
+      const type = TYPE_CONTAINER;
+
+      vertices[ PAGE_ID ] =  {
+         PAGE_ID,
+         label: 'Page: ' + pageRef,
+         ports: { inbound: [], outbound: [] }
+      };
+
+      Object.keys( page.areas ).forEach( areaName => {
+         insertEdge( areaName );
+         const owner = findOwner( areaName );
+         if( !owner ) {
+            return;
+         }
+
+         let containsAnything = false;
+         page.areas[ areaName ].filter( either( isWidget, isLayout ) ).forEach( item => {
+            if( vertices[ item.id ] ) {
+               insertUplink( vertices[ item.id ], areaName );
+               containsAnything = true;
+            }
+         } );
+         if( containsAnything ) {
+            insertOwnerPort( owner, areaName );
+         }
+      } );
+
+      function findOwner( areaName ) {
+         if( areaName.indexOf( '.' ) === -1 ) {
+            return vertices[ PAGE_ID ];
+         }
+         const prefix = areaName.slice( 0, areaName.lastIndexOf( '.' ) );
+         return vertices[ prefix ];
+      }
+
+      function insertOwnerPort( vertex, areaName ) {
+         vertex.ports.outbound.unshift( {
+            id: 'CONTAINER:' + areaName,
+            type: TYPE_CONTAINER,
+            edgeId: areaEdgeId( areaName ),
+            label: areaName
+         } );
+      }
+
+      function insertUplink( vertex, areaName ) {
+         vertex.ports.inbound.unshift( {
+            id: 'CONTAINER:anchor',
+            type: TYPE_CONTAINER,
+            edgeId: areaEdgeId( areaName ),
+            label: 'anchor'
+         } );
+      }
+
+      function insertEdge( areaName ) {
+         const id = areaEdgeId( areaName );
+         edges[ id ] = { id, type, label: areaName };
+      }
+
+      function areaEdgeId( areaName ) {
+         return TYPE_CONTAINER + ':' + areaName;
+      }
+   }
+
 }
 
 export function layout( graph ) {
@@ -173,23 +301,5 @@ export function layout( graph ) {
 }
 
 export function types() {
-   return graphModel.convert.types( {
-      RESOURCE: {
-         hidden: false,
-         label: 'Resources'
-      },
-      FLAG: {
-         label: 'Flags',
-         hidden: false
-      },
-      ACTION: {
-         label: 'Actions',
-         hidden: false
-      },
-      CONTAINER: {
-         hidden: false,
-         label: 'Container',
-         owningPort: 'outbound'
-      }
-   } );
+   return graphModel.convert.types( edgeTypes );
 }

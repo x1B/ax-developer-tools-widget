@@ -34,6 +34,7 @@ function create( context, eventBus, reactRender ) {
    var domAvailable = false;
    var resourceAvailable = false;
    var visible = false;
+   var hideIrrelevantWidgets = true;
 
    patterns.resources.handlerFor( context )
       .registerResourceFromFeature( 'pageInfo', {
@@ -50,10 +51,14 @@ function create( context, eventBus, reactRender ) {
       }
    } );
 
+   function updateHideIrrelevantWidgets( event ) {
+      hideIrrelevantWidgets = event.target.checked;
+      update();
+   }
+
    function renderEmpty() {
       reactRender( <h3>Waiting for data</h3> );
    }
-
 
    let dispatcher;
    function update() {
@@ -62,31 +67,35 @@ function create( context, eventBus, reactRender ) {
       }
 
       const pageInfo = context.resources.pageInfo;
-      const pageGraph = graph( pageInfo );
+      const pageGraph = graph( pageInfo, hideIrrelevantWidgets );
+
       const pageTyeps = types();
-      const pageLayout = layout( pageGraph );
       dispatcher = new Dispatcher( render );
       new HistoryStore( dispatcher );
       const graphStore = new GraphStore( dispatcher, pageGraph, pageTyeps );
-      const layoutStore = new LayoutStore( dispatcher, pageLayout, graphStore );
+      const layoutStore = new LayoutStore( dispatcher, graphStore );
       const settingsStore = new SettingsStore( dispatcher, Settings({ mode: READ_ONLY }) );
       const selectionStore = new SelectionStore( dispatcher, layoutStore, graphStore );
-
-      window.setTimeout( () => {
-         dispatcher.dispatch( AutoLayout() );
-      }, 0 );
 
       function render() {
          reactRender(
             <div className='page-inspector-row'>
-                <Graph className={'nbe-theme-fusebox-app'}
-                       types={graphStore.types}
-                       model={graphStore.graph}
-                       layout={layoutStore.layout}
-                       measurements={layoutStore.measurements}
-                       settings={settingsStore.settings}
-                       selection={selectionStore.selection}
-                       eventHandler={dispatcher.dispatch} />
+               <div className='page-inspector-settings'>
+                  <label>
+                     <input type='checkbox'
+                        checked={hideIrrelevantWidgets}
+                        onChange={updateHideIrrelevantWidgets}/>
+                     Hide simple widgets
+                  </label>
+               </div>
+               <Graph className={'nbe-theme-fusebox-app'}
+                      types={graphStore.types}
+                      model={graphStore.graph}
+                      layout={layoutStore.layout}
+                      measurements={layoutStore.measurements}
+                      settings={settingsStore.settings}
+                      selection={selectionStore.selection}
+                      eventHandler={dispatcher.dispatch} />
             </div>
          );
       }

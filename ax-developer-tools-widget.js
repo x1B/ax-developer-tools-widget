@@ -11,7 +11,7 @@ define( [
 ], function( ax, patterns, ng, require ) {
    'use strict';
 
-   var BUFFER_SIZE = 500;
+   var BUFFER_SIZE = 2500;
 
    // To capture navigation and lifecycle events, the event log persists across LaxarJS navigation.
    var contentWindow;
@@ -122,7 +122,7 @@ define( [
          } );
 
          ng.element( window ).off( 'beforeunload.AxDeveloperToolsWidget' );
-         ng.element( window ).on( 'beforeunload.AxDeveloperToolsWidget', function() {
+         ng.element( window ).one( 'beforeunload.AxDeveloperToolsWidget', function() {
             ax.log.removeLogChannel( logChannel );
             cleanupInspector();
             cleanupInspector = null;

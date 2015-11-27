@@ -18,6 +18,7 @@ define( [
       var eventBus = $scope.eventBus;
       var pageInfoVersion = -1;
       var timeout;
+      var lastIndexByStream = {};
 
       // If the development server is used and we don't want the development window to be reloaded each
       // time something changes during development, we shutdown live reload here.
@@ -60,13 +61,21 @@ define( [
          var channel = window.opener.axDeveloperTools;
          var buffers = channel && channel.buffers;
          if( buffers ) {
-            if( buffers.events.length ) {
-               eventBus.publish( 'didProduce.' + $scope.features.events.stream, {
-                  stream: $scope.features.events.stream,
-                  data: buffers.events
+            [ 'events', 'log' ].forEach( function( streamType ) {
+               var buffer = buffers[ streamType ];
+               if( !buffer.length ) {
+                  return;
+               }
+               var lastIndex = lastIndexByStream[ streamType ] || -1;
+               eventBus.publish( 'didProduce.' + $scope.features[ streamType ].stream, {
+                  stream: $scope.features[ streamType ].stream,
+                  data: buffer.filter( function( item ) {
+                     return item.index > lastIndex;
+                  } )
                } );
-               buffers.events = [];
-            }
+               lastIndexByStream[ streamType ] = buffer[ buffer.length - 1 ].index;
+            } );
+
 
             if( buffers.log.length ) {
                eventBus.publish( 'didProduce.' + $scope.features.log.stream, {

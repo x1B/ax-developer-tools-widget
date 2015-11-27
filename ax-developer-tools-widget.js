@@ -105,6 +105,8 @@ define( [
       if( enabled ) {
          developerHooks = window.axDeveloperTools = ( window.axDeveloperTools || {} );
          developerHooks.buffers = ( developerHooks.buffers || { events: [], log: [] } );
+         developerHooks.eventCounter = developerHooks.eventCounter || 0;
+         developerHooks.logCounter = developerHooks.logCounter || 0;
          developerHooks.pageInfo = developerHooks.pageInfo || ax._tooling.pages.current();
          developerHooks.pageInfoVersion = developerHooks.pageInfoVersion || 1;
          ax._tooling.pages.addListener( onPageChange );
@@ -118,7 +120,12 @@ define( [
                   ax.log.warn( 'DeveloperTools: [0], event: [1]', problem.description, item );
                } );
             }
-            pushIntoStore( 'events', ax.object.options( { time: new Date(), problems: problems }, item ) );
+            var index = developerHooks.eventCounter++;
+            pushIntoStore( 'events', ax.object.options( {
+               time: new Date(),
+               problems: problems,
+               index: index
+            }, item ) );
          } );
 
          ng.element( window ).off( 'beforeunload.AxDeveloperToolsWidget' );
@@ -132,6 +139,7 @@ define( [
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function logChannel( messageObject ) {
+         messageObject.index = developerHooks.logCounter++;
          pushIntoStore( 'log', messageObject );
       }
    }
@@ -375,11 +383,9 @@ define( [
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    function onPageChange( pageInfo ) {
-      console.log( 'developerHooks.pageInfo: ', developerHooks.pageInfo, 'pageInfo: ', pageInfo );
       if( ng.equals( developerHooks.pageInfo, pageInfo ) ) {
          return;
       }
-      console.log( 'page change...' );
       developerHooks.pageInfo = pageInfo;
       ++developerHooks.pageInfoVersion;
    }

@@ -6,8 +6,9 @@
 define( [
    'angular',
    'angular-sanitize',
+   'laxar-patterns',
    'moment'
-], function( ng, ngSanitize, moment ) {
+], function( ng, ngSanitize, patterns, moment ) {
    'use strict';
 
    var settingGroups = [ 'patterns', 'interactions', 'sources' ];
@@ -17,6 +18,13 @@ define( [
    Controller.$inject = [ '$scope', '$sanitize' ];
 
    function Controller( $scope, $sanitize ) {
+
+      $scope.resources = {};
+
+      var resourceHandler = patterns.resources.handlerFor( $scope ).registerResourceFromFeature( 'filter', {
+         onUpdateReplace: runFilters,
+         isOptional: true
+      } );
 
       $scope.model = {
          patterns: [
@@ -209,15 +217,11 @@ define( [
             if( !settings.sources[ eventInfo.sourceType ] ) {
                return false;
             }
-            if( searchRegExp ) {
-               var someMatch = [ eventInfo.name, eventInfo.source, eventInfo.target].some( function( field ) {
-                  var matches = searchRegExp.test( field );
-                  searchRegExp.lastIndex = 0;
-                  return !!matches;
-               } );
-               if( !someMatch ) {
-                  return false;
-               }
+            if( !matchesFilterResource( eventInfo ) ) {
+               return false;
+            }
+            if( !matchesSearchExpression( eventInfo, searchRegExp ) ) {
+               return false;
             }
             ++numVisible;
             return true;
@@ -230,6 +234,51 @@ define( [
             eventInfo.htmlTarget = htmlValue( eventInfo.target, searchRegExp );
             eventInfo.selected = !!selectionEventInfo && inSelection( eventInfo, selectionEventInfo );
          } );
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function matchesSearchExpression( eventInfo, searchRegExp ) {
+         return !searchRegExp || [ eventInfo.name, eventInfo.source, eventInfo.target ]
+            .some( function( field ) {
+               var matches = searchRegExp.test( field );
+               searchRegExp.lastIndex = 0;
+               return !!matches;
+            } );
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function matchesFilterResource( eventInfo ) {
+         if( !$scope.resources.filter ) {
+            return true;
+         }
+         var filter = $scope.resources.filter;
+         const topicsFilter = filter.topics || [];
+         const widgetFilter = {
+            source: filter.sources || [],
+            target: filter.targets || []
+         };
+
+         if( !topicsFilter.length && !widgetFilter.source.length && !widgetFilter.target.length ) {
+            return true;
+         }
+
+         const matchesFilterTopics = filter.topics.some( function( topic ) {
+            return eventInfo.name === topic || eventInfo.name.indexOf( topic + '.' ) === 0;
+         } );
+
+         return matchesFilterTopics || [ 'target', 'source' ].some( function( field ) {
+            var value = eventInfo[ field ];
+            var filterValues = widgetFilter[ field ];
+            return filterValues.some( isSuffixOf( value ) );
+         } );
+
+         function isSuffixOf( value ) {
+            return function( _ ) {
+               return value.indexOf( '#' + _ ) === value.length - _.length;
+            };
+         }
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////

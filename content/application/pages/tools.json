@@ -23,34 +23,44 @@
       "toolbar": [
          {
             "widget": "developer-tools/ax-developer-toolbar-widget",
+            "id": "toolbar",
             "features": {
                "grid": {
                   "resource": "gridSettings"
+               },
+               "tabs": {
+                  "parameter": "tab"
                }
             }
          }
       ],
-      "events": [
-         {
-            "widget": "developer-tools/ax-events-display-widget",
-            "features": {
-               "events": {
-                  "stream": "eventBusItems"
-               }
-            }
-         }
-      ],
-      "page": [
+      "toolbar.page": [
          {
             "widget": "developer-tools/ax-page-inspector-widget",
             "features": {
                "pageInfo": {
                   "resource": "pageInfo"
+               },
+               "filter": {
+                  "resource": "eventFilter"
                }
             }
          }
       ],
-      "logs": [
+      "toolbar.events": [
+         {
+            "widget": "developer-tools/ax-events-display-widget",
+            "features": {
+               "events": {
+                  "stream": "eventBusItems"
+               },
+               "filter": {
+                  "resource": "eventFilter"
+               }
+            }
+         }
+      ],
+      "toolbar.logs": [
          {
             "widget": "developer-tools/ax-log-display-widget",
             "features": {

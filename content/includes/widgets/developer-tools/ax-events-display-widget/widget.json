@@ -51,6 +51,12 @@
                   "type": "array",
                   "description": "Controls interaction-related default filter settings",
                   "default": [ "subscribe", "unsubscribe" ]
+               },
+               "resource": {
+                  "type": "string",
+                  "description": "The event topic through which to receive filter information",
+                  "format": "topic",
+                  "axRole": "master"
                }
             }
          },

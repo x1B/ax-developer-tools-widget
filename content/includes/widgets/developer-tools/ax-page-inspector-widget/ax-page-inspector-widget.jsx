@@ -3,23 +3,13 @@ import patterns from 'laxar-patterns';
 
 import wireflow from 'wireflow';
 
-import { types, graph, layout } from './graph-helpers';
+import { types, graph, layout, filterFromSelection } from './graph-helpers';
 
 const {
-  selection: {
-    SelectionStore
-  },
-  history: {
-    actions: { CreateCheckpoint },
-    HistoryStore
-  },
-  layout: {
-     actions: { AutoLayout },
-     LayoutStore
-  },
-  graph: {
-    GraphStore
-  },
+  selection: { SelectionStore },
+  history: { HistoryStore },
+  layout: { LayoutStore },
+  graph: { GraphStore },
   settings: {
     actions: { ChangeMode },
     model: { Settings, READ_ONLY, READ_WRITE },
@@ -29,12 +19,14 @@ const {
   components: { Graph }
 } = wireflow;
 
+
 function create( context, eventBus, reactRender ) {
 
-   var domAvailable = false;
-   var resourceAvailable = false;
-   var visible = false;
-   var hideIrrelevantWidgets = true;
+   let domAvailable = false;
+   let resourceAvailable = false;
+   let visible = false;
+   let hideIrrelevantWidgets = true;
+   let publishedSelection = null;
 
    patterns.resources.handlerFor( context )
       .registerResourceFromFeature( 'pageInfo', {
@@ -44,12 +36,26 @@ function create( context, eventBus, reactRender ) {
          }
       } );
 
-   eventBus.subscribe( 'didChangeAreaVisibility.' + context.widget.area, event => {
+
+   const publishFilter = patterns.resources.replacePublisherForFeature( context, 'filter', {
+      isOptional: true
+   } );
+
+   eventBus.subscribe( `didChangeAreaVisibility.${context.widget.area}`, event => {
       if( !visible && event.visible ) {
          visible = true;
          update();
       }
    } );
+
+   function replaceFilter( selection ) {
+      const resource = context.features.filter.resource;
+      if( !resource || selection === publishedSelection ) {
+         return;
+      }
+      publishedSelection = selection;
+      publishFilter( filterFromSelection( selection ) );
+   }
 
    function updateHideIrrelevantWidgets( event ) {
       hideIrrelevantWidgets = event.target.checked;
@@ -78,15 +84,17 @@ function create( context, eventBus, reactRender ) {
       const selectionStore = new SelectionStore( dispatcher, layoutStore, graphStore );
 
       function render() {
+         replaceFilter( selectionStore.selection );
+
          reactRender(
-            <div className='page-inspector-row'>
-               <div className='page-inspector-settings'>
-                  <label>
+            <div className='page-inspector-row form-inline'>
+               <div className='page-inspector-settings form-group form-group-sm'>
                      <input type='checkbox'
+                        id='hideIrrelevant'
+                        className='form-control input-sm'
                         checked={hideIrrelevantWidgets}
                         onChange={updateHideIrrelevantWidgets}/>
-                     Hide simple widgets
-                  </label>
+                     <label htmlFor='hideIrrelevant'> Hide simple widgets</label>
                </div>
                <Graph className={'nbe-theme-fusebox-app'}
                       types={graphStore.types}

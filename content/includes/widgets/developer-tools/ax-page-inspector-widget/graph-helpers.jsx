@@ -303,3 +303,22 @@ export function layout( graph ) {
 export function types() {
    return graphModel.convert.types( edgeTypes );
 }
+
+
+const patternTopics = {
+   RESOURCE: [ 'didReplace', 'didUpdate' ],
+   ACTION: [ 'takeActionRequest', 'willTakeAction', 'didTakeAction' ],
+   FLAG: [ 'didChangeFlag' ],
+   CONTAINER: []
+};
+
+export function filterFromSelection( selection ) {
+   const topics = selection.edges.flatMap( edgeId => {
+      const [ type, topic ] = edgeId.split( ':' );
+      return patternTopics[ type ].map( prefix => prefix + '.' + topic );
+   } ).toJS();
+
+   return {
+      topics
+   };
+}

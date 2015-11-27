@@ -17,7 +17,19 @@
             "required": [ "resource" ],
             "properties": {
                "resource": {
-                  "type": "string"
+                  "type": "string",
+                  "format": "topic",
+                  "axRole": "slave"
+               }
+            }
+         },
+         "tabs": {
+            "type": "object",
+            "required": [ "parameter" ],
+            "properties": {
+               "parameter": {
+                  "type": "string",
+                  "format": "topic"
                }
             }
          }

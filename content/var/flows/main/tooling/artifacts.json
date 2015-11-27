@@ -59,8 +59,8 @@
          "widgets": [
             "developer-tools/ax-host-connector-widget",
             "developer-tools/ax-developer-toolbar-widget",
-            "developer-tools/ax-events-display-widget",
             "developer-tools/ax-page-inspector-widget",
+            "developer-tools/ax-events-display-widget",
             "developer-tools/ax-log-display-widget"
          ]
       }

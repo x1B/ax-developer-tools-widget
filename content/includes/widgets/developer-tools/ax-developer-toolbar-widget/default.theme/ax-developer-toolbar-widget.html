@@ -12,4 +12,27 @@
       ><i class="fa"
           data-ng-class="{ 'fa-toggle-off': !model.widgetOverlay, 'fa-toggle-on': model.widgetOverlay }"
       ></i>&nbsp;{{model.widgetOverlay ? 'Turn off widget outline' : 'Turn on widget outline'}}</button>
+
 </div>
+
+<ul class="nav nav-tabs" role="tablist">
+   <li data-ng-class="{ 'ax-active': model.activeTab=='page' }"
+      ><a href="javascript:void(0);"
+          data-ng-click="activateTab('page')">Page</a></li>
+   <li data-ng-class="{ 'ax-active': model.activeTab=='events' }"
+      ><a href="javascript:void(0);"
+          data-ng-click="activateTab('events')">Events</a></li>
+   <li data-ng-class="{ 'ax-active': model.activeTab=='logs' }"
+      ><a href="javascript:void(0);"
+          data-ng-click="activateTab('logs')">Logs</a></li>
+</ul>
+
+<div class="app-tab app-tab-page"
+     data-ax-widget-area="page"
+     data-ng-show="model.activeTab=='page'"></div>
+<div class="app-tab app-tab-content"
+     data-ax-widget-area="events"
+     data-ng-show="model.activeTab=='events'"></div>
+<div class="app-tab app-tab-content"
+     data-ax-widget-area="logs"
+     data-ng-show="model.activeTab=='logs'"></div>

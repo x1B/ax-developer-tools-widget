@@ -1,31 +1,6 @@
-<div class="fluid-container"
-     data-ng-init="activeTab='page'">
-
+<div class="fluid-container">
    <div class="app-toolbar">
       <div class="col col-lg-12 first last"
            data-ax-widget-area="toolbar"></div>
    </div>
-
-   <ul class="nav nav-tabs" role="tablist">
-      <li data-ng-class="{ 'ax-active': activeTab=='page' }"
-         ><a href="javascript:void(0);"
-             data-ng-click="activeTab='page'">Page</a></li>
-      <li data-ng-class="{ 'ax-active': activeTab=='events' }"
-         ><a href="javascript:void(0);"
-             data-ng-click="activeTab='events'">Events</a></li>
-      <li data-ng-class="{ 'ax-active': activeTab=='logs' }"
-         ><a href="javascript:void(0);"
-             data-ng-click="activeTab='logs'">Logs</a></li>
-   </ul>
-
-   <div class="app-tab app-tab-page"
-        data-ax-widget-area="page"
-        data-ng-show="activeTab=='page'"></div>
-   <div class="app-tab app-tab-content"
-        data-ax-widget-area="events"
-        data-ng-show="activeTab=='events'"></div>
-   <div class="app-tab app-tab-content"
-        data-ax-widget-area="logs"
-        data-ng-show="activeTab=='logs'"></div>
-
 </div>

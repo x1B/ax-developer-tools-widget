@@ -1,4 +1,4 @@
-define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Object.defineProperty(exports, '__esModule', { value: true });exports.graph = graph;exports.layout = layout;exports.types = types;function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { 'default': obj };}var _wireflow2 = _interopRequireDefault(_wireflow);
+define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Object.defineProperty(exports, '__esModule', { value: true });var _slicedToArray = (function () {function sliceIterator(arr, i) {var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i['return']) _i['return']();} finally {if (_d) throw _e;}}return _arr;}return function (arr, i) {if (Array.isArray(arr)) {return arr;} else if (Symbol.iterator in Object(arr)) {return sliceIterator(arr, i);} else {throw new TypeError('Invalid attempt to destructure non-iterable instance');}};})();exports.graph = graph;exports.layout = layout;exports.types = types;exports.filterFromSelection = filterFromSelection;function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { 'default': obj };}var _wireflow2 = _interopRequireDefault(_wireflow);
 
 
    var TYPE_CONTAINER = 'CONTAINER';var 
@@ -301,5 +301,23 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
 
 
    function types() {
-      return graphModel.convert.types(edgeTypes);}});
+      return graphModel.convert.types(edgeTypes);}
+
+
+
+   var patternTopics = { 
+      RESOURCE: ['didReplace', 'didUpdate'], 
+      ACTION: ['takeActionRequest', 'willTakeAction', 'didTakeAction'], 
+      FLAG: ['didChangeFlag'], 
+      CONTAINER: [] };
+
+
+   function filterFromSelection(selection) {
+      var topics = selection.edges.flatMap(function (edgeId) {var _edgeId$split = 
+         edgeId.split(':');var _edgeId$split2 = _slicedToArray(_edgeId$split, 2);var type = _edgeId$split2[0];var topic = _edgeId$split2[1];
+         return patternTopics[type].map(function (prefix) {return prefix + '.' + topic;});}).
+      toJS();
+
+      return { 
+         topics: topics };}});
 //# sourceMappingURL=graph-helpers.js.map

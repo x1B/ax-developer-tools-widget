@@ -14,17 +14,33 @@ define( [
    // This controller performs heavy DOM-manipulation, which you would normally put into a directive.
    // However, only the DOM of the host application is manipulated, so this is acceptable.
 
-   Controller.$inject = [ '$scope', '$window' ];
+   Controller.$inject = [ 'axEventBus', '$scope', '$window' ];
 
-   function Controller( $scope, $window ) {
+   function Controller( eventBus, $scope, $window ) {
 
       $scope.resources = {};
 
       axPatterns.resources.handlerFor( $scope ).registerResourceFromFeature( 'grid', { } );
 
       $scope.model = {
+         activeTab: null,
          gridOverlay: false,
          widgetOverlay: false
+      };
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      eventBus.subscribe( 'didNavigate', function( event ) {
+         $scope.model.activeTab = event.data[ $scope.features.tabs.parameter ] || 'page';
+      } );
+
+      $scope.activateTab = function( tabName ) {
+         var data = {};
+         data[ $scope.features.tabs.parameter ] = tabName;
+         eventBus.publish( 'navigateRequest._self', {
+            target: '_self',
+            data: data
+         } );
       };
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////

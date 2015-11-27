@@ -6,20 +6,10 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
 
 
 
-
-   SelectionStore = _wireflow2['default'].selection.SelectionStore;var _wireflow$history = _wireflow2['default'].
-
-   history;var 
-   CreateCheckpoint = _wireflow$history.actions.CreateCheckpoint;var 
-   HistoryStore = _wireflow$history.HistoryStore;var _wireflow$layout = _wireflow2['default'].
-
-   layout;var 
-   AutoLayout = _wireflow$layout.actions.AutoLayout;var 
-   LayoutStore = _wireflow$layout.LayoutStore;var 
-
-
+   SelectionStore = _wireflow2['default'].selection.SelectionStore;var 
+   HistoryStore = _wireflow2['default'].history.HistoryStore;var 
+   LayoutStore = _wireflow2['default'].layout.LayoutStore;var 
    GraphStore = _wireflow2['default'].graph.GraphStore;var _wireflow$settings = _wireflow2['default'].
-
    settings;var 
    ChangeMode = _wireflow$settings.actions.ChangeMode;var _wireflow$settings$model = _wireflow$settings.
    model;var Settings = _wireflow$settings$model.Settings;var READ_ONLY = _wireflow$settings$model.READ_ONLY;var READ_WRITE = _wireflow$settings$model.READ_WRITE;var 
@@ -29,12 +19,14 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
    Graph = _wireflow2['default'].components.Graph;
 
 
+
    function create(context, eventBus, reactRender) {
 
       var domAvailable = false;
       var resourceAvailable = false;
       var visible = false;
       var hideIrrelevantWidgets = true;
+      var publishedSelection = null;
 
       _patterns['default'].resources.handlerFor(context).
       registerResourceFromFeature('pageInfo', { 
@@ -44,11 +36,25 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
 
 
 
+
+      var publishFilter = _patterns['default'].resources.replacePublisherForFeature(context, 'filter', { 
+         isOptional: true });
+
+
       eventBus.subscribe('didChangeAreaVisibility.' + context.widget.area, function (event) {
          if (!visible && event.visible) {
             visible = true;
             update();}});
 
+
+
+      function replaceFilter(selection) {
+         var resource = context.features.filter.resource;
+         if (!resource || selection === publishedSelection) {
+            return;}
+
+         publishedSelection = selection;
+         publishFilter((0, _graphHelpers.filterFromSelection)(selection));}
 
 
       function updateHideIrrelevantWidgets(event) {
@@ -78,15 +84,17 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
          var selectionStore = new SelectionStore(dispatcher, layoutStore, graphStore);
 
          function render() {
+            replaceFilter(selectionStore.selection);
+
             reactRender(
-            _React['default'].createElement('div', { className: 'page-inspector-row' }, 
-            _React['default'].createElement('div', { className: 'page-inspector-settings' }, 
-            _React['default'].createElement('label', null, 
+            _React['default'].createElement('div', { className: 'page-inspector-row form-inline' }, 
+            _React['default'].createElement('div', { className: 'page-inspector-settings form-group form-group-sm' }, 
             _React['default'].createElement('input', { type: 'checkbox', 
+               id: 'hideIrrelevant', 
+               className: 'form-control input-sm', 
                checked: hideIrrelevantWidgets, 
-               onChange: updateHideIrrelevantWidgets }), 'Hide simple widgets')), 
-
-
+               onChange: updateHideIrrelevantWidgets }), 
+            _React['default'].createElement('label', { htmlFor: 'hideIrrelevant' }, ' Hide simple widgets')), 
 
             _React['default'].createElement(Graph, { className: 'nbe-theme-fusebox-app', 
                types: graphStore.types, 

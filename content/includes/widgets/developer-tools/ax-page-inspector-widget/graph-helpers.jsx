@@ -97,7 +97,8 @@ export function graph( pageInfo, removeIrrelevantWidgets ) {
    function processLayoutInstance( layout, areaName ) {
       vertices[ layout.id ] = {
          id: layout.id,
-         label: 'Layout: ' + layout.layout,
+         kind: 'LAYOUT',
+         label: '[L] ' + layout.id,
          ports: { inbound: [], outbound: [] }
       };
    }
@@ -108,10 +109,16 @@ export function graph( pageInfo, removeIrrelevantWidgets ) {
       const descriptor = widgetDescriptors[ widget.widget ];
       const ports = { inbound: [], outbound: [] };
 
+      const kinds = {
+         widget: 'WIDGET',
+         activity: 'ACTIVITY'
+      };
+
       identifyPorts( widget.features, descriptor.features, [] );
       vertices[ widget.id ] = {
          id: widget.id,
-         label: widget.widget,
+         kind: kinds[ descriptor.integration.type ],
+         label: widget.id,
          ports: ports
       };
 
@@ -232,7 +239,8 @@ export function graph( pageInfo, removeIrrelevantWidgets ) {
 
       vertices[ PAGE_ID ] =  {
          PAGE_ID,
-         label: 'Page: ' + pageRef,
+         label: 'Page ' + pageRef,
+         kind: 'PAGE',
          ports: { inbound: [], outbound: [] }
       };
 
@@ -293,6 +301,8 @@ export function graph( pageInfo, removeIrrelevantWidgets ) {
 
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export function layout( graph ) {
    return layoutModel.convert.layout( {
       vertices: {},
@@ -300,25 +310,27 @@ export function layout( graph ) {
    } );
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export function types() {
    return graphModel.convert.types( edgeTypes );
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const patternTopics = {
-   RESOURCE: [ 'didReplace', 'didUpdate' ],
-   ACTION: [ 'takeActionRequest', 'willTakeAction', 'didTakeAction' ],
-   FLAG: [ 'didChangeFlag' ],
-   CONTAINER: []
-};
-
-export function filterFromSelection( selection ) {
-   const topics = selection.edges.flatMap( edgeId => {
+export function filterFromSelection( selection, graphModel ) {
+   const topics = selection.edges.map( edgeId => {
       const [ type, topic ] = edgeId.split( ':' );
-      return patternTopics[ type ].map( prefix => prefix + '.' + topic );
+      return { pattern: type, topic };
    } ).toJS();
 
+   const participants = selection.vertices.flatMap( vertexId => {
+      const { id, kind } = graphModel.vertices.get( vertexId );
+      return ( kind === 'PAGE' || kind === 'LAYOUT' ) ? [] : [{ kind, participant: vertexId }];
+   } );
+
    return {
-      topics
+      topics,
+      participants
    };
 }

@@ -48,13 +48,13 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
 
 
 
-      function replaceFilter(selection) {
+      function replaceFilter(selection, graphModel) {
          var resource = context.features.filter.resource;
          if (!resource || selection === publishedSelection) {
             return;}
 
          publishedSelection = selection;
-         publishFilter((0, _graphHelpers.filterFromSelection)(selection));}
+         publishFilter((0, _graphHelpers.filterFromSelection)(selection, graphModel));}
 
 
       function updateHideIrrelevantWidgets(event) {
@@ -84,7 +84,7 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
          var selectionStore = new SelectionStore(dispatcher, layoutStore, graphStore);
 
          function render() {
-            replaceFilter(selectionStore.selection);
+            replaceFilter(selectionStore.selection, graphStore.graph);
 
             reactRender(
             _React['default'].createElement('div', { className: 'page-inspector-row form-inline' }, 

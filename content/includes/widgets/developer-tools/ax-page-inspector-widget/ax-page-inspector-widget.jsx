@@ -48,13 +48,13 @@ function create( context, eventBus, reactRender ) {
       }
    } );
 
-   function replaceFilter( selection ) {
+   function replaceFilter( selection, graphModel ) {
       const resource = context.features.filter.resource;
       if( !resource || selection === publishedSelection ) {
          return;
       }
       publishedSelection = selection;
-      publishFilter( filterFromSelection( selection ) );
+      publishFilter( filterFromSelection( selection, graphModel ) );
    }
 
    function updateHideIrrelevantWidgets( event ) {
@@ -84,7 +84,7 @@ function create( context, eventBus, reactRender ) {
       const selectionStore = new SelectionStore( dispatcher, layoutStore, graphStore );
 
       function render() {
-         replaceFilter( selectionStore.selection );
+         replaceFilter( selectionStore.selection, graphStore.graph );
 
          reactRender(
             <div className='page-inspector-row form-inline'>

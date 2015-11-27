@@ -249,30 +249,39 @@ define( [
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+      const patternTopics = {
+         RESOURCE: [ 'didReplace', 'didUpdate' ],
+         ACTION: [ 'takeActionRequest', 'willTakeAction', 'didTakeAction' ],
+         FLAG: [ 'didChangeFlag' ],
+         CONTAINER: [ 'changeAreaVisibilityRequest', 'willChangeAreaVisibility', 'didChangeAreaVisibility' ]
+      };
+
       function matchesFilterResource( eventInfo ) {
          if( !$scope.resources.filter ) {
             return true;
          }
          var filter = $scope.resources.filter;
-         const topicsFilter = filter.topics || [];
-         const widgetFilter = {
-            source: filter.sources || [],
-            target: filter.targets || []
-         };
+         var filterTopics = filter.topics || [];
+         var filterParticipants = filter.participants || [];
 
-         if( !topicsFilter.length && !widgetFilter.source.length && !widgetFilter.target.length ) {
+         if( !filterTopics.length && !filterParticipants.length ) {
             return true;
          }
 
-         const matchesFilterTopics = filter.topics.some( function( topic ) {
-            return eventInfo.name === topic || eventInfo.name.indexOf( topic + '.' ) === 0;
+         var matchesTopicFilter = filterTopics
+            .map( function( _ ) { return _.participant; } )
+            .some( function( topic ) {
+               return eventInfo.name === topic || eventInfo.name.indexOf( topic + '.' ) === 0;
+            } );
+
+         var matchesParticipantsFilter = [ 'target', 'source' ].some( function( field ) {
+            var value = eventInfo[ field ];
+            return filterParticipants
+               .map( function( _ ) { return _.participant; } )
+               .some( isSuffixOf( value ) );
          } );
 
-         return matchesFilterTopics || [ 'target', 'source' ].some( function( field ) {
-            var value = eventInfo[ field ];
-            var filterValues = widgetFilter[ field ];
-            return filterValues.some( isSuffixOf( value ) );
-         } );
+         return matchesTopicFilter || matchesParticipantsFilter;
 
          function isSuffixOf( value ) {
             return function( _ ) {

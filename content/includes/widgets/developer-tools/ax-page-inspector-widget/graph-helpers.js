@@ -97,7 +97,8 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
       function processLayoutInstance(layout, areaName) {
          vertices[layout.id] = { 
             id: layout.id, 
-            label: 'Layout: ' + layout.layout, 
+            kind: 'LAYOUT', 
+            label: '[L] ' + layout.id, 
             ports: { inbound: [], outbound: [] } };}
 
 
@@ -108,10 +109,16 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
          var descriptor = widgetDescriptors[widget.widget];
          var ports = { inbound: [], outbound: [] };
 
+         var kinds = { 
+            widget: 'WIDGET', 
+            activity: 'ACTIVITY' };
+
+
          identifyPorts(widget.features, descriptor.features, []);
          vertices[widget.id] = { 
             id: widget.id, 
-            label: widget.widget, 
+            kind: kinds[descriptor.integration.type], 
+            label: widget.id, 
             ports: ports };
 
 
@@ -232,7 +239,8 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
 
          vertices[PAGE_ID] = { 
             PAGE_ID: PAGE_ID, 
-            label: 'Page: ' + pageRef, 
+            label: 'Page ' + pageRef, 
+            kind: 'PAGE', 
             ports: { inbound: [], outbound: [] } };
 
 
@@ -293,6 +301,8 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
 
 
 
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
    function layout(graph) {
       return layoutModel.convert.layout({ 
          vertices: {}, 
@@ -300,24 +310,26 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
 
 
 
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
    function types() {
       return graphModel.convert.types(edgeTypes);}
 
 
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   var patternTopics = { 
-      RESOURCE: ['didReplace', 'didUpdate'], 
-      ACTION: ['takeActionRequest', 'willTakeAction', 'didTakeAction'], 
-      FLAG: ['didChangeFlag'], 
-      CONTAINER: [] };
-
-
-   function filterFromSelection(selection) {
-      var topics = selection.edges.flatMap(function (edgeId) {var _edgeId$split = 
+   function filterFromSelection(selection, graphModel) {
+      var topics = selection.edges.map(function (edgeId) {var _edgeId$split = 
          edgeId.split(':');var _edgeId$split2 = _slicedToArray(_edgeId$split, 2);var type = _edgeId$split2[0];var topic = _edgeId$split2[1];
-         return patternTopics[type].map(function (prefix) {return prefix + '.' + topic;});}).
+         return { pattern: type, topic: topic };}).
       toJS();
 
+      var participants = selection.vertices.flatMap(function (vertexId) {var _graphModel$vertices$get = 
+         graphModel.vertices.get(vertexId);var id = _graphModel$vertices$get.id;var kind = _graphModel$vertices$get.kind;
+         return kind === 'PAGE' || kind === 'LAYOUT' ? [] : [{ kind: kind, participant: vertexId }];});
+
+
       return { 
-         topics: topics };}});
+         topics: topics, 
+         participants: participants };}});
 //# sourceMappingURL=graph-helpers.js.map

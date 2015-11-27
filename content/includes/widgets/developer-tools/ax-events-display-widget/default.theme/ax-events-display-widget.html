@@ -96,6 +96,11 @@
               data-ng-class="{ 'ax-disabled': !model.eventInfos.length }"
               data-ng-click="commands.discard()">Discard Events</button>
    </div>
+
+   <div data-ng-if="resources.filter.topics.length || resources.filter.participants.length">
+      <span data-ng-repeat="item in resources.filter.topics" data-ng-class="'ax-events-display-filter-item ax-events-display-pattern-' + item.pattern">{{item.topic}}</span>
+      <span data-ng-repeat="item in resources.filter.participants" data-ng-class="'ax-events-display-filter-item ax-events-display-kind-' + item.kind">{{item.participant}}</span>
+   </div>
 </div>
 
 <div data-ng-if="!model.eventInfos.length"

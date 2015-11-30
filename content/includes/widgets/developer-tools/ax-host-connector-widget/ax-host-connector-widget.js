@@ -38,14 +38,24 @@ define( [
             return;
          }
 
-         publishGridSettings();
-         checkForData();
+         var hostApplicationAvailable = publishGridSettings();
+         if( hostApplicationAvailable ) {
+            checkForData();
+         }
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function publishGridSettings() {
-         var channel = window.opener.axDeveloperTools;
+         var channel;
+         try {
+            channel = window.opener.axDeveloperTools;
+         }
+         catch( exception ) {
+            handleApplicationGone();
+            return false;
+         }
+
          var channelGridSettings = channel && channel.gridSettings;
          if( $scope.features.grid.resource && channelGridSettings ) {
             eventBus.publish( 'didReplace.' + $scope.features.grid.resource, {
@@ -53,27 +63,35 @@ define( [
                data: channelGridSettings
             } );
          }
+         return true;
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       function checkForData() {
-         var channel = window.opener.axDeveloperTools;
+         var channel;
+         try {
+            channel = window.opener.axDeveloperTools;
+         } catch (e) {
+            handleApplicationGone();
+            return;
+         }
          var buffers = channel && channel.buffers;
          if( buffers ) {
             [ 'events', 'log' ].forEach( function( streamType ) {
                var buffer = buffers[ streamType ];
-               if( !buffer.length ) {
+               var lastIndex = lastIndexByStream[ streamType ] || -1;
+               var events = buffer.filter( function( item ) {
+                  return item.index > lastIndex;
+               } );
+               if( !events.length ) {
                   return;
                }
-               var lastIndex = lastIndexByStream[ streamType ] || -1;
                eventBus.publish( 'didProduce.' + $scope.features[ streamType ].stream, {
                   stream: $scope.features[ streamType ].stream,
-                  data: buffer.filter( function( item ) {
-                     return item.index > lastIndex;
-                  } )
+                  data: events
                } );
-               lastIndexByStream[ streamType ] = buffer[ buffer.length - 1 ].index;
+               lastIndexByStream[ streamType ] = events[ events.length - 1 ].index;
             } );
 
 
@@ -95,6 +113,15 @@ define( [
          }
 
          timeout = window.setTimeout( checkForData, REFRESH_DELAY_MS );
+      }
+
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      function handleApplicationGone() {
+         var message =
+            'laxar-developer-tools-widget: Cannot access LaxarJS host window (or tab). Is it still open?';
+         ax.log.error( message );
+         eventBus.publish( 'didEncounterError', message );
       }
 
    }

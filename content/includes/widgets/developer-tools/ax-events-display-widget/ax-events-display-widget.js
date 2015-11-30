@@ -134,7 +134,7 @@ define( [
 
       if( $scope.features.events.stream ) {
          $scope.eventBus.subscribe( 'didProduce.' + $scope.features.events.stream, function( event ) {
-            if( Array.isArray( event.data ) ) {
+            if( Array.isArray( event.data ) && event.data.length ) {
                event.data.forEach( addEvent );
             }
             else {
@@ -260,18 +260,20 @@ define( [
          if( !$scope.resources.filter ) {
             return true;
          }
-         var filter = $scope.resources.filter;
-         var filterTopics = filter.topics || [];
-         var filterParticipants = filter.participants || [];
 
+         var filterTopics = $scope.resources.filter.topics || [];
+         var filterParticipants = $scope.resources.filter.participants || [];
          if( !filterTopics.length && !filterParticipants.length ) {
             return true;
          }
 
          var matchesTopicFilter = filterTopics
-            .map( function( _ ) { return _.participant; } )
-            .some( function( topic ) {
-               return eventInfo.name === topic || eventInfo.name.indexOf( topic + '.' ) === 0;
+            .some( function( item ) {
+               var prefixes = patternTopics[ item.pattern ];
+               return prefixes.some( function( prefix ) {
+                  var topic = prefix + '.' + item.topic;
+                  return eventInfo.name === topic || eventInfo.name.indexOf( topic + '.' ) === 0;
+               } );
             } );
 
          var matchesParticipantsFilter = [ 'target', 'source' ].some( function( field ) {
@@ -285,7 +287,8 @@ define( [
 
          function isSuffixOf( value ) {
             return function( _ ) {
-               return value.indexOf( '#' + _ ) === value.length - _.length;
+               const tail = '#' + _;
+               return value.length >= tail.length && value.indexOf( tail ) === value.length - tail.length;
             };
          }
       }

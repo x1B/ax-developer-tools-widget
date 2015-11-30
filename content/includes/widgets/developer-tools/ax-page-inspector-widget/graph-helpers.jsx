@@ -36,11 +36,11 @@ const edgeTypes = {
  * Create a wireflow graph from a given page/widget information model.
  *
  * @param {Object} pageInfo
- * @param {Boolean} removeIrrelevantWidgets
+ * @param {Boolean=false} includeIrrelevantWidgets
  *   If set to `true`, widgets without any relevance to actions/resources/flags are removed.
  *   Containers of widgets (that are relevant by this measure) are kept.
  */
-export function graph( pageInfo, removeIrrelevantWidgets ) {
+export function graph( pageInfo, includeIrrelevantWidgets ) {
 
    const PAGE_ID = '.';
    const { pageRef, pageDefinitions, widgetDescriptors } = pageInfo;
@@ -51,7 +51,7 @@ export function graph( pageInfo, removeIrrelevantWidgets ) {
 
    identifyVertices();
    identifyContainers();
-   if( removeIrrelevantWidgets ) {
+   if( !includeIrrelevantWidgets ) {
       pruneIrrelevantWidgets();
    }
    pruneEmptyEdges();
@@ -319,9 +319,9 @@ export function types() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export function filterFromSelection( selection, graphModel ) {
-   const topics = selection.edges.map( edgeId => {
+   const topics = selection.edges.flatMap( edgeId => {
       const [ type, topic ] = edgeId.split( ':' );
-      return { pattern: type, topic };
+      return ( type === 'CONTAINER' ) ? [] : [{ pattern: type, topic }];
    } ).toJS();
 
    const participants = selection.vertices.flatMap( vertexId => {

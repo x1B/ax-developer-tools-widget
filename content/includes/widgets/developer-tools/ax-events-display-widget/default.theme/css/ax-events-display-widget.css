@@ -1,5 +1,6 @@
 
 .ax-events-display-widget .ax-events-display-filter-item {
+   /*
    display: inline-block;
    padding: 1px 4px;
    border-radius: 2px;
@@ -8,25 +9,36 @@
    font-weight: bold;
    color: white;
    background: #999;
+   */
 }
 
-.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-kind-ACTIVITY {
+.ax-events-filter-items {
+   line-height: 200%;
+}
+
+.ax-events-filter-items .btn-info {
+   color: white;
+   margin-left: 4px;
+   border: none;
+}
+
+.ax-events-display-widget .ax-events-display-kind-ACTIVITY {
    background: #4fb04f;
 }
-.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-kind-WIDGET {
+.ax-events-display-widget .ax-events-display-kind-WIDGET {
    background: #f90;
 }
 
-.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-pattern-RESOURCE {
+.ax-events-display-widget .ax-events-display-pattern-RESOURCE {
    background: #673ab7;
 }
-.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-pattern-FLAG {
+.ax-events-display-widget .ax-events-display-pattern-FLAG {
    background: #4caf50;
 }
-.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-pattern-ACTION {
+.ax-events-display-widget .ax-events-display-pattern-ACTION {
    background: #ef6c00;
 }
-.ax-events-display-widget .ax-events-display-filter-item.ax-events-display-pattern-CONTAINER {
+.ax-events-display-widget .ax-events-display-pattern-CONTAINER {
    background: #4285f4;
 }
 

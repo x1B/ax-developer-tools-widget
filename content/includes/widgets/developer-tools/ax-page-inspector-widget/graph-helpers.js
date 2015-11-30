@@ -36,11 +36,11 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
     * Create a wireflow graph from a given page/widget information model.
     *
     * @param {Object} pageInfo
-    * @param {Boolean} removeIrrelevantWidgets
+    * @param {Boolean=false} includeIrrelevantWidgets
     *   If set to `true`, widgets without any relevance to actions/resources/flags are removed.
     *   Containers of widgets (that are relevant by this measure) are kept.
     */
-   function graph(pageInfo, removeIrrelevantWidgets) {
+   function graph(pageInfo, includeIrrelevantWidgets) {
 
       var PAGE_ID = '.';var 
       pageRef = pageInfo.pageRef;var pageDefinitions = pageInfo.pageDefinitions;var widgetDescriptors = pageInfo.widgetDescriptors;
@@ -51,7 +51,7 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
 
       identifyVertices();
       identifyContainers();
-      if (removeIrrelevantWidgets) {
+      if (!includeIrrelevantWidgets) {
          pruneIrrelevantWidgets();}
 
       pruneEmptyEdges();
@@ -319,9 +319,9 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
    function filterFromSelection(selection, graphModel) {
-      var topics = selection.edges.map(function (edgeId) {var _edgeId$split = 
+      var topics = selection.edges.flatMap(function (edgeId) {var _edgeId$split = 
          edgeId.split(':');var _edgeId$split2 = _slicedToArray(_edgeId$split, 2);var type = _edgeId$split2[0];var topic = _edgeId$split2[1];
-         return { pattern: type, topic: topic };}).
+         return type === 'CONTAINER' ? [] : [{ pattern: type, topic: topic }];}).
       toJS();
 
       var participants = selection.vertices.flatMap(function (vertexId) {var _graphModel$vertices$get = 

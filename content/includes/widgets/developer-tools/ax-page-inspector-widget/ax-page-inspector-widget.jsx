@@ -25,7 +25,7 @@ function create( context, eventBus, reactRender ) {
    let domAvailable = false;
    let resourceAvailable = false;
    let visible = false;
-   let hideIrrelevantWidgets = true;
+   let showIrrelevantWidgets = false;
    let publishedSelection = null;
 
    patterns.resources.handlerFor( context )
@@ -57,8 +57,8 @@ function create( context, eventBus, reactRender ) {
       publishFilter( filterFromSelection( selection, graphModel ) );
    }
 
-   function updateHideIrrelevantWidgets( event ) {
-      hideIrrelevantWidgets = event.target.checked;
+   function toggleIrrelevantWidgets() {
+      showIrrelevantWidgets = !showIrrelevantWidgets;
       update();
    }
 
@@ -73,7 +73,7 @@ function create( context, eventBus, reactRender ) {
       }
 
       const pageInfo = context.resources.pageInfo;
-      const pageGraph = graph( pageInfo, hideIrrelevantWidgets );
+      const pageGraph = graph( pageInfo, showIrrelevantWidgets );
 
       const pageTyeps = types();
       dispatcher = new Dispatcher( render );
@@ -88,13 +88,12 @@ function create( context, eventBus, reactRender ) {
 
          reactRender(
             <div className='page-inspector-row form-inline'>
-               <div className='page-inspector-settings form-group form-group-sm'>
-                     <input type='checkbox'
-                        id='hideIrrelevant'
-                        className='form-control input-sm'
-                        checked={hideIrrelevantWidgets}
-                        onChange={updateHideIrrelevantWidgets}/>
-                     <label htmlFor='hideIrrelevant'> Hide simple widgets</label>
+               <div class='row text-right'>
+                  <button className='btn btn-link'
+                          type='button'
+                          onClick={toggleIrrelevantWidgets}
+                     ><i className={'fa fa-toggle-' + ( showIrrelevantWidgets ? 'on' : 'off' ) }
+                     ></i> &quot;Silent&quot; Widgets</button>
                </div>
                <Graph className={'nbe-theme-fusebox-app'}
                       types={graphStore.types}

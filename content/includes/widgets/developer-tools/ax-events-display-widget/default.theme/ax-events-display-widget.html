@@ -97,9 +97,17 @@
               data-ng-click="commands.discard()">Discard Events</button>
    </div>
 
-   <div data-ng-if="resources.filter.topics.length || resources.filter.participants.length">
-      <span data-ng-repeat="item in resources.filter.topics" data-ng-class="'ax-events-display-filter-item ax-events-display-pattern-' + item.pattern">{{item.topic}}</span>
-      <span data-ng-repeat="item in resources.filter.participants" data-ng-class="'ax-events-display-filter-item ax-events-display-kind-' + item.kind">{{item.participant}}</span>
+   <div class="form-inline ax-events-filter-items" data-ng-if="resources.filter.topics.length || resources.filter.participants.length">
+      <a class="btn btn-xs btn-link" href="#/tools/page">Page selection</a>
+      <span class="btn btn-xs btn-info"
+            data-ng-repeat="item in resources.filter.topics track by item.topic"
+            data-ng-class="'ax-events-display-pattern-' + item.pattern">
+            {{item.topic}}
+      </span><span class="btn btn-xs btn-info"
+            data-ng-repeat="item in resources.filter.participants track by item.participant"
+            data-ng-class="'ax-events-display-kind-' + item.kind">
+            {{item.participant}}
+      </span>
    </div>
 </div>
 
@@ -157,10 +165,10 @@
              data-ng-bind-html="view.patternsByName[ event.pattern ].htmlIcon"></td>
          <td class="ax-col-interaction"><em>{{event.interaction}}</em></td>
          <td>
-            <button type="button" class="btn-link"
+            <button type="button" class="btn-link btn-info"
                     data-ng-if="event.interaction == 'publish' && !event.showDetails"
                     data-ng-click="event.showDetails = true; $event.stopPropagation();"><i class="fa fa-plus-square">&nbsp;</i></button>
-            <button type="button" class="btn-link"
+            <button type="button" class="btn-link btn-info"
                     data-ng-if="event.interaction == 'publish' && event.showDetails"
                     data-ng-click="event.showDetails = false; $event.stopPropagation();"><i class="fa fa-minus-square" >&nbsp;</i></button>
          </td>

@@ -25,7 +25,7 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
       var domAvailable = false;
       var resourceAvailable = false;
       var visible = false;
-      var hideIrrelevantWidgets = true;
+      var showIrrelevantWidgets = false;
       var publishedSelection = null;
 
       _patterns['default'].resources.handlerFor(context).
@@ -57,8 +57,8 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
          publishFilter((0, _graphHelpers.filterFromSelection)(selection, graphModel));}
 
 
-      function updateHideIrrelevantWidgets(event) {
-         hideIrrelevantWidgets = event.target.checked;
+      function toggleIrrelevantWidgets() {
+         showIrrelevantWidgets = !showIrrelevantWidgets;
          update();}
 
 
@@ -73,7 +73,7 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
 
 
          var pageInfo = context.resources.pageInfo;
-         var pageGraph = (0, _graphHelpers.graph)(pageInfo, hideIrrelevantWidgets);
+         var pageGraph = (0, _graphHelpers.graph)(pageInfo, showIrrelevantWidgets);
 
          var pageTyeps = (0, _graphHelpers.types)();
          dispatcher = new Dispatcher(render);
@@ -88,13 +88,12 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
 
             reactRender(
             _React['default'].createElement('div', { className: 'page-inspector-row form-inline' }, 
-            _React['default'].createElement('div', { className: 'page-inspector-settings form-group form-group-sm' }, 
-            _React['default'].createElement('input', { type: 'checkbox', 
-               id: 'hideIrrelevant', 
-               className: 'form-control input-sm', 
-               checked: hideIrrelevantWidgets, 
-               onChange: updateHideIrrelevantWidgets }), 
-            _React['default'].createElement('label', { htmlFor: 'hideIrrelevant' }, ' Hide simple widgets')), 
+            _React['default'].createElement('div', { 'class': 'row text-right' }, 
+            _React['default'].createElement('button', { className: 'btn btn-link', 
+               type: 'button', 
+               onClick: toggleIrrelevantWidgets }, 
+            _React['default'].createElement('i', { className: 'fa fa-toggle-' + (showIrrelevantWidgets ? 'on' : 'off') }), ' "Silent" Widgets')), 
+
 
             _React['default'].createElement(Graph, { className: 'nbe-theme-fusebox-app', 
                types: graphStore.types, 

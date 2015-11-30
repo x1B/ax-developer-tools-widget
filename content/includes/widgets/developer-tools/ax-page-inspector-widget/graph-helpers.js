@@ -32,6 +32,7 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
 
 
 
+
    /**
     * Create a wireflow graph from a given page/widget information model.
     *
@@ -98,7 +99,7 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
          vertices[layout.id] = { 
             id: layout.id, 
             kind: 'LAYOUT', 
-            label: '[L] ' + layout.id, 
+            label: layout.id, 
             ports: { inbound: [], outbound: [] } };}
 
 

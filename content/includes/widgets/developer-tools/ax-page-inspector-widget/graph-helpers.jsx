@@ -32,6 +32,7 @@ const edgeTypes = {
    }
 };
 
+
 /**
  * Create a wireflow graph from a given page/widget information model.
  *
@@ -98,7 +99,7 @@ export function graph( pageInfo, includeIrrelevantWidgets ) {
       vertices[ layout.id ] = {
          id: layout.id,
          kind: 'LAYOUT',
-         label: '[L] ' + layout.id,
+         label: layout.id,
          ports: { inbound: [], outbound: [] }
       };
    }

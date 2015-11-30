@@ -1,7 +1,3 @@
 .sass-cache
 test-results.xml
 /.idea
-
-# re-enabled this when #31 is complete
-/content/var
-/content/bower_components

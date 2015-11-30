@@ -20,6 +20,7 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
 
 
 
+
    function create(context, eventBus, reactRender) {
 
       var domAvailable = false;
@@ -88,7 +89,7 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
 
             reactRender(
             _React['default'].createElement('div', { className: 'page-inspector-row form-inline' }, 
-            _React['default'].createElement('div', { 'class': 'row text-right' }, 
+            _React['default'].createElement('div', { className: 'row text-right' }, 
             _React['default'].createElement('button', { className: 'btn btn-link', 
                type: 'button', 
                onClick: toggleIrrelevantWidgets }, 

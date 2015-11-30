@@ -20,6 +20,7 @@ const {
 } = wireflow;
 
 
+
 function create( context, eventBus, reactRender ) {
 
    let domAvailable = false;
@@ -88,7 +89,7 @@ function create( context, eventBus, reactRender ) {
 
          reactRender(
             <div className='page-inspector-row form-inline'>
-               <div class='row text-right'>
+               <div className='row text-right'>
                   <button className='btn btn-link'
                           type='button'
                           onClick={toggleIrrelevantWidgets}

@@ -7,9 +7,6 @@ atlassian-ide-plugin.xml
 contents-*.zip
 npm-debug.log
 
-/var/build/*.map
-/var/build/require_configured.js
-
 /bower_components/*
 
 !/bower_components/laxar-uikit/

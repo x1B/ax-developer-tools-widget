@@ -2,6 +2,8 @@
 
 ## Last Changes
 
+- [#32](https://github.com/LaxarJS/ax-developer-tools-widget/issues/32): host-connector: fixed host-window access problem in MSIE11
+
 
 ## v1.6.0
 

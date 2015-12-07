@@ -50,7 +50,7 @@ The window will also open when the global method `window.laxarShowDeveloperTools
 
 Use this configuration on a page to have a developer tools window without visual representation, that will open when the action `showDevTools` is requested.
 Alternatively, the window can be opened by calling the method `window.goDevelop()` (for example, from a bookmark).
-_Note:_ To open the developer window in this fashion, it might be necessary to add an exception to the browser's popup blocker. 
+_Note:_ To open the developer window in this fashion, it might be necessary to add an exception to the browser's popup blocker.
 
 For full configuration options refer to the [widget.json](widget.json).
 
@@ -64,7 +64,7 @@ npm install
 ```
 
 To build and _release a new version_, the release-version of the embedded application must be committed:
- 
+
 ```sh
 cd content
 npm run-script optimize
@@ -78,7 +78,7 @@ git commit ...
 ### 1. Allow to Open a Developer Tools Window _(open)_
 
 Because the developer tools should exist independently of the host application state and navigation, they are opened in a separate window.
- 
+
 *R1.1* The widget MUST allow to configure an action for opening the developer tools window.
 _Note:_ To open the developer window in this fashion, it might be necessary for the user to add an exception to the browser's popup blocker.
 Alternatively, a _button_ (see below) may be used.
@@ -88,11 +88,13 @@ _Note:_ This method is intended to be invoked manually by developers, and not as
 
 *R1.3* The widget MUST establish a _communication channel_ to the contents of the developer tools window when open.
 
-*R1.4* The widget MUST intercept _event bus activity_ from the host application and forward it to the communication channel.
+*R1.4* The widget MUST intercept _event bus activity_ from the host application and forward it to the communication channel, encoding each message as a JSON string.
+_Note:_ The JSON encoding is necessary to avoid that objects and their prototypes are kept across the window boundary.
+Such cross-references leads to slow and error-prone behavior, at least in MSIE11.
 
-*R1.5* The widget MUST intercept LaxarJS _log messages_ from the host application and forward them to the communication channel.
+*R1.5* The widget MUST intercept LaxarJS _log messages_ from the host application and forward them to the communication channel, encoding each message as a JSON string _(see above)_.
 
-*R1.6* The widget MUST provide _content_ that must not depend in any way on the contents of the host application, except for relying on the communication channel. 
+*R1.6* The widget MUST provide _content_ that must not depend in any way on the contents of the host application, except for relying on the communication channel.
 The widget MUST observe the communication channel from within the window and update its contents with no more than a second delay.
 Refer to the [AxHostConnectorWidget](content/includes/widgets/developer-tools/ax-host-connector-widget/README.md) for details.
 

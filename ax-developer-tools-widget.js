@@ -11,7 +11,7 @@ define( [
 ], function( ax, patterns, ng, require ) {
    'use strict';
 
-   var BUFFER_SIZE = 500;
+   var BUFFER_SIZE = 2500;
 
    // To capture navigation and lifecycle events, the event log persists across LaxarJS navigation.
    var contentWindow;
@@ -116,7 +116,7 @@ define( [
                   ax.log.warn( 'DeveloperTools: [0], event: [1]', problem.description, item );
                } );
             }
-            pushIntoStore( 'events', ax.object.options( { time: new Date(), problems: problems }, item ) );
+            pushIntoStore( 'events', ax.object.options( { time: Date.now(), problems: problems }, item ) );
          } );
 
          ng.element( window ).off( 'beforeunload.AxDeveloperToolsWidget' );
@@ -377,7 +377,7 @@ define( [
       while( buffer.length >= BUFFER_SIZE ) {
          buffer.shift();
       }
-      buffer.push( item );
+      buffer.push( JSON.stringify( item ) );
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////

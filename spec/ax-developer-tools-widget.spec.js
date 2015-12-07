@@ -109,7 +109,7 @@ define( [
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-         it( 'intercepts _event bus activity_ from the host application and forwards it to the communication channel (R1.4)', function() {
+         it( 'intercepts _event bus activity_ from the host application and forwards it to the communication channel as JSON (R1.4)', function() {
             window.axOpenDevTools();
             jasmine.Clock.tick( 0 );
             testBed.eventBusMock.subscribe( 'someEvent', function() {} );
@@ -118,16 +118,18 @@ define( [
 
             // initial subscribe for develop action + subscribe/publish/deliver for someEvent:
             expect( window.axDeveloperTools.buffers.events.length ).toBe( 4 );
+            expect( window.axDeveloperTools.buffers.events[ 0 ] ).toEqual( jasmine.any( String ) );
          } );
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-         it( 'intercepts LaxarJS _log messages_ from the host application and forwards them to the communication channel (R1.5)', function() {
+         it( 'intercepts LaxarJS _log messages_ from the host application and forwards them to the communication channel as JSON (R1.5)', function() {
             window.axOpenDevTools();
             ax.log.trace( 'test log message' );
             ax.log.info( 'test log message' );
             jasmine.Clock.tick( 0 );
             expect( window.axDeveloperTools.buffers.log.length ).toBe( 2 );
+            expect( window.axDeveloperTools.buffers.log[ 0 ] ).toEqual( jasmine.any( String ) );
          } );
 
       } );

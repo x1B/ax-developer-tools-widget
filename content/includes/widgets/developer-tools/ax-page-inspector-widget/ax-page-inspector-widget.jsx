@@ -20,7 +20,6 @@ const {
 } = wireflow;
 
 
-
 function create( context, eventBus, reactRender ) {
 
    let domAvailable = false;
@@ -76,10 +75,10 @@ function create( context, eventBus, reactRender ) {
       const pageInfo = context.resources.pageInfo;
       const pageGraph = graph( pageInfo, showIrrelevantWidgets );
 
-      const pageTyeps = types();
+      const pageTypes = types();
       dispatcher = new Dispatcher( render );
       new HistoryStore( dispatcher );
-      const graphStore = new GraphStore( dispatcher, pageGraph, pageTyeps );
+      const graphStore = new GraphStore( dispatcher, pageGraph, pageTypes );
       const layoutStore = new LayoutStore( dispatcher, graphStore );
       const settingsStore = new SettingsStore( dispatcher, Settings({ mode: READ_ONLY }) );
       const selectionStore = new SelectionStore( dispatcher, layoutStore, graphStore );
@@ -96,7 +95,7 @@ function create( context, eventBus, reactRender ) {
                      ><i className={'fa fa-toggle-' + ( showIrrelevantWidgets ? 'on' : 'off' ) }
                      ></i> &quot;Silent&quot; Widgets</button>
                </div>
-               <Graph className={'nbe-theme-fusebox-app'}
+               <Graph className='nbe-theme-fusebox-app'
                       types={graphStore.types}
                       model={graphStore.graph}
                       layout={layoutStore.layout}

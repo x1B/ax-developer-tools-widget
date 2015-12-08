@@ -32,7 +32,6 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
 
 
 
-
    /**
     * Create a wireflow graph from a given page/widget information model.
     *
@@ -128,15 +127,14 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
                return;}
 
 
-            if (schema.type === 'string' && (
-            schema.format === 'topic' || schema.format === 'flag-topic') && 
-            schema.axRole) {
+            if (schema.type === 'string' && schema.axRole && (
+            schema.format === 'topic' || schema.format === 'flag-topic')) {
                var type = schema.axPattern ? schema.axPattern.toUpperCase() : inferEdgeType(path);
                if (!type) {return;}
                var edgeId = type + ':' + value;
                var label = path.join('.');
                var id = path.join(':');
-               ports[schema.axRole === 'master' ? 'outbound' : 'inbound'].push({ 
+               ports[schema.axRole === 'outlet' ? 'outbound' : 'inbound'].push({ 
                   label: label, id: id, type: type, edgeId: edgeId });
 
                if (edgeId && !edges[edgeId]) {
@@ -201,17 +199,17 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
          var toPrune = [];
          Object.keys(edges).forEach(function (edgeId) {
             var type = edgeTypes[edges[edgeId].type];
-            var masters = Object.keys(vertices).filter(isMasterOf(edgeId));
-            var slaves = Object.keys(vertices).filter(isSlaveOf(edgeId));
-            var hasMasters = masters.length > 0;
-            var hasSlaves = slaves.length > 0;
-            var isEmpty = type.owningPort ? !hasMasters || !hasSlaves : !hasMasters && !hasSlaves;
+            var sources = Object.keys(vertices).filter(isSourceOf(edgeId));
+            var sinks = Object.keys(vertices).filter(isSinkOf(edgeId));
+            var hasSources = sources.length > 0;
+            var hasSinks = sinks.length > 0;
+            var isEmpty = type.owningPort ? !hasSources || !hasSinks : !hasSources && !hasSinks;
             if (!isEmpty) {
                return;}
 
 
             toPrune.push(edgeId);
-            masters.concat(slaves).forEach(function (vertexId) {
+            sources.concat(sinks).forEach(function (vertexId) {
                var ports = vertices[vertexId].ports;
                ports.inbound.concat(ports.outbound).forEach(function (port) {
                   port.edgeId = port.edgeId === edgeId ? null : port.edgeId;});});});
@@ -220,13 +218,13 @@ define(['exports', 'wireflow'], function (exports, _wireflow) {'use strict';Obje
 
          toPrune.forEach(function (id) {delete edges[id];});
 
-         function isSlaveOf(edgeId) {
+         function isSourceOf(edgeId) {
             return function (vertexId) {
                return vertices[vertexId].ports.inbound.some(function (port) {return port.edgeId === edgeId;});};}
 
 
 
-         function isMasterOf(edgeId) {
+         function isSinkOf(edgeId) {
             return function (vertexId) {
                return vertices[vertexId].ports.outbound.some(function (port) {return port.edgeId === edgeId;});};}}
 

@@ -19,7 +19,7 @@
                "resource": {
                   "type": "string",
                   "format": "topic",
-                  "axRole": "slave"
+                  "axRole": "inlet"
                }
             }
          },

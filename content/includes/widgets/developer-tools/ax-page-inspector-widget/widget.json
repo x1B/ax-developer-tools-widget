@@ -20,7 +20,7 @@
                   "type": "string",
                   "description": "The event topic through which to monitor pages.",
                   "format": "topic",
-                  "axRole": "slave"
+                  "axRole": "inlet"
                }
             }
          },
@@ -33,7 +33,7 @@
                   "type": "string",
                   "description": "The event topic through which to publish filter information",
                   "format": "topic",
-                  "axRole": "master"
+                  "axRole": "outlet"
                }
             }
          }

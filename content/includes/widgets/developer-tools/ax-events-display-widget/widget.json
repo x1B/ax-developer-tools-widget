@@ -56,7 +56,7 @@
                   "type": "string",
                   "description": "The event topic through which to receive filter information",
                   "format": "topic",
-                  "axRole": "master"
+                  "axRole": "outlet"
                }
             }
          },

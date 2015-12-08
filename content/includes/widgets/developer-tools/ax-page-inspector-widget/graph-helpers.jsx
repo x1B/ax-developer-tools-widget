@@ -32,7 +32,6 @@ const edgeTypes = {
    }
 };
 
-
 /**
  * Create a wireflow graph from a given page/widget information model.
  *
@@ -128,15 +127,14 @@ export function graph( pageInfo, includeIrrelevantWidgets ) {
             return;
          }
 
-         if( schema.type === 'string' &&
-             ( schema.format === 'topic' || schema.format === 'flag-topic' ) &&
-             schema.axRole ) {
+         if( schema.type === 'string' && schema.axRole &&
+             ( schema.format === 'topic' || schema.format === 'flag-topic' ) ) {
             const type = schema.axPattern ? schema.axPattern.toUpperCase() : inferEdgeType( path );
             if( !type ) { return; }
             const edgeId = type + ':' + value;
             const label = path.join( '.' );
             const id =  path.join( ':' );
-            ports[ schema.axRole === 'master' ? 'outbound' : 'inbound' ].push( {
+            ports[ schema.axRole === 'outlet' ? 'outbound' : 'inbound' ].push( {
                label, id, type, edgeId
             } );
             if( edgeId && !edges[ edgeId ] ) {
@@ -201,17 +199,17 @@ export function graph( pageInfo, includeIrrelevantWidgets ) {
       const toPrune = [];
       Object.keys( edges ).forEach( edgeId => {
          const type = edgeTypes[ edges[ edgeId ].type ];
-         const masters = Object.keys( vertices ).filter( isMasterOf( edgeId ) );
-         const slaves = Object.keys( vertices ).filter( isSlaveOf( edgeId ) );
-         const hasMasters = masters.length > 0;
-         const hasSlaves = slaves.length > 0;
-         const isEmpty = type.owningPort ? (!hasMasters || !hasSlaves) : (!hasMasters && !hasSlaves);
+         const sources = Object.keys( vertices ).filter( isSourceOf( edgeId ) );
+         const sinks = Object.keys( vertices ).filter( isSinkOf( edgeId ) );
+         const hasSources = sources.length > 0;
+         const hasSinks = sinks.length > 0;
+         const isEmpty = type.owningPort ? (!hasSources || !hasSinks) : (!hasSources && !hasSinks);
          if( !isEmpty ) {
             return;
          }
 
          toPrune.push( edgeId );
-         masters.concat( slaves ).forEach( vertexId => {
+         sources.concat( sinks ).forEach( vertexId => {
             const ports = vertices[ vertexId ].ports;
             ports.inbound.concat( ports.outbound ).forEach( port => {
                port.edgeId = port.edgeId === edgeId ? null : port.edgeId;
@@ -220,13 +218,13 @@ export function graph( pageInfo, includeIrrelevantWidgets ) {
       } );
       toPrune.forEach( id => { delete edges[ id ]; } );
 
-      function isSlaveOf( edgeId ) {
+      function isSourceOf( edgeId ) {
          return function( vertexId ) {
             return vertices[ vertexId ].ports.inbound.some( port => port.edgeId === edgeId );
          };
       }
 
-      function isMasterOf( edgeId ) {
+      function isSinkOf( edgeId ) {
          return function( vertexId ) {
             return vertices[ vertexId ].ports.outbound.some( port => port.edgeId === edgeId );
          };

@@ -20,7 +20,6 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
 
 
 
-
    function create(context, eventBus, reactRender) {
 
       var domAvailable = false;
@@ -76,10 +75,10 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
          var pageInfo = context.resources.pageInfo;
          var pageGraph = (0, _graphHelpers.graph)(pageInfo, showIrrelevantWidgets);
 
-         var pageTyeps = (0, _graphHelpers.types)();
+         var pageTypes = (0, _graphHelpers.types)();
          dispatcher = new Dispatcher(render);
          new HistoryStore(dispatcher);
-         var graphStore = new GraphStore(dispatcher, pageGraph, pageTyeps);
+         var graphStore = new GraphStore(dispatcher, pageGraph, pageTypes);
          var layoutStore = new LayoutStore(dispatcher, graphStore);
          var settingsStore = new SettingsStore(dispatcher, Settings({ mode: READ_ONLY }));
          var selectionStore = new SelectionStore(dispatcher, layoutStore, graphStore);

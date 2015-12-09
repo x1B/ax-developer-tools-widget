@@ -18,25 +18,53 @@ define( [
 
    function Controller( eventBus, $scope, $window ) {
 
-      $scope.resources = {};
+      var TABS = [
+         { name: 'events', label: 'Events' },
+         { name: 'page', label: 'Page' },
+         { name: 'log', label: 'Log' }
+      ];
 
+      $scope.resources = {};
       axPatterns.resources.handlerFor( $scope ).registerResourceFromFeature( 'grid', { } );
 
       $scope.model = {
-         activeTab: null,
+         tabs: TABS,
+         activeTab: TABS[ 0 ],
          gridOverlay: false,
          widgetOverlay: false
       };
 
+      axPatterns.visibility.handlerFor( $scope, { onAnyAreaRequest: function( event ) {
+         var prefix = $scope.widget.id + '.';
+         return event.visible && event.area === prefix + $scope.model.activeTab.name;
+      } } );
+
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       eventBus.subscribe( 'didNavigate', function( event ) {
-         $scope.model.activeTab = event.data[ $scope.features.tabs.parameter ] || 'page';
+         var newName = event.data[ $scope.features.tabs.parameter ];
+         var newTab = TABS.filter( function( _ ) { return _.name === newName; } )[ 0 ];
+         if( !newTab ) {
+            return;
+         }
+
+         if( $scope.model.activeTab !== newTab ) {
+            publishVisibility( $scope.model.activeTab, false );
+            publishVisibility( newTab, true );
+         }
+         $scope.model.activeTab = newTab;
+
+         function publishVisibility( tab, visible ) {
+            var area = $scope.widget.id + '.' + tab.name;
+            axPatterns.visibility.requestPublisherForArea( $scope, area )( visible );
+         }
       } );
 
-      $scope.activateTab = function( tabName ) {
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+      $scope.activateTab = function( tab ) {
          var data = {};
-         data[ $scope.features.tabs.parameter ] = tabName;
+         data[ $scope.features.tabs.parameter ] = tab.name;
          eventBus.publish( 'navigateRequest._self', {
             target: '_self',
             data: data

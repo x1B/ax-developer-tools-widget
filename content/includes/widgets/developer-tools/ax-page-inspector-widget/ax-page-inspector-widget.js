@@ -10,8 +10,8 @@ define(['exports', 'module', 'react', 'laxar-patterns', 'wireflow', './graph-hel
    HistoryStore = _wireflow2['default'].history.HistoryStore;var 
    LayoutStore = _wireflow2['default'].layout.LayoutStore;var 
    GraphStore = _wireflow2['default'].graph.GraphStore;var _wireflow$settings = _wireflow2['default'].
-   settings;var 
-   ChangeMode = _wireflow$settings.actions.ChangeMode;var _wireflow$settings$model = _wireflow$settings.
+   settings;var _wireflow$settings$actions = _wireflow$settings.
+   actions;var ChangeMode = _wireflow$settings$actions.ChangeMode;var MinimapResized = _wireflow$settings$actions.MinimapResized;var _wireflow$settings$model = _wireflow$settings.
    model;var Settings = _wireflow$settings$model.Settings;var READ_ONLY = _wireflow$settings$model.READ_ONLY;var READ_WRITE = _wireflow$settings$model.READ_WRITE;var 
    SettingsStore = _wireflow$settings.SettingsStore;var 
 

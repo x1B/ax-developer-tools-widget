@@ -1,7 +1,7 @@
 {
    "application": {
       "flow": {
-         "flow.json": "{\"places\":{\"entry\":{\"redirectTo\":\"tools/page\"},\"tools/:tab\":{\"page\":\"tools\"}}}"
+         "flow.json": "{\"places\":{\"entry\":{\"redirectTo\":\"tools/events\"},\"tools/:tab\":{\"page\":\"tools\"}}}"
       },
       "layouts": {
          "tools": {
@@ -14,7 +14,7 @@
          }
       },
       "pages": {
-         "tools.json": "{\"layout\":\"tools\",\"areas\":{\"activities\":[{\"widget\":\"developer-tools/ax-host-connector-widget\",\"features\":{\"events\":{\"stream\":\"eventBusItems\"},\"log\":{\"stream\":\"logItems\"},\"pageInfo\":{\"resource\":\"pageInfo\"},\"grid\":{\"resource\":\"gridSettings\"}}}],\"toolbar\":[{\"widget\":\"developer-tools/ax-developer-toolbar-widget\",\"id\":\"toolbar\",\"features\":{\"grid\":{\"resource\":\"gridSettings\"},\"tabs\":{\"parameter\":\"tab\"}}}],\"toolbar.page\":[{\"widget\":\"developer-tools/ax-page-inspector-widget\",\"features\":{\"pageInfo\":{\"resource\":\"pageInfo\"},\"filter\":{\"resource\":\"eventFilter\"}}}],\"toolbar.events\":[{\"widget\":\"developer-tools/ax-events-display-widget\",\"features\":{\"events\":{\"stream\":\"eventBusItems\"},\"filter\":{\"resource\":\"eventFilter\"}}}],\"toolbar.logs\":[{\"widget\":\"developer-tools/ax-log-display-widget\",\"features\":{\"log\":{\"stream\":\"logItems\"}}}]}}"
+         "tools.json": "{\"layout\":\"tools\",\"areas\":{\"activities\":[{\"widget\":\"developer-tools/ax-host-connector-widget\",\"features\":{\"events\":{\"stream\":\"eventBusItems\"},\"log\":{\"stream\":\"logItems\"},\"pageInfo\":{\"resource\":\"pageInfo\"},\"grid\":{\"resource\":\"gridSettings\"}}}],\"toolbar\":[{\"widget\":\"developer-tools/ax-developer-toolbar-widget\",\"id\":\"tabs\",\"features\":{\"grid\":{\"resource\":\"gridSettings\"},\"tabs\":{\"parameter\":\"tab\"}}}],\"tabs.page\":[{\"widget\":\"developer-tools/ax-page-inspector-widget\",\"features\":{\"pageInfo\":{\"resource\":\"pageInfo\"},\"filter\":{\"resource\":\"eventFilter\"}}}],\"tabs.events\":[{\"widget\":\"developer-tools/ax-events-display-widget\",\"features\":{\"events\":{\"stream\":\"eventBusItems\"},\"filter\":{\"resource\":\"eventFilter\"}}}],\"tabs.log\":[{\"widget\":\"developer-tools/ax-log-display-widget\",\"features\":{\"log\":{\"stream\":\"logItems\"}}}]}}"
       }
    },
    "bower_components": {
@@ -41,7 +41,7 @@
          "developer-tools": {
             "ax-developer-toolbar-widget": {
                "default.theme": {
-                  "ax-developer-toolbar-widget.html": "<div class=\"row text-right\"> <button class=\"btn btn-link\" type=\"button\" data-ng-if=\"resources.grid\" data-ng-click=\"toggleGrid()\" ><i class=\"fa\" data-ng-class=\"{ 'fa-toggle-off': !model.gridOverlay, 'fa-toggle-on': model.gridOverlay }\" ></i>&nbsp;{{model.gridOverlay ? 'Turn off grid overlay' : 'Turn on grid overlay'}}</button> <button class=\"btn btn-link\" type=\"button\" data-ng-click=\"toggleWidgetOutline()\" ><i class=\"fa\" data-ng-class=\"{ 'fa-toggle-off': !model.widgetOverlay, 'fa-toggle-on': model.widgetOverlay }\" ></i>&nbsp;{{model.widgetOverlay ? 'Turn off widget outline' : 'Turn on widget outline'}}</button> </div> <ul class=\"nav nav-tabs\" role=\"tablist\"> <li data-ng-class=\"{ 'ax-active': model.activeTab=='page' }\" ><a href=\"javascript:void(0);\" data-ng-click=\"activateTab('page')\">Page</a></li> <li data-ng-class=\"{ 'ax-active': model.activeTab=='events' }\" ><a href=\"javascript:void(0);\" data-ng-click=\"activateTab('events')\">Events</a></li> <li data-ng-class=\"{ 'ax-active': model.activeTab=='logs' }\" ><a href=\"javascript:void(0);\" data-ng-click=\"activateTab('logs')\">Logs</a></li> </ul> <div class=\"app-tab app-tab-page\" data-ax-widget-area=\"page\" data-ng-show=\"model.activeTab=='page'\"></div> <div class=\"app-tab app-tab-content\" data-ax-widget-area=\"events\" data-ng-show=\"model.activeTab=='events'\"></div> <div class=\"app-tab app-tab-content\" data-ax-widget-area=\"logs\" data-ng-show=\"model.activeTab=='logs'\"></div> ",
+                  "ax-developer-toolbar-widget.html": "<div class=\"row text-right\"> <button class=\"btn btn-link\" type=\"button\" ng-if=\"resources.grid\" ng-click=\"toggleGrid()\" ><i class=\"fa\" ng-class=\"{ 'fa-toggle-off': !model.gridOverlay, 'fa-toggle-on': model.gridOverlay }\" ></i>&nbsp;{{model.gridOverlay ? 'Turn off grid overlay' : 'Turn on grid overlay'}}</button> <button class=\"btn btn-link\" type=\"button\" ng-click=\"toggleWidgetOutline()\" ><i class=\"fa\" ng-class=\"{ 'fa-toggle-off': !model.widgetOverlay, 'fa-toggle-on': model.widgetOverlay }\" ></i>&nbsp;{{model.widgetOverlay ? 'Turn off widget outline' : 'Turn on widget outline'}}</button> </div> <ul class=\"nav nav-tabs\" role=\"tablist\"> <li ng-repeat=\"tab in model.tabs\" ng-class=\"{ 'ax-active': model.activeTab.name == tab.name }\" ><a href=\"javascript:void(0);\" ng-click=\"activateTab( tab )\">{{ tab.label }}</a></li> </ul> <div ng-repeat=\"tab in model.tabs\" ng-show=\"model.activeTab == tab\" class=\"app-tab app-tab-page\" data-ax-widget-area data-ax-widget-area-binding=\"tab.name\"></div> ",
                   "css": {
                      "ax-developer-toolbar-widget.css": 1
                   }

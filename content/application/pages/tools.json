@@ -23,7 +23,7 @@
       "toolbar": [
          {
             "widget": "developer-tools/ax-developer-toolbar-widget",
-            "id": "toolbar",
+            "id": "tabs",
             "features": {
                "grid": {
                   "resource": "gridSettings"
@@ -34,7 +34,7 @@
             }
          }
       ],
-      "toolbar.page": [
+      "tabs.page": [
          {
             "widget": "developer-tools/ax-page-inspector-widget",
             "features": {
@@ -47,7 +47,7 @@
             }
          }
       ],
-      "toolbar.events": [
+      "tabs.events": [
          {
             "widget": "developer-tools/ax-events-display-widget",
             "features": {
@@ -60,7 +60,7 @@
             }
          }
       ],
-      "toolbar.logs": [
+      "tabs.log": [
          {
             "widget": "developer-tools/ax-log-display-widget",
             "features": {

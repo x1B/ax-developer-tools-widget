@@ -64,14 +64,14 @@ module.exports = function( grunt ) {
    grunt.loadNpmTasks( 'grunt-babel' );
 
    // basic aliases
-   grunt.registerTask( 'test', [ 'laxar-test' ] );
+   grunt.registerTask( 'test', [ 'babel', 'laxar-test' ] );
    grunt.registerTask( 'build', [ 'babel', 'laxar-build' ] );
-   grunt.registerTask( 'dist', [ 'laxar-dist' ] );
+   grunt.registerTask( 'dist', [ 'babel', 'laxar-dist' ] );
    grunt.registerTask( 'develop', [ 'babel', 'laxar-develop' ] );
    grunt.registerTask( 'info', [ 'laxar-info' ] );
 
    // additional (possibly) more intuitive aliases
-   grunt.registerTask( 'optimize', [ 'laxar-dist' ] );
+   grunt.registerTask( 'optimize', [ 'babel', 'laxar-dist' ] );
    grunt.registerTask( 'start', [ 'develop' ] );
 
    grunt.registerTask( 'default', [ 'build', 'test' ] );

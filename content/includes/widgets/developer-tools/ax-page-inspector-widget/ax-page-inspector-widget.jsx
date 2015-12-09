@@ -11,7 +11,7 @@ const {
   layout: { LayoutStore },
   graph: { GraphStore },
   settings: {
-    actions: { ChangeMode },
+    actions: { ChangeMode, MinimapResized },
     model: { Settings, READ_ONLY, READ_WRITE },
     SettingsStore
   },

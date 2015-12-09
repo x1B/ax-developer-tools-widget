@@ -1,7 +1,7 @@
 {
    "places": {
       "entry": {
-         "redirectTo": "tools/page"
+         "redirectTo": "tools/events"
       },
 
       "tools/:tab": {

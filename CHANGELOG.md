@@ -2,7 +2,7 @@
 
 ## Last Changes
 
-- [#30](https://github.com/LaxarJS/ax-developer-tools-widget/issues/30): added prototype page inspector
+- [#31](https://github.com/LaxarJS/ax-developer-tools-widget/issues/31): added prototype page inspector
 
 
 ## v1.6.0

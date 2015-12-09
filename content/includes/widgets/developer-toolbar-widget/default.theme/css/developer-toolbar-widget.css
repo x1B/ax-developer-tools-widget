@@ -1,0 +1,15 @@
+/**
+ * Copyright 2015 aixigo AG
+ * Released under the MIT license.
+ * http://www.laxarjs.org
+ */
+@charset "UTF-8";
+
+.development-tool-bar-widget :active,
+.development-tool-bar-widget :focus {
+   outline: none !important;
+}
+
+.development-tool-bar-widget .fa-toggle-on {
+   color: #5cb85c;
+}

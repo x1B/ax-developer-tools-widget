@@ -34,23 +34,23 @@ module.exports = function( grunt ) {
          },
          babel: {
             options: {
-               sourceMap: true,
+               sourceMap: 'inline',
                modules: 'amd',
                retainLines: true
             },
             widgets: {
-               files: [{
+               files: [ {
                   expand: true,
                   cwd: 'includes/widgets/',
-                  src: [ '*/*/*.jsx' ],
+                  src: [ '*/*.jsx' ],
                   dest: 'includes/widgets/',
                   ext: '.js'
-               }]
+               } ]
             }
          },
          watch: {
             jsx: {
-               files: [ 'includes/widgets/*/*/*.jsx' ],
+               files: [ 'includes/widgets/*/*.jsx' ],
                tasks: [ 'babel:widgets' ]
             }
          }

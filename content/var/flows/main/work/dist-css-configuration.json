@@ -5,10 +5,10 @@
             {
                "src": [
                   "bower_components/laxar-uikit/dist/themes/default.theme/css/theme.css",
-                  "includes/widgets/developer-tools/ax-developer-toolbar-widget/default.theme/css/ax-developer-toolbar-widget.css",
-                  "includes/widgets/developer-tools/ax-events-display-widget/default.theme/css/ax-events-display-widget.css",
-                  "includes/widgets/developer-tools/ax-log-display-widget/default.theme/css/ax-log-display-widget.css",
-                  "includes/widgets/developer-tools/ax-page-inspector-widget/default.theme/css/ax-page-inspector-widget.css",
+                  "includes/widgets/developer-toolbar-widget/default.theme/css/developer-toolbar-widget.css",
+                  "includes/widgets/events-display-widget/default.theme/css/events-display-widget.css",
+                  "includes/widgets/log-display-widget/default.theme/css/log-display-widget.css",
+                  "includes/widgets/page-inspector-widget/default.theme/css/page-inspector-widget.css",
                   "application/layouts/tools/default.theme/css/tools.css"
                ],
                "dest": "var/flows/main/dist/default.theme.css"

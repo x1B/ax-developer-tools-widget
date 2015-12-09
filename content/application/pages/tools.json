@@ -3,7 +3,7 @@
    "areas": {
       "activities": [
          {
-            "widget": "developer-tools/ax-host-connector-widget",
+            "widget": "host-connector-widget",
             "features": {
                "events": {
                   "stream": "eventBusItems"
@@ -22,7 +22,7 @@
       ],
       "toolbar": [
          {
-            "widget": "developer-tools/ax-developer-toolbar-widget",
+            "widget": "developer-toolbar-widget",
             "id": "tabs",
             "features": {
                "grid": {
@@ -36,7 +36,7 @@
       ],
       "tabs.page": [
          {
-            "widget": "developer-tools/ax-page-inspector-widget",
+            "widget": "page-inspector-widget",
             "features": {
                "pageInfo": {
                   "resource": "pageInfo"
@@ -49,7 +49,7 @@
       ],
       "tabs.events": [
          {
-            "widget": "developer-tools/ax-events-display-widget",
+            "widget": "events-display-widget",
             "features": {
                "events": {
                   "stream": "eventBusItems"
@@ -62,7 +62,7 @@
       ],
       "tabs.log": [
          {
-            "widget": "developer-tools/ax-log-display-widget",
+            "widget": "log-display-widget",
             "features": {
                "log": {
                   "stream": "logItems"

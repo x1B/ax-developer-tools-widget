@@ -57,11 +57,11 @@
          },
          "pages": [],
          "widgets": [
-            "developer-tools/ax-host-connector-widget",
-            "developer-tools/ax-developer-toolbar-widget",
-            "developer-tools/ax-page-inspector-widget",
-            "developer-tools/ax-events-display-widget",
-            "developer-tools/ax-log-display-widget"
+            "host-connector-widget",
+            "developer-toolbar-widget",
+            "page-inspector-widget",
+            "events-display-widget",
+            "log-display-widget"
          ]
       }
    ],
@@ -88,7 +88,7 @@
    ],
    "widgets": [
       {
-         "path": "includes/widgets/developer-tools/ax-developer-toolbar-widget",
+         "path": "includes/widgets/developer-toolbar-widget",
          "integration": {
             "technology": "angular",
             "type": "widget"
@@ -96,35 +96,35 @@
          "resources": {
             "watch": [
                "widget.json",
-               "*.theme/ax-developer-toolbar-widget.html",
-               "*.theme/css/ax-developer-toolbar-widget.css",
-               "ax-developer-toolbar-widget.js"
+               "*.theme/developer-toolbar-widget.html",
+               "*.theme/css/developer-toolbar-widget.css",
+               "developer-toolbar-widget.js"
             ],
             "embed": [
                "widget.json",
-               "*.theme/ax-developer-toolbar-widget.html"
+               "*.theme/developer-toolbar-widget.html"
             ],
             "list": [
-               "*.theme/css/ax-developer-toolbar-widget.css"
+               "*.theme/css/developer-toolbar-widget.css"
             ]
          },
          "references": {
             "local": {
-               "self": "developer-tools/ax-developer-toolbar-widget"
+               "self": "developer-toolbar-widget"
             },
             "amd": {
-               "self": "../includes/widgets/developer-tools/ax-developer-toolbar-widget",
-               "module": "laxar-application/includes/widgets/developer-tools/ax-developer-toolbar-widget/ax-developer-toolbar-widget"
+               "self": "../includes/widgets/developer-toolbar-widget",
+               "module": "laxar-application/includes/widgets/developer-toolbar-widget/developer-toolbar-widget"
             }
          },
          "controls": [],
          "referencedAs": {
-            "byUser": "developer-tools/ax-developer-toolbar-widget",
-            "derivedReference": "developer-tools/ax-developer-toolbar-widget"
+            "byUser": "developer-toolbar-widget",
+            "derivedReference": "developer-toolbar-widget"
          }
       },
       {
-         "path": "includes/widgets/developer-tools/ax-events-display-widget",
+         "path": "includes/widgets/events-display-widget",
          "integration": {
             "technology": "angular",
             "type": "widget"
@@ -132,25 +132,25 @@
          "resources": {
             "watch": [
                "widget.json",
-               "*.theme/ax-events-display-widget.html",
-               "*.theme/css/ax-events-display-widget.css",
-               "ax-events-display-widget.js"
+               "*.theme/events-display-widget.html",
+               "*.theme/css/events-display-widget.css",
+               "events-display-widget.js"
             ],
             "embed": [
                "widget.json",
-               "*.theme/ax-events-display-widget.html"
+               "*.theme/events-display-widget.html"
             ],
             "list": [
-               "*.theme/css/ax-events-display-widget.css"
+               "*.theme/css/events-display-widget.css"
             ]
          },
          "references": {
             "local": {
-               "self": "developer-tools/ax-events-display-widget"
+               "self": "events-display-widget"
             },
             "amd": {
-               "self": "../includes/widgets/developer-tools/ax-events-display-widget",
-               "module": "laxar-application/includes/widgets/developer-tools/ax-events-display-widget/ax-events-display-widget"
+               "self": "../includes/widgets/events-display-widget",
+               "module": "laxar-application/includes/widgets/events-display-widget/events-display-widget"
             }
          },
          "controls": [
@@ -158,12 +158,12 @@
             "laxar-affix-control"
          ],
          "referencedAs": {
-            "byUser": "developer-tools/ax-events-display-widget",
-            "derivedReference": "developer-tools/ax-events-display-widget"
+            "byUser": "events-display-widget",
+            "derivedReference": "events-display-widget"
          }
       },
       {
-         "path": "includes/widgets/developer-tools/ax-host-connector-widget",
+         "path": "includes/widgets/host-connector-widget",
          "integration": {
             "technology": "angular",
             "type": "widget"
@@ -171,35 +171,35 @@
          "resources": {
             "watch": [
                "widget.json",
-               "*.theme/ax-host-connector-widget.html",
-               "*.theme/css/ax-host-connector-widget.css",
-               "ax-host-connector-widget.js"
+               "*.theme/host-connector-widget.html",
+               "*.theme/css/host-connector-widget.css",
+               "host-connector-widget.js"
             ],
             "embed": [
                "widget.json",
-               "*.theme/ax-host-connector-widget.html"
+               "*.theme/host-connector-widget.html"
             ],
             "list": [
-               "*.theme/css/ax-host-connector-widget.css"
+               "*.theme/css/host-connector-widget.css"
             ]
          },
          "references": {
             "local": {
-               "self": "developer-tools/ax-host-connector-widget"
+               "self": "host-connector-widget"
             },
             "amd": {
-               "self": "../includes/widgets/developer-tools/ax-host-connector-widget",
-               "module": "laxar-application/includes/widgets/developer-tools/ax-host-connector-widget/ax-host-connector-widget"
+               "self": "../includes/widgets/host-connector-widget",
+               "module": "laxar-application/includes/widgets/host-connector-widget/host-connector-widget"
             }
          },
          "controls": [],
          "referencedAs": {
-            "byUser": "developer-tools/ax-host-connector-widget",
-            "derivedReference": "developer-tools/ax-host-connector-widget"
+            "byUser": "host-connector-widget",
+            "derivedReference": "host-connector-widget"
          }
       },
       {
-         "path": "includes/widgets/developer-tools/ax-log-display-widget",
+         "path": "includes/widgets/log-display-widget",
          "integration": {
             "technology": "angular",
             "type": "widget"
@@ -207,37 +207,37 @@
          "resources": {
             "watch": [
                "widget.json",
-               "*.theme/ax-log-display-widget.html",
-               "*.theme/css/ax-log-display-widget.css",
-               "ax-log-display-widget.js"
+               "*.theme/log-display-widget.html",
+               "*.theme/css/log-display-widget.css",
+               "log-display-widget.js"
             ],
             "embed": [
                "widget.json",
-               "*.theme/ax-log-display-widget.html"
+               "*.theme/log-display-widget.html"
             ],
             "list": [
-               "*.theme/css/ax-log-display-widget.css"
+               "*.theme/css/log-display-widget.css"
             ]
          },
          "references": {
             "local": {
-               "self": "developer-tools/ax-log-display-widget"
+               "self": "log-display-widget"
             },
             "amd": {
-               "self": "../includes/widgets/developer-tools/ax-log-display-widget",
-               "module": "laxar-application/includes/widgets/developer-tools/ax-log-display-widget/ax-log-display-widget"
+               "self": "../includes/widgets/log-display-widget",
+               "module": "laxar-application/includes/widgets/log-display-widget/log-display-widget"
             }
          },
          "controls": [
             "laxar-affix-control"
          ],
          "referencedAs": {
-            "byUser": "developer-tools/ax-log-display-widget",
-            "derivedReference": "developer-tools/ax-log-display-widget"
+            "byUser": "log-display-widget",
+            "derivedReference": "log-display-widget"
          }
       },
       {
-         "path": "includes/widgets/developer-tools/ax-page-inspector-widget",
+         "path": "includes/widgets/page-inspector-widget",
          "integration": {
             "technology": "react",
             "type": "widget"
@@ -245,31 +245,31 @@
          "resources": {
             "watch": [
                "widget.json",
-               "*.theme/ax-page-inspector-widget.html",
-               "*.theme/css/ax-page-inspector-widget.css",
-               "ax-page-inspector-widget.js"
+               "*.theme/page-inspector-widget.html",
+               "*.theme/css/page-inspector-widget.css",
+               "page-inspector-widget.js"
             ],
             "embed": [
                "widget.json",
-               "*.theme/ax-page-inspector-widget.html"
+               "*.theme/page-inspector-widget.html"
             ],
             "list": [
-               "*.theme/css/ax-page-inspector-widget.css"
+               "*.theme/css/page-inspector-widget.css"
             ]
          },
          "references": {
             "local": {
-               "self": "developer-tools/ax-page-inspector-widget"
+               "self": "page-inspector-widget"
             },
             "amd": {
-               "self": "../includes/widgets/developer-tools/ax-page-inspector-widget",
-               "module": "laxar-application/includes/widgets/developer-tools/ax-page-inspector-widget/ax-page-inspector-widget"
+               "self": "../includes/widgets/page-inspector-widget",
+               "module": "laxar-application/includes/widgets/page-inspector-widget/page-inspector-widget"
             }
          },
          "controls": [],
          "referencedAs": {
-            "byUser": "developer-tools/ax-page-inspector-widget",
-            "derivedReference": "developer-tools/ax-page-inspector-widget"
+            "byUser": "page-inspector-widget",
+            "derivedReference": "page-inspector-widget"
          }
       }
    ],

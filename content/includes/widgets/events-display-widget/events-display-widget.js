@@ -34,7 +34,7 @@ define( [
             { name: 'navigation', htmlIcon: '<i class="fa fa-location-arrow"></i>', eventTypes: [
                'navigate'
             ] },
-            { name: 'resources', htmlIcon: '<i class="fa fa-gift"></i>', eventTypes: [
+            { name: 'resources', htmlIcon: '<i class="fa fa-file-text-o"></i>', eventTypes: [
                'replace', 'update', 'validate', 'save'
             ] },
             { name: 'actions', htmlIcon: '<i class="fa fa-rocket"></i>', eventTypes: [
@@ -166,12 +166,15 @@ define( [
             cycleId: eventInfo.cycleId > -1 ? eventInfo.cycleId : '-',
             eventObject: eventInfo.eventObject || {},
             formattedEvent: JSON.stringify( eventInfo.eventObject, null, 3 ),
-            formattedTime: moment( eventInfo.time ).format( 'HH:mm:ss.SSS' ),
+            formattedTime: {
+               upper: moment( eventInfo.time ).format( 'HH:mm' ),
+               lower: moment( eventInfo.time ).format( 'ss.SSS' )
+            },
             name: eventInfo.event || '?',
             pattern: pattern( (eventInfo.event || '?').toLowerCase() ),
             showDetails: false,
-            source: eventInfo.source || '?',
-            target: eventInfo.target || '?',
+            source: ( eventInfo.source || '?' ).replace( /^widget\./, '' ),
+            target: ( eventInfo.target || '?' ).replace( /^-$/, '' ),
             time: eventInfo.time,
             selected: false,
             sourceType: ( eventInfo.source || '?' ).indexOf( 'widget.' ) === 0 ? 'widgets' : 'runtime'
@@ -189,6 +192,7 @@ define( [
             } );
             return matchingPatthern.length ? matchingPatthern[ 0 ].name : 'other';
          }
+
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,9 +235,9 @@ define( [
 
          // modify matches in place
          $scope.model.visibleEventInfos.forEach( function( eventInfo ) {
-            eventInfo.htmlName = htmlValue( eventInfo.name, searchRegExp );
-            eventInfo.htmlSource = htmlValue( eventInfo.source, searchRegExp );
-            eventInfo.htmlTarget = htmlValue( eventInfo.target, searchRegExp );
+            eventInfo.htmlName = htmlValue( eventInfo.name, searchRegExp, '.' );
+            eventInfo.htmlSource = htmlValue( eventInfo.source, searchRegExp, '#' );
+            eventInfo.htmlTarget = htmlValue( eventInfo.target, searchRegExp, '#' );
             eventInfo.selected = !!selectionEventInfo && inSelection( eventInfo, selectionEventInfo );
          } );
       }
@@ -297,27 +301,49 @@ define( [
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      function htmlValue( value, searchRegExp ) {
-         if( !searchRegExp ) {
-            return $sanitize( value );
-         }
+      function htmlValue( value, searchRegExp, splitCharacter ) {
          var html = $sanitize( value );
+         var wasSplit = false;
+         if( !searchRegExp ) {
+            return wrap( split( html, false ) );
+         }
+
          var parts = [];
          var match;
          var lastIndex = 0;
          var limit = 1;
          while( limit-- && ( match = searchRegExp.exec( html ) ) !== null ) {
             if( match.index > lastIndex ) {
-               parts.push( html.substring( lastIndex, match.index ) );
+               parts.push( split( html.substring( lastIndex, match.index ), false ) );
             }
             parts.push( '<b>' );
-            parts.push( match[ 0 ] );
+            parts.push( split( match[ 0 ], true ) );
             parts.push( '</b>' );
             lastIndex = searchRegExp.lastIndex;
          }
          searchRegExp.lastIndex = 0;
-         parts.push( html.substring( lastIndex, html.length ) );
-         return parts.join( '' );
+         parts.push( split( html.substring( lastIndex, html.length ) ) );
+         return wrap( parts.join( '' ) );
+
+         function wrap( whole ) {
+            return '<span>' + whole + '</span>';
+         }
+
+         function split( part, isBold ) {
+            if( !splitCharacter || wasSplit ) {
+               return part;
+            }
+
+            var splitPoint = part.indexOf( splitCharacter );
+            if( splitPoint === -1 ) {
+               return part;
+            }
+
+            wasSplit = true;
+            return part.substring( 0, splitPoint ) +
+               ( isBold ? '</b>' : '' ) + '</span><br /><span>' + ( isBold ? '<b>' : '' ) +
+               part.substring( splitPoint + 1, part.length );
+         }
       }
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -334,6 +360,17 @@ define( [
          );
       }
 
+   }
+
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+   function separate( label, separator, defaultText ) {
+      var name = label || defaultText;
+      var splitPoint = name.indexOf( separator );
+      return {
+         upper: splitPoint === -1 ? name : name.substr( 0, splitPoint ),
+         lower: splitPoint === -1 ? defaultText : name.substr( splitPoint, name.length )
+      };
    }
 
    ///////////////////////////////////////////////////////////////////////////////////////////////////////////

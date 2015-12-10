@@ -65,7 +65,7 @@ var require = {
       },
       {
          name: 'wireflow',
-         location: 'wireflow/build',
+         location: '../bower_components/wireflow/build',
          main: 'wireflow'
       }
    ],

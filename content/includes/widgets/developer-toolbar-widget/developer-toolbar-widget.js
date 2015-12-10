@@ -29,14 +29,15 @@ define( [
 
       $scope.model = {
          tabs: TABS,
-         activeTab: TABS[ 0 ],
+         activeTab: null,
          gridOverlay: false,
          widgetOverlay: false
       };
 
       axPatterns.visibility.handlerFor( $scope, { onAnyAreaRequest: function( event ) {
          var prefix = $scope.widget.id + '.';
-         return event.visible && event.area === prefix + $scope.model.activeTab.name;
+         var activeTab = $scope.model.activeTab;
+         return event.visible && activeTab !== null && event.area === prefix + activeTab.name;
       } } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,8 +56,10 @@ define( [
          $scope.model.activeTab = newTab;
 
          function publishVisibility( tab, visible ) {
-            var area = $scope.widget.id + '.' + tab.name;
-            axPatterns.visibility.requestPublisherForArea( $scope, area )( visible );
+            if( tab ) {
+               var area = $scope.widget.id + '.' + tab.name;
+               axPatterns.visibility.requestPublisherForArea( $scope, area )( visible );
+            }
          }
       } );
 

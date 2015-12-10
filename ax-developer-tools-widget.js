@@ -35,9 +35,6 @@ define( [
          open: openContentWindow
       };
 
-      var contentUrl = require.toUrl( './content/' ) +
-         ( $scope.features.develop.enabled ? 'debug' : 'index' ) + '.html';
-
       $scope.features.open.onActions.forEach( function( action ) {
          eventBus.subscribe( 'takeActionRequest.' + action, function( event ) {
             openContentWindow();
@@ -69,7 +66,10 @@ define( [
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      function openContentWindow() {
+      function openContentWindow( mode ) {
+         var contentUrl = require.toUrl( './content/' ) +
+            ( mode || ( $scope.features.develop.enabled ? 'debug' : 'index' ) ) + '.html';
+
          var settings = {
             resizable: 'yes',
             scrollbars: 'yes',

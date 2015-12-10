@@ -27,11 +27,6 @@ module.exports = function( grunt ) {
                }
             }
          },
-         'laxar-compass': {
-            options: {
-               compass: './tools/bin/compass'
-            }
-         },
          babel: {
             options: {
                sourceMap: 'inline',

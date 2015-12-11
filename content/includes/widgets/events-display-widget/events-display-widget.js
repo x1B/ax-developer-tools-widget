@@ -245,7 +245,7 @@ define( [
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      const patternTopics = {
+      var patternTopics = {
          RESOURCE: [ 'didReplace', 'didUpdate' ],
          ACTION: [ 'takeActionRequest', 'willTakeAction', 'didTakeAction' ],
          FLAG: [ 'didChangeFlag' ],
@@ -283,7 +283,7 @@ define( [
 
          function isSuffixOf( value ) {
             return function( _ ) {
-               const tail = '#' + _;
+               var tail = '#' + _;
                return value.length >= tail.length && value.indexOf( tail ) === value.length - tail.length;
             };
          }

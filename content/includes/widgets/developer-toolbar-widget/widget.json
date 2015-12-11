@@ -25,11 +25,12 @@
          },
          "tabs": {
             "type": "object",
-            "required": [ "parameter" ],
+            "required": [],
             "properties": {
                "parameter": {
                   "type": "string",
-                  "format": "topic"
+                  "format": "topic",
+                  "default": "events"
                }
             }
          }

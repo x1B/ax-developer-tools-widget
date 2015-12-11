@@ -13,8 +13,8 @@
    -->
    <script type="text/javascript">
       ( function() {
-         // assume that we live in an application as a widget under includes/widgets/{category}/{widget}
-         var defaultDepth = 5;
+         // assume that we live in an application as a widget under includes/widgets/{widget}
+         var defaultDepth = 4;
          var depth = parseInt( window.location.search.replace( /[?&]folderDepth=([0-9]+)/, '$1' ), 10 );
          if( isNaN( depth ) ) depth = defaultDepth;
          var config = 'require_config.js';

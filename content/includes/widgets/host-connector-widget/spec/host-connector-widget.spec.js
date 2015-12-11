@@ -3,9 +3,10 @@
  * Released under the MIT license.
  */
 define( [
-   '../host-connector-widget',
-   'laxar/laxar_testing'
-], function( widgetModule, ax ) {
+   'json!../widget.json',
+   'laxar/laxar_testing',
+   '../host-connector-widget'
+], function( descriptor, ax ) {
    'use strict';
 
    describe( 'A host-connector-widget', function() {
@@ -28,7 +29,7 @@ define( [
 
          fakeChannel = window.opener.axDeveloperTools;
 
-         testBed = ax.testing.portalMocksAngular.createControllerTestBed( 'host-connector-widget' );
+         testBed = ax.testing.portalMocksAngular.createControllerTestBed( descriptor );
          testBed.featuresMock =  {
             events: {
                stream: 'eventBusItems'
@@ -38,6 +39,9 @@ define( [
             },
             grid: {
                resource: 'gridSettings'
+            },
+            pageInfo: {
+               resource: 'page'
             }
          };
 
@@ -58,7 +62,7 @@ define( [
          jasmine.Clock.tick( 0 );
          expect( testBed.scope.eventBus.publish ).not.toHaveBeenCalled();
 
-         fakeChannel.buffers.events.push( JSON.stringify( { fake: 'event item' } ) );
+         fakeChannel.buffers.events.push( { index: 0, json: JSON.stringify( { fake: 'event item' } ) } );
          jasmine.Clock.tick( 99 );
          expect( testBed.scope.eventBus.publish ).not.toHaveBeenCalled();
 
@@ -67,8 +71,6 @@ define( [
             stream: 'eventBusItems',
             data: [ { fake: 'event item' } ]
          } );
-
-         expect( fakeChannel.buffers.events.length ).toBe( 0 );
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +80,7 @@ define( [
          jasmine.Clock.tick( 0 );
          expect( testBed.scope.eventBus.publish ).not.toHaveBeenCalled();
 
-         fakeChannel.buffers.log.push( JSON.stringify( { fake: 'log item' } ) );
+         fakeChannel.buffers.log.push( { index: 0, json: JSON.stringify( { fake: 'log item' } ) } );
          jasmine.Clock.tick( 99 );
          expect( testBed.scope.eventBus.publish ).not.toHaveBeenCalled();
 
@@ -87,8 +89,6 @@ define( [
             stream: 'logItems',
             data: [ { fake: 'log item' } ]
          } );
-
-         expect( fakeChannel.buffers.log.length ).toBe( 0 );
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////

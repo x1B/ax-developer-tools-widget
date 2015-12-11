@@ -4,8 +4,9 @@
  */
 define( [
    'json!../widget.json',
-   'laxar-mocks'
-], function( descriptor, axMocks ) {
+   'laxar-mocks',
+   'laxar-react-adapter'
+], function( descriptor, axMocks, axReactAdapter ) {
    'use strict';
 
    // Minimalistic test setup. More information:
@@ -14,13 +15,18 @@ define( [
    describe( 'The page-inspector-widget', function() {
 
       beforeEach( axMocks.createSetupForWidget( descriptor, {
-         knownMissingResources: []
+         knownMissingResources: [],
+         adapter: axReactAdapter
       } ) );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
       beforeEach( function() {
-         axMocks.widget.configure( {} );
+         axMocks.widget.configure( {
+            pageInfo: {
+               resource: 'page'
+            }
+         } );
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -29,8 +35,8 @@ define( [
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      it( 'still needs some tests', function() {
-         // ... first test here
+      it( 'can be instantiated successfully', function() {
+         expect( true ).toBe( true );
       } );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////

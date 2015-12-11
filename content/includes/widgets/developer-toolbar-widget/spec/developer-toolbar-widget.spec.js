@@ -4,9 +4,10 @@
  * http://www.laxarjs.org
  */
 define( [
-   '../developer-toolbar-widget',
-   'laxar/laxar_testing'
-], function( widgetModule, ax ) {
+   'json!../widget.json',
+   'laxar/laxar_testing',
+   '../developer-toolbar-widget'
+], function( descriptor, ax ) {
    'use strict';
 
    describe( 'A developer-toolbar-widget', function() {
@@ -14,14 +15,13 @@ define( [
       var testBed;
 
       beforeEach( function setup() {
-         testBed = ax.testing.portalMocksAngular.createControllerTestBed( 'developer-tools/ax-developer-toolbar-widget' );
+         testBed = ax.testing.portalMocksAngular.createControllerTestBed( descriptor );
          testBed.featuresMock = {
             grid: {
                resource: 'gridSettings'
             }
          };
 
-         testBed.useWidgetJson();
          testBed.setup();
       } );
 

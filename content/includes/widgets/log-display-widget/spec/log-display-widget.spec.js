@@ -4,9 +4,10 @@
  * http://laxarjs.org/license
  */
 define( [
-   '../log-display-widget',
-   'laxar/laxar_testing'
-], function( widgetModule, ax ) {
+   'json!../widget.json',
+   'laxar/laxar_testing',
+   '../log-display-widget'
+], function( descriptor, ax ) {
    'use strict';
 
    describe( 'A log-display-widget', function() {
@@ -37,7 +38,7 @@ define( [
             }
          ];
 
-         testBed = ax.testing.portalMocksAngular.createControllerTestBed( 'log-display-widget' );
+         testBed = ax.testing.portalMocksAngular.createControllerTestBed( descriptor );
          testBed.featuresMock = {
             log: {
                stream: 'myLogStream',

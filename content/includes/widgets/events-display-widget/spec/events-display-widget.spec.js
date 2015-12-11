@@ -4,9 +4,10 @@
  * http://laxarjs.org/license
  */
 define( [
-   '../ax-events-display-widget',
-   'laxar/laxar_testing'
-], function( widgetModule, ax ) {
+   'json!../widget.json',
+   'laxar/laxar_testing',
+   '../events-display-widget'
+], function( descriptor, ax ) {
    'use strict';
 
    describe( 'An events-display-widget', function() {
@@ -94,7 +95,7 @@ define( [
             }
          ];
 
-         testBed = ax.testing.portalMocksAngular.createControllerTestBed( 'developer-tools/ax-events-display-widget' );
+         testBed = ax.testing.portalMocksAngular.createControllerTestBed( descriptor );
          testBed.featuresMock = {
             events: {
                stream: 'myEventStream',
@@ -124,7 +125,8 @@ define( [
 
          it( 'represents each event item if not filtered out (R1.2)', function() {
             var expectedVisibleItems = testBed.scope.model.eventInfos.filter( function( info ) {
-               return info.interaction in { 'publish': 1, 'deliver': 1 } && info.source !== 'axFlowController';
+               return info.interaction in { 'publish': 1, 'deliver': 1 } &&
+                      -1 === info.source.indexOf( 'AxFlowController' );
             } );
             expect( testBed.scope.model.visibleEventInfos ).toEqual( expectedVisibleItems );
          } );

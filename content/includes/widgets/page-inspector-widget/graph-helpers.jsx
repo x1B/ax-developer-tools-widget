@@ -245,7 +245,7 @@ export function graph( pageInfo, options ) {
 
       vertices[ PAGE_ID ] =  {
          PAGE_ID,
-         label: 'Page ' + pageRef,
+         label: 'Page ' + pageReference,
          kind: 'PAGE',
          ports: { inbound: [], outbound: [] }
       };

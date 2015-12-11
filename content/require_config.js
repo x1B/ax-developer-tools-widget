@@ -42,6 +42,11 @@ var require = {
       // LaxarJS application modules (contents are generated):
       'laxar-application-dependencies': '../var/static/laxar_application_dependencies',
 
+      // New-style testing:
+      'laxar-mocks': 'laxar-mocks/dist/laxar-mocks',
+      jasmine2: 'jasmine2/lib/jasmine-core/jasmine',
+      'promise-polyfill': 'promise-polyfill/Promise',
+
       // React support (ax-page-inspector-widget):
       'laxar-react-adapter': 'laxar-react-adapter/laxar-react-adapter',
       'react': 'react/react',

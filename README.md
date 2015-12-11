@@ -20,7 +20,9 @@ The ax-developer-tools-widget allows to open a _developer tools window_ that dis
 
 ### Installation
 
+For this version of the laxar-developer-tools-widget, make sure that your host application is using LaxarJS v1.2.0 or newer.
 For installation instruction take a look at the [LaxarJS documentation](https://github.com/LaxarJS/laxar/blob/master/docs/manuals/installing_widgets.md).
+
 
 ### Configuration example
 
@@ -127,13 +129,13 @@ This should be the default behavior.
 ### 3. Display Events from the Host Application
 
 *R3.1* The widget MUST allow to view events from the host application.
-Refer to the [AxEventsDisplayWidget](content/includes/widgets/developer-tools/ax-events-display-widget/README.md) for details.
+Refer to the [events-display-widget](content/includes/widgets/events-display-widget/README.md) for details.
 
 
 ### 4. Display Log Messages from the Host Application
 
 *R4.1* The widget MUST allow to view log messages from the host application.
-Refer to the [AxLogDisplayWidget](content/includes/widgets/developer-tools/ax-log-display-widget/README.md) for details.
+Refer to the [log-display-widget](content/includes/widgets/log-display-widget/README.md) for details.
 
 
 ### 5. Visualize Widget Positions within the Host Application
@@ -172,6 +174,12 @@ The widget must allow to track and validate _pattern events_ (resource, actions,
 *R7.3* If the tracker is enabled, the widget MUST watch _didUpdate_ and _didReplace_ events and report problems using log-level WARN.
 
 *R7.4* If the tracker is enabled, the widget MUST watch _didChangeFlag_ events and report problems using log-level WARN.
+
+
+### 8. Visualize the Structure of the Current Page
+
+*R8.1* The widget MUST allow to inspect widgets and activities of the current host application page.
+Refer to the [AxEventsDisplayWidget](content/includes/widgets/events-display-widget/README.md) for details.
 
 
 ## Integration

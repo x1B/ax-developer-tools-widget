@@ -31,7 +31,7 @@
             "properties": {
                "resource": {
                   "type": "string",
-                  "description": "The event topic through which to publish filter information",
+                  "description": "The topic through which to publish filter information",
                   "format": "topic",
                   "axRole": "outlet"
                }

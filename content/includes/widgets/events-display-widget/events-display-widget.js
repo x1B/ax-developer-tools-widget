@@ -145,16 +145,6 @@ define( [
          } );
       }
 
-      if( $scope.features.showLocalEvents.enabled ) {
-         var removeInspector = $scope.eventBus.addInspector( function( eventInfo ) {
-            eventInfo.time = new Date();
-            addEvent( eventInfo );
-            runFilters();
-            removeInspector = null;
-         } );
-         $scope.$on( '$destroy', removeInspector );
-      }
-
       $scope.$watch( 'model.settings', runFilters, true );
 
       ////////////////////////////////////////////////////////////////////////////////////////////////////////

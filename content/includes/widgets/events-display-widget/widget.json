@@ -59,17 +59,6 @@
                   "axRole": "outlet"
                }
             }
-         },
-         "showLocalEvents": {
-            "type": "object",
-            "description": "Display page-local events.",
-            "properties": {
-               "enabled": {
-                  "type": "boolean",
-                  "description": "If true, any event from the same page is displayed.",
-                  "default": false
-               }
-            }
          }
       }
    }

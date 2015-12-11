@@ -66,6 +66,12 @@ For full configuration options refer to the [widget.json](widget.json).
 *R3.1* The widget MUST query the host application for CSS grid settings and publish them through the configured resource.
 
 
+### 4. Read and Publish Page Inspectiona data _(page)_
+
+*R4.1* The widget MUST poll the host application for page inspection information and publish this information as a resource using didReplace.
+
+
+
 ## Integration
 
 ### Patterns
@@ -75,9 +81,14 @@ Additionally the widget supports the following event patterns as specified by th
 
 #### Resources
 
-* Action: grid.resource
+* Resource: grid.resource
 * Role: Master
 * Description: Publish CSS grid settings from the host application
+
+* Resource: grid.resource
+* Role: Master
+* Description: Publish CSS grid settings from the host application
+
 
 
 ## References

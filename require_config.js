@@ -1,3 +1,4 @@
+/* global -require */
 var require = {
    paths: {
       'laxar-patterns': 'laxar-patterns/dist/laxar-patterns',

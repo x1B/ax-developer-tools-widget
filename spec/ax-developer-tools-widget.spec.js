@@ -157,11 +157,7 @@ define( [
                replacements: [],
                time: jasmine.any( String ),
                tags: {},
-               sourceInfo: {
-                  file: jasmine.any( String ),
-                  line: jasmine.any( String ),
-                  char: jasmine.any( Number )
-               }
+               sourceInfo: jasmine.any( Object )
             } );
          } );
 

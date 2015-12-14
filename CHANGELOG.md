@@ -3,6 +3,9 @@
 
 ## Last Changes
 
+
+## v2.0.0-alpha.0
+
 - [#36](https://github.com/LaxarJS/ax-developer-tools-widget/issues/36): fixed spec tests
 - [#31](https://github.com/LaxarJS/ax-developer-tools-widget/issues/31): added prototype page inspector
 - [#35](https://github.com/LaxarJS/ax-developer-tools-widget/issues/35): host-connector: fixed log message overflow

@@ -118,7 +118,22 @@ define( [
 
             // initial subscribe for develop action + subscribe/publish/deliver for someEvent:
             expect( window.axDeveloperTools.buffers.events.length ).toBe( 4 );
-            expect( window.axDeveloperTools.buffers.events[ 0 ] ).toEqual( jasmine.any( String ) );
+
+            var index = window.axDeveloperTools.buffers.events[ 0 ].index;
+            expect( index ).toEqual( jasmine.any( Number ) );
+
+            var payload = window.axDeveloperTools.buffers.events[ 0 ].json;
+            expect( payload ).toEqual( jasmine.any( String ) );
+            expect( JSON.parse( payload ) ).toEqual( {
+               action: 'subscribe',
+               source: 'widget.ax-developer-tools-widget#testWidgetId',
+               target: '-',
+               event: 'takeActionRequest.develop',
+               cycleId: -1,
+               time: jasmine.any( Number ),
+               problems: []
+            } );
+
          } );
 
          /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +144,25 @@ define( [
             ax.log.info( 'test log message' );
             jasmine.Clock.tick( 0 );
             expect( window.axDeveloperTools.buffers.log.length ).toBe( 2 );
-            expect( window.axDeveloperTools.buffers.log[ 0 ] ).toEqual( jasmine.any( String ) );
+
+            var index = window.axDeveloperTools.buffers.log[ 0 ].index;
+            expect( index ).toEqual( jasmine.any( Number ) );
+
+            var payload = window.axDeveloperTools.buffers.log[ 0 ].json;
+            expect( payload ).toEqual( jasmine.any( String ) );
+            expect( JSON.parse( payload ) ).toEqual( {
+               id: jasmine.any( Number ),
+               level: 'TRACE',
+               text: 'test log message',
+               replacements: [],
+               time: jasmine.any( String ),
+               tags: {},
+               sourceInfo: {
+                  file: jasmine.any( String ),
+                  line: jasmine.any( String ),
+                  char: jasmine.any( Number )
+               }
+            } );
          } );
 
       } );

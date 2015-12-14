@@ -123,8 +123,7 @@ define( [
             var index = developerHooks.eventCounter++;
             var jsonItem = JSON.stringify( ax.object.options( {
                time: Date.now(),
-               problems: problems,
-               index: index
+               problems: problems
             }, item ) );
 
             pushIntoStore( 'events', {
